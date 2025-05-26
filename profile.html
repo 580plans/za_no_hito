@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール - ミニブログ</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ... 既存のスタイル ... */
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-header h2 {
+            margin: 0;
+        }
+
+        .edit-button {
+            background-color: #808080; /* グレーに変更済み */
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .edit-button:hover {
+            background-color: #666666;
+        }
+
+        .profile-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: flex; /* 画像とテキストを横並びにする */
+            align-items: flex-start; /* 上端を揃える */
+        }
+
+        .profile-image-container {
+            margin-right: 20px;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+
+        .profile-details {
+            flex-grow: 1; /* 残りのスペースを埋める */
+        }
+
+        .profile-details p {
+            margin-bottom: 8px;
+            white-space: pre-wrap; /* 改行を反映 */
+        }
+
+        .profile-details strong {
+            font-weight: bold;
+        }
+
+        .profile-edit-form {
+            display: none; /* 初期表示は非表示 */
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .profile-edit-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .profile-edit-form input[type="text"],
+        .profile-edit-form select,
+        .profile-edit-form textarea,
+        .profile-edit-form input[type="file"] { /* ファイルインプットのスタイル */
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+　      }
+
+　　　　.profile-edit-form button[type="submit"] {
+            background-color: #808080;  /* グレーに変更 */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+         }
+
+        .profile-edit-form button[type="submit"]:hover {
+            background-color: #666666; /* ホバー時も濃いグレーに */
+         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ミニブログ</h1>
+            <nav>
+                <ul>
+                    <li><a href="logged_in.html">ホーム</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <h2>プロフィール</h2>
+                    <a href="#" id="edit-profile-button" class="edit-button" style="float: right;">編集</a>
+                </div>
+                <div class="profile-info" id="profile-display">
+                    <div class="profile-image-container">
+                        <img src="default_user.png" alt="プロフィール画像" class="profile-image" id="display-profile-image">
+                    </div>
+                    <div class="profile-details">
+                        <p><strong>ユーザー名:</strong> <span id="display-username">[ユーザー名]</span></p>
+                        <p><strong>年齢:</strong> <span id="display-age">[年齢]</span></p>
+                        <p><strong>性別:</strong> <span id="display-gender">[性別]</span></p>
+                        <p><strong>血液型:</strong> <span id="display-blood_type">[血液型]</span></p>
+                        <p><strong>星座:</strong> <span id="display-star_sign">[星座]</span></p>
+                        <p><strong>居住地:</strong> <span id="display-residence">[居住地]</span></p>
+                        <p><strong>身長:</strong> <span id="display-height">[身長]</span></p>
+                        <p><strong>好きな芸能人:</strong> <span id="display-favorite_celebrity">[好きな芸能人]</span></p>
+                        <p><strong>好きなタイプ:</strong> <span id="display-favorite_type">[好きなタイプ]</span></p>
+                        <p><strong>好きな食べ物:</strong> <span id="display-favorite_food">[好きな食べ物]</span></p>
+                        <p><strong>表向きの趣味:</strong> <span id="display-public_hobby">[表向きの趣味]</span></p>
+                        <p><strong>ここでしか言えない趣味:</strong> <span id="display-private_hobby">[ここでしか言えない趣味]</span></p>
+                        <p><strong>特技:</strong> <span id="display-skill">[特技]</span></p>
+                        <p><strong>好きなマンガ:</strong> <span id="display-favorite_manga">[好きなマンガ]</span></p>
+                        <p><strong>好きな映画・アニメ・ラジオ:</strong> <span id="display-favorite_media">[好きな映画・アニメ・ラジオ]</span></p>
+                        <p><strong>座右の銘:</strong> <span id="display-motto">[座右の銘]</span></p>
+                        <p><strong>必殺技:</strong> <span id="display-ultimate_skill">[必殺技]</span></p>
+                        <p><strong>許せない人のタイプ:</strong> <span id="display-disliked_person">[許せない人のタイプ]</span></p>
+                        <p><strong>将来の夢:</strong> <span id="display-future_dream">[将来の夢]</span></p>
+                    </div>
+                </div>
+                <form id="profile-edit-form" class="profile-edit-form">
+                    <h2>プロフィール編集</h2>
+                    <div>
+                        <label for="edit_profile_image">プロフィール画像:</label>
+                        <input type="file" id="edit_profile_image" name="profile_image" accept="image/*">
+                        <img src="default_user.png" alt="プレビュー" id="image-preview" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; margin-top: 10px;">
+                    </div>
+                    <div>
+                        <label for="edit_username">ユーザー名:</label>
+                        <input type="text" id="edit_username" name="username" value="[ユーザー名]" required>
+                    </div>
+                    <div>
+                        <label for="edit_age">年齢:</label>
+                        <input type="text" id="edit_age" name="age" value="[年齢]">
+                    </div>
+                    <div>
+                        <label for="edit_gender">性別:</label>
+                        <select id="edit_gender" name="gender">
+                            <option value="">選択してください</option>
+                            <option value="male">男性</option>
+                            <option value="female">女性</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="edit_blood_type">血液型:</label>
+                        <select id="edit_blood_type" name="blood_type">
+                            <option value="">選択してください</option>
+                            <option value="A">A型</option>
+                            <option value="B">B型</option>
+                            <option value="O">O型</option>
+                            <option value="AB">AB型</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="edit_star_sign">星座:</label>
+                        <input type="text" id="edit_star_sign" name="star_sign" value="[星座]">
+                    </div>
+                    <div>
+                        <label for="edit_residence">居住地:</label>
+                        <input type="text" id="edit_residence" name="residence" value="[居住地]">
+                    </div>
+                    <div>
+                        <label for="edit_height">身長:</label>
+                        <input type="text" id="edit_height" name="height" value="[身長]">
+                    </div>
+                    <div>
+                        <label for="edit_favorite_celebrity">好きな芸能人:</label>
+                        <textarea id="edit_favorite_celebrity" name="favorite_celebrity">[好きな芸能人]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_favorite_type">好きなタイプ:</label>
+                        <textarea id="edit_favorite_type" name="favorite_type">[好きなタイプ]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_favorite_food">好きな食べ物:</label>
+                        <textarea id="edit_favorite_food" name="favorite_food">[好きな食べ物]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_public_hobby">表向きの趣味:</label>
+                        <textarea id="edit_public_hobby" name="public_hobby">[表向きの趣味]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_private_hobby">ここでしか言えない趣味:</label>
+                        <textarea id="edit_private_hobby" name="private_hobby">[ここでしか言えない趣味]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_skill">特技:</label>
+                        <textarea id="edit_skill" name="skill">[特技]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_favorite_manga">好きなマンガ:</label>
+                        <textarea id="edit_favorite_manga" name="favorite_manga">[好きなマンガ]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_favorite_media">好きな映画・アニメ・ラジオ:</label>
+                        <textarea id="edit_favorite_media" name="favorite_media">[好きな映画・アニメ・ラジオ]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_motto">座右の銘:</label>
+                        <textarea id="edit_motto" name="motto">[座右の銘]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_ultimate_skill">必殺技:</label>
+                        <textarea id="edit_ultimate_skill" name="ultimate_skill">[必殺技]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_disliked_person">許せない人のタイプ:</label>
+                        <textarea id="edit_disliked_person" name="disliked_person">[許せない人のタイプ]</textarea>
+                    </div>
+                    <div>
+                        <label for="edit_future_dream">将来の夢:</label>
+                        <textarea id="edit_future_dream" name="future_dream">[将来の夢]</textarea>
+                    </div>
+                    <button type="submit">保存</button>
+                </form>
+                <p><a href="logged_in.html">ホームに戻る</a></p>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2025 ミニブログ</p>
+        </footer>
+    </div>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+            const editProfileButton = document.getElementById('edit-profile-button');
+            const profileDisplay = document.getElementById('profile-display');
+            const profileEditForm = document.getElementById('profile-edit-form');
+            const form = document.getElementById('profile-edit-form');
+            const imagePreview = document.getElementById('image-preview');
+            const editProfileImageInput = document.getElementById('edit_profile_image');
+            const displayProfileImage = document.getElementById('display-profile-image');
+
+            const displayUsername = document.getElementById('display-username');
+            const displayAge = document.getElementById('display-age');
+            const displayGender = document.getElementById('display-gender');
+            const displayBloodType = document.getElementById('display-blood_type');
+            const displayStarSign = document.getElementById('display-star_sign');
+            const displayResidence = document.getElementById('display-residence');
+            const displayHeight = document.getElementById('display-height');
+            const displayFavoriteCelebrity = document.getElementById('display-favorite_celebrity');
+            const displayFavoriteType = document.getElementById('display-favorite_type');
+            const displayFavoriteFood = document.getElementById('display-favorite_food');
+            const displayPublicHobby = document.getElementById('display-public_hobby');
+            const displayPrivateHobby = document.getElementById('display-private_hobby');
+            const displaySkill = document.getElementById('display-skill');
+            const displayFavoriteManga = document.getElementById('display-favorite_manga');
+            const displayFavoriteMedia = document.getElementById('display-favorite_media');
+            const displayMotto = document.getElementById('display-motto');
+            const displayUltimateSkill = document.getElementById('display-ultimate_skill');
+            const displayDislikedPerson = document.getElementById('display-disliked_person');
+            const displayFutureDream = document.getElementById('display-future_dream');
+
+            // ローカルストレージからプロフィール情報を読み込む
+            const storedProfile = localStorage.getItem('userProfile');
+            let userProfile = storedProfile ? JSON.parse(storedProfile) : {};
+
+            // プロフィール表示を更新する関数
+            function updateProfileDisplay() {
+                displayUsername.textContent = userProfile.username || '-';
+                displayAge.textContent = userProfile.age || '-';
+                displayGender.textContent = userProfile.gender === 'male' ? '男性' : (userProfile.gender === 'female' ? '女性' : (userProfile.gender === 'other' ? 'その他' : '-'));
+                displayBloodType.textContent = userProfile.blood_type || '-';
+                displayStarSign.textContent = userProfile.star_sign || '-';
+                displayResidence.textContent = userProfile.residence || '-';
+                displayHeight.textContent = userProfile.height || '-';
+                displayFavoriteCelebrity.textContent = userProfile.favorite_celebrity || '-';
+                displayFavoriteType.textContent = userProfile.favorite_type || '-';
+                displayFavoriteFood.textContent = userProfile.favorite_food || '-';
+                displayPublicHobby.textContent = userProfile.public_hobby || '-';
+                displayPrivateHobby.textContent = userProfile.private_hobby || '-';
+                displaySkill.textContent = userProfile.skill || '-';
+                displayFavoriteManga.textContent = userProfile.favorite_manga || '-';
+                displayFavoriteMedia.textContent = userProfile.favorite_media || '-';
+                displayMotto.textContent = userProfile.motto || '-';
+                displayUltimateSkill.textContent = userProfile.ultimate_skill || '-';
+                displayDislikedPerson.textContent = userProfile.disliked_person || '-';
+                displayFutureDream.textContent = userProfile.future_dream || '-';
+                displayProfileImage.src = userProfile.profileImage || 'default_user.png';
+            }
+
+            // フォームに初期値を設定する関数
+            function populateEditForm() {
+                document.getElementById('edit_username').value = userProfile.username || '';
+                document.getElementById('edit_age').value = userProfile.age || '';
+                document.getElementById('edit_gender').value = userProfile.gender || '';
+                document.getElementById('edit_blood_type').value = userProfile.blood_type || '';
+                document.getElementById('edit_star_sign').value = userProfile.star_sign || '';
+                document.getElementById('edit_residence').value = userProfile.residence || '';
+                document.getElementById('edit_height').value = userProfile.height || '';
+                document.getElementById('edit_favorite_celebrity').value = userProfile.favorite_celebrity || '';
+                document.getElementById('edit_favorite_type').value = userProfile.favorite_type || '';
+                document.getElementById('edit_favorite_food').value = userProfile.favorite_food || '';
+                document.getElementById('edit_public_hobby').value = userProfile.public_hobby || '';
+                document.getElementById('edit_private_hobby').value = userProfile.private_hobby || '';
+                document.getElementById('edit_skill').value = userProfile.skill || '';
+                document.getElementById('edit_favorite_manga').value = userProfile.favorite_manga || '';
+                document.getElementById('edit_favorite_media').value = userProfile.favorite_media || '';
+                document.getElementById('edit_motto').value = userProfile.motto || '';
+                document.getElementById('edit_ultimate_skill').value = userProfile.ultimate_skill || '';
+                document.getElementById('edit_disliked_person').value = userProfile.disliked_person || '';
+                document.getElementById('edit_future_dream').value = userProfile.future_dream || '';
+
+                // 性別と血液型のセレクトボックスの初期値を設定
+                if (userProfile.gender) document.getElementById('edit_gender').value = userProfile.gender;
+                if (userProfile.blood_type) document.getElementById('edit_blood_type').value = userProfile.blood_type;
+                if (userProfile.profileImage) imagePreview.src = userProfile.profileImage;
+            }
+
+            // 初期表示
+            updateProfileDisplay();
+            populateEditForm();
+
+            // 編集ボタンがクリックされた時の処理
+            editProfileButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                profileDisplay.style.display = 'none';
+                profileEditForm.style.display = 'block';
+            });
+
+            // 画像プレビュー
+            editProfileImageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imagePreview.src = event.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.src = userProfile.profileImage || 'default_user.png';
+                }
+            });
+
+            // 保存ボタンがクリックされた時の処理
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                userProfile.username = document.getElementById('edit_username').value;
+                userProfile.age = document.getElementById('edit_age').value;
+                userProfile.gender = document.getElementById('edit_gender').value;
+                userProfile.blood_type = document.getElementById('edit_blood_type').value;
+                userProfile.star_sign = document.getElementById('edit_star_sign').value;
+                userProfile.residence = document.getElementById('edit_residence').value;
+                userProfile.height = document.getElementById('edit_height').value;
+                userProfile.favorite_celebrity = document.getElementById('edit_favorite_celebrity').value;
+                userProfile.favorite_type = document.getElementById('edit_favorite_type').value;
+                userProfile.favorite_food = document.getElementById('edit_favorite_food').value;
+                userProfile.public_hobby = document.getElementById('edit_public_hobby').value;
+                userProfile.private_hobby = document.getElementById('edit_private_hobby').value;
+                userProfile.skill = document.getElementById('edit_skill').value;
+                userProfile.favorite_manga = document.getElementById('edit_favorite_manga').value;
+                userProfile.favorite_media = document.getElementById('edit_favorite_media').value;
+                userProfile.motto = document.getElementById('edit_motto').value;
+                userProfile.ultimate_skill = document.getElementById('edit_ultimate_skill').value;
+                userProfile.disliked_person = document.getElementById('edit_disliked_person').value;
+                userProfile.future_dream = document.getElementById('edit_future_dream').value;
+                const profileImageFile = editProfileImageInput.files[0];
+                if (profileImageFile) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        userProfile.profileImage = reader.result;
+                        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                        updateProfileDisplay();
+                        profileDisplay.style.display = 'block';
+                        profileEditForm.style.display = 'none';
+                    }
+                    reader.readAsDataURL(profileImageFile);
+                } else {
+                    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                    updateProfileDisplay();
+                    profileDisplay.style.display = 'block';
+                    profileEditForm.style.display = 'none';
+                }
+            });
+        });
+    </script>

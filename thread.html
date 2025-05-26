@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スレッド - ミニブログ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ミニブログ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">トップ</a></li>
+                <li><a href="register.html">登録</a></li>
+                <li><a href="login.html">ログイン</a></li>
+                <li><a href="profile.html">プロフィール</a></li>
+                <li><a href="search.html">検索</a></li>
+                <li><a href="notifications.html">通知</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="thread-detail">
+        <h2 id="thread-title">スレッドタイトル</h2>
+        <div id="replies-list">
+            </div>
+        <section id="reply-form">
+            <h3>あなたの声を聞かせてよ</h3>
+            <textarea id="reply-content" placeholder="あなたの声を聞かせてよ"></textarea>
+            <button id="reply-button">寄稿</button>
+        </section>
+        <p><a href="index.html">スレッド一覧に戻る</a></p>
+    </main>
+    <footer>
+        <p>&copy; 2025 ミニブログ</p>
+    </footer>
+    <script src="thread.js"></script>
+</body>
+</html>

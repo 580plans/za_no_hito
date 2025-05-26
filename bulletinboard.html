@@ -1,0 +1,49 @@
+    <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>掲示板 - ミニブログ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>ミニブログ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">トップ</a></li>
+                <li><a href="bulletinboard.html">掲示板</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>掲示板</h2>
+        <section id="bulletinboard-top">
+            <h3>近頃多く読まれたスレッド</h3>
+            <ul id="popular-threads-list">
+                </ul>
+            <h3>近頃投稿された画像</h3>
+            <div id="recent-images-board">
+                </div>
+            <h3>近頃にぎやかなスレッド</h3>
+            <ul id="active-threads-list">
+                </ul>
+        </section>
+        <section id="bulletin-board-list-container">
+            <h3>スレッド一覧</h3>
+            <ul id="bulletin-board-list">
+                </ul>
+        </section>
+        <div class="post-form">
+            <h3>新しいスレッドを作成</h3>
+            <input type="text" id="bulletin-board-title" placeholder="スレッド名">
+            <button id="create-bulletin-board">作成</button>
+        </div>
+        <p><a href="index.html">トップに戻る</a></p>
+    </main>
+    <footer>
+        <p>&copy; 2025 ミニブログ</p>
+    </footer>
+    <script src="bulletinboard.js"></script>
+</body>
+</html>

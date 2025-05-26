@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ミニブログ - ログイン後</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 基本的なスタイルは style.css に記述 */
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 水平方向中央揃え */
+        }
+
+        .container {
+            max-width: 960px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            display: flex;
+            width: 100%;
+            justify-content: center; /* メインコンテンツを中央に配置 */
+            margin-bottom: 20px;
+        }
+
+        aside.left-column-logged-in {
+            width: 200px;
+            padding-right: 20px;
+            border-right: 1px solid #ccc;
+            margin-right: 20px; /* 中央コンテンツとの間隔 */
+        }
+
+        aside.left-column-logged-in ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside.left-column-logged-in li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        aside.left-column-logged-in li a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .user-image-logged-in {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .main-content-logged-in {
+            width: calc(100% - 220px - 20px); /* 左カラムの幅とマージンを考慮 */
+        }
+
+        .tab-container-logged-in {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            width: 100%; /* タブコンテナを親要素の幅に合わせる */
+        }
+
+        .tab-buttons-logged-in button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px 15px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .tab-buttons-logged-in button.active {
+            background-color: #ddd;
+        }
+
+        .tab-content-logged-in {
+            display: none;
+            padding: 15px 0;
+        }
+
+        .tab-content-logged-in.active {
+            display: block;
+        }
+
+        #essay-timeline-logged-in ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #essay-timeline-logged-in li {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .essay-meta {
+            color: #777;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #eee;
+            border-top: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ミニブログ</h1>
+            <nav>
+                <ul>
+                    <li><a href="logged_in.html">ホーム</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <aside class="left-column-logged-in">
+                <img src="default_user.png" alt="ユーザー画像" class="user-image-logged-in">
+                <ul>
+                    <li><a href="profile.html">ユーザー名</a></li>
+                    <li><a href="notifications.html">通知</a></li>
+                    <li><a href="#">随筆を書く</a></li>
+                    <li><a href="#">過去の随筆</a></li>
+                    <li>刮目</li>
+                    <ul id="following-list">
+                        <li><a href="#">ユーザーA</a></li>
+                        <li><a href="#">ユーザーB</a></li>
+                        <li><a href="#">ユーザーC</a></li>
+                        </ul>
+                </ul>
+            </aside>
+            <div class="main-content-logged-in">
+                <section class="tab-container-logged-in">
+                    <div class="tab-buttons-logged-in">
+                        <button class="tab-button-logged-in active" data-tab="essays">新規の随筆</button>
+                        <button class="tab-button-logged-in" data-tab="popular-essays">近頃多く読まれた随筆</button>
+                        <button class="tab-button-logged-in" data-tab="recent-essay-images">近頃の画像</button>
+                        <button class="tab-button-logged-in" data-tab="active-threads">近頃にぎやかなスレ</button>
+                    </div>
+                    <div id="essays" class="tab-content-logged-in active">
+                        <ul id="essay-timeline-logged-in">
+                            </ul>
+                    </div>
+                    <div id="popular-essays" class="tab-content-logged-in">
+                        <h3>近頃多く読まれた随筆</h3>
+                        <ul id="popular-essays-list">
+                            </ul>
+                    </div>
+                    <div id="recent-essay-images" class="tab-content-logged-in">
+                        <h3>近頃の画像</h3>
+                        <div id="recent-essay-images-tab">
+                            </div>
+                    </div>
+                    <div id="active-threads" class="tab-content-logged-in">
+                        <h3>近頃にぎやかなスレ</h3>
+                        <ul id="active-threads-list">
+                            </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2025 ミニブログ</p>
+        </footer>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button-logged-in');
+            const tabContents = document.querySelectorAll('.tab-content-logged-in');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabToShow = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    document.getElementById(tabToShow).classList.add('active');
+                });
+
+                // 初期表示で「新規の随筆」タブをアクティブにする
+                if (button.dataset.tab === 'essays') {
+                    button.classList.add('active');
+                    document.getElementById('essays').classList.add('active');
+                }
+            });
+
+            // 仮の刮目リスト
+            const followingList = document.getElementById('following-list');
+            const followingUsers = ['ユーザーX', 'ユーザーY', 'ユーザーZ'];
+            followingUsers.forEach(user => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#'; // プロフィールページへのリンク（仮）
+                link.textContent = user;
+                listItem.appendChild(link);
+                followingList.appendChild(listItem);
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

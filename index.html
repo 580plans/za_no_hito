@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ミニブログ</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 水平方向中央揃え */
+        }
+
+        .container {
+            max-width: 960px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            display: flex;
+            width: 100%;
+            justify-content: center; /* メインコンテンツを中央に配置 */
+            margin-bottom: 20px;
+        }
+
+        aside.left-column {
+            width: 200px;
+            padding-right: 20px;
+            border-right: 1px solid #ccc;
+            margin-right: 20px; /* 中央コンテンツとの間隔 */
+        }
+
+        .main-content {
+            width: calc(100% - 220px - 20px); /* 左カラムの幅とマージンを考慮 */
+        }
+
+        .tab-container {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            width: 100%; /* タブコンテナを親要素の幅に合わせる */
+        }
+
+        .tab-buttons button {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px 15px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        .tab-buttons button.active {
+            background-color: #ddd;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 15px 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        #essay-timeline ul, #popular-essays-list ul, #active-threads-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #essay-timeline li, #popular-essays-list li, #active-threads-list li {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        #recent-essay-images-tab {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #recent-essay-images-tab img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #eee;
+            border-top: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ミニブログ</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">トップ</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <aside class="left-column">
+                <h3>ログイン</h3>
+                <form id="login-form-aside">
+                    <label for="email-login">メールアドレス:</label><br>
+                    <input type="email" id="email-login" name="email"><br><br>
+                    <label for="password-login">パスワード:</label><br>
+                    <input type="password" id="password-login" name="password"><br><br>
+                    <button type="submit">ログイン</button>
+                </form>
+                <hr>
+                <p><a href="register.html">新規登録はこちら</a></p>
+            </aside>
+            <div class="main-content">
+                <section class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="essays">新規の随筆</button>
+                        <button class="tab-button" data-tab="popular-essays">近頃多く読まれた随筆</button>
+                        <button class="tab-button" data-tab="recent-essay-images">近頃の画像</button>
+                        <button class="tab-button" data-tab="active-threads">近頃にぎやかなスレ</button>
+                    </div>
+                    <div id="essays" class="tab-content active">
+                        <ul id="essay-timeline">
+                            </ul>
+                    </div>
+                    <div id="popular-essays" class="tab-content">
+                        <h3>近頃多く読まれた随筆</h3>
+                        <ul id="popular-essays-list">
+                            </ul>
+                    </div>
+                    <div id="recent-essay-images" class="tab-content">
+                        <h3>近頃の画像</h3>
+                        <div id="recent-essay-images-tab">
+                            </div>
+                    </div>
+                    <div id="active-threads" class="tab-content">
+                        <h3>近頃にぎやかなスレ</h3>
+                        <ul id="active-threads-list">
+                            </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2025 ミニブログ</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabToShow = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    button.classList.add('active');
+                    document.getElementById(tabToShow).classList.add('active');
+                });
+
+                // 初期表示で「新規の随筆」タブをアクティブにする
+                if (button.dataset.tab === 'essays') {
+                    button.classList.add('active');
+                    document.getElementById('essays').classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
