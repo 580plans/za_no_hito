@@ -21,3 +21,40 @@
     テキストエディタ :VS Code
                     Webブラウザのデベロッパーツール
    <pre/>
+
+### インストール手順 (Installation Steps)
+
+このプロジェクトは、特別なインストール手順を必要としません。
+以下のいずれかの方法で、プロジェクトを開始できます。
+
+1.  **リポジトリをクローンする (推奨)**:
+    ```bash
+    git clone [https://github.com/580plans/za_no_hito.git](https://www.google.com/search?q=https://github.com/%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AE%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%90%8D/%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AE%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E5%90%8D.git)
+    cd za_no_hito
+    ```
+    クローン後、お好きなWebブラウザで `index.html` ファイルを開いてください。
+
+2.  **ZIPファイルをダウンロードする**:
+    GitHubのプロジェクトページから「Code」ボタンをクリックし、「Download ZIP」を選択してファイルをダウンロードしてください。
+    解凍後、解凍されたフォルダ内の `index.html` ファイルをWebブラウザで開いてください。
+
+ ### 環境変数設定 (Environment Variables)
+
+このプロジェクトでは、一部の外部サービスを利用するためにAPIキーなどの設定が必要です。
+以下のファイルを直接編集して、設定を行ってください。
+
+* `src/js/config.js` (または `assets/js/settings.js` など、設定ファイルの名前)
+
+    ```javascript
+    // src/js/config.js の例
+    const API_KEY = "YOUR_API_KEY_HERE"; // ここに取得したAPIキーを設定してください
+    const API_BASE_URL = "[https://api.example.com/v1](https://www.google.com/search?q=https://api.example.com/v1)";
+    ```
+    **注意**: APIキーは公開リポジトリに直接コミットしないことを強く推奨します。
+    可能であれば、サーバーサイドでプロキシを立てるなど、より安全な方法を検討してください。
+
+　3. 使い方 (Usage)
+ 基本的な使い方: 誰でもアカウントを作成することで、簡易ブログや掲示板の作成、閲覧、投稿ができ、ゆるくコミュニケーションが取れる場です
+ 
+
+  
