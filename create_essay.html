@@ -72,9 +72,7 @@
         .submit-button:hover {
             background-color: #0056b3;
         }
-        /* ヘッダーとフッターのスタイルはstyle.cssで共通化されている前提 */
-        /* もしこのページ専用のヘッダー・フッタースタイルが必要ならここに */
-        header { /* logged_in.htmlからコピー */
+        header {
             background-color: #333;
             color: white;
             padding: 10px 0;
@@ -82,35 +80,34 @@
             margin-bottom: 20px;
             width: 100%;
         }
-        nav ul { /* logged_in.htmlからコピー */
+        nav ul {
             list-style: none;
             padding: 0;
             margin: 10px 0;
             text-align: center;
         }
-        nav ul li { /* logged_in.htmlからコピー */
+        nav ul li {
             display: inline;
             margin: 0 10px;
         }
-        nav a { /* logged_in.htmlからコピー */
+        nav a {
             color: white;
             text-decoration: none;
         }
-        footer { /* logged_in.htmlからコピー */
+        footer {
             text-align: center;
             padding: 10px 0;
             background-color: #eee;
             border-top: 1px solid #ddd;
             width: 100%;
-            margin-top: 20px; /* mainとの間に少しマージン */
+            margin-top: 20px;
         }
-        .container { /* 既存のスタイルを適用するために追加 */
+        .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-
     </style>
 </head>
 <body>
@@ -139,18 +136,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="essay-image">画像を選択 (任意):</label>
-                    <input type="file" id="essay-image" name="essay-image" accept="image/*">
-                    <div class="preview-area" id="image-preview-area">
-                        <p>画像プレビュー</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="essay-video">動画を選択 (任意):</label>
-                    <input type="file" id="essay-video" name="essay-video" accept="video/*">
-                    <div class="preview-area" id="video-preview-area">
-                        <p>動画プレビュー</p>
+                    <label for="essay-media">メディアファイルを選択 (画像または動画, 任意):</label>
+                    <input type="file" id="essay-media" name="essay-media" accept="image/*,video/*">
+                    <div class="preview-area" id="media-preview-area">
+                        <p>メディアプレビュー</p>
                     </div>
                 </div>
 
@@ -166,65 +155,47 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const essayForm = document.getElementById('essay-form');
-            const imageInput = document.getElementById('essay-image');
-            const videoInput = document.getElementById('essay-video');
-            const imagePreviewArea = document.getElementById('image-preview-area');
-            const videoPreviewArea = document.getElementById('video-preview-area');
+            const mediaInput = document.getElementById('essay-media');
+            const mediaPreviewArea = document.getElementById('media-preview-area');
 
-            function setupPreview(inputElement, previewAreaElement) {
-                inputElement.addEventListener('change', (event) => {
-                    previewAreaElement.innerHTML = `<p>${inputElement.accept.includes('image') ? '画像' : '動画'}プレビュー</p>`; // 古いプレビューをクリア
-                    const file = event.target.files[0];
-                    if (file) {
-                        if (inputElement.accept.includes('image') && file.type.startsWith('image/')) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                const img = document.createElement('img');
-                                img.src = e.target.result;
-                                previewAreaElement.innerHTML = '';
-                                previewAreaElement.appendChild(img);
-                            }
-                            reader.readAsDataURL(file);
-                        } else if (inputElement.accept.includes('video') && file.type.startsWith('video/')) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                const video = document.createElement('video');
-                                video.src = e.target.result;
-                                video.controls = true;
-                                previewAreaElement.innerHTML = '';
-                                previewAreaElement.appendChild(video);
-                            }
-                            reader.readAsDataURL(file);
+            mediaInput.addEventListener('change', (event) => {
+                mediaPreviewArea.innerHTML = '<p>メディアプレビュー</p>'; // 古いプレビューをクリア
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        mediaPreviewArea.innerHTML = ''; // "メディアプレビュー"のテキストを消す
+                        if (file.type.startsWith('image/')) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            mediaPreviewArea.appendChild(img);
+                        } else if (file.type.startsWith('video/')) {
+                            const video = document.createElement('video');
+                            video.src = e.target.result;
+                            video.controls = true;
+                            mediaPreviewArea.appendChild(video);
                         } else {
-                            previewAreaElement.innerHTML = `<p>選択されたファイルはサポートされていません。</p>`;
+                            mediaPreviewArea.innerHTML = '<p>選択されたファイル形式はサポートされていません。</p>';
                         }
-                    }
-                });
-            }
-
-            setupPreview(imageInput, imagePreviewArea);
-            setupPreview(videoInput, videoPreviewArea);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
 
             essayForm.addEventListener('submit', (event) => {
                 event.preventDefault();
 
                 const title = document.getElementById('essay-title').value;
                 const content = document.getElementById('essay-content').value;
-                const imageFile = imageInput.files[0];
-                const videoFile = videoInput.files[0];
+                const mediaFile = mediaInput.files[0];
 
                 const formData = new FormData();
                 formData.append('title', title);
                 formData.append('content', content);
-                if (imageFile) {
-                    formData.append('image', imageFile, imageFile.name);
-                }
-                if (videoFile) {
-                    formData.append('video', videoFile, videoFile.name);
+                if (mediaFile) {
+                    formData.append('media', mediaFile, mediaFile.name);
                 }
 
-                // FormDataの内容をコンソールに出力する（デバッグ用）
-                // 通常、FormDataの中身は直接console.logでは見えにくいので、以下のように確認
                 for (let [key, value] of formData.entries()) {
                     console.log(`${key}:`, value);
                 }
@@ -234,6 +205,6 @@
             });
         });
     </script>
-    {/* <script src="script.js"></script> */} {/* 必要であればコメントアウトを外して共通スクリプトを読み込む */}
+    <!-- <script src="script.js"></script> --> 
 </body>
 </html>

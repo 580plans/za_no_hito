@@ -113,10 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return '';
         }
         let temp = unsafe;
+        // HTMLエンティティへの正しい置換
         temp = temp.replace(/&/g, "&");
         temp = temp.replace(/</g, "<");
         temp = temp.replace(/>/g, ">");
-        temp = temp.replace(/"/g, """);
+        temp = temp.replace(/"/g, '"'); // ★★★ ここが修正点です ★★★
         temp = temp.replace(/'/g, "'");
         return temp;
      }
