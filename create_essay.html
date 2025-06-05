@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随筆を書く - 座の人</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* このページ専用のスタイルを追加する場合はここに記述 */
+        .editor-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        .form-group input[type="file"] {
+            display: block;
+            margin-top: 5px;
+        }
+        .preview-area {
+            margin-top: 10px;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            min-height: 50px;
+            display: flex; /* プレビュー要素を中央揃えにしやすくする */
+            justify-content: center; /* 水平中央揃え */
+            align-items: center; /* 垂直中央揃え */
+            flex-direction: column; /* プレビュー要素が縦に並ぶように */
+        }
+        .preview-area img,
+        .preview-area video {
+            max-width: 100%;
+            max-height: 300px; /* プレビューの最大高さを設定 */
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .preview-area p { /* プレビューがない時のテキスト用 */
+            color: #777;
+        }
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+        /* ヘッダーとフッターのスタイルはstyle.cssで共通化されている前提 */
+        /* もしこのページ専用のヘッダー・フッタースタイルが必要ならここに */
+        header { /* logged_in.htmlからコピー */
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        nav ul { /* logged_in.htmlからコピー */
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            text-align: center;
+        }
+        nav ul li { /* logged_in.htmlからコピー */
+            display: inline;
+            margin: 0 10px;
+        }
+        nav a { /* logged_in.htmlからコピー */
+            color: white;
+            text-decoration: none;
+        }
+        footer { /* logged_in.htmlからコピー */
+            text-align: center;
+            padding: 10px 0;
+            background-color: #eee;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            margin-top: 20px; /* mainとの間に少しマージン */
+        }
+        .container { /* 既存のスタイルを適用するために追加 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>座の人</h1>
+            <nav>
+                <ul>
+                    <li><a href="logged_in.html">ホーム</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="editor-container">
+            <h2>随筆を執筆する</h2>
+            <form id="essay-form">
+                <div class="form-group">
+                    <label for="essay-title">タイトル:</label>
+                    <input type="text" id="essay-title" name="essay-title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="essay-content">本文:</label>
+                    <textarea id="essay-content" name="essay-content" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="essay-image">画像を選択 (任意):</label>
+                    <input type="file" id="essay-image" name="essay-image" accept="image/*">
+                    <div class="preview-area" id="image-preview-area">
+                        <p>画像プレビュー</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="essay-video">動画を選択 (任意):</label>
+                    <input type="file" id="essay-video" name="essay-video" accept="video/*">
+                    <div class="preview-area" id="video-preview-area">
+                        <p>動画プレビュー</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-button">投稿する</button>
+            </form>
+        </main>
+
+        <footer>
+            <p>© 2025 座の人</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const essayForm = document.getElementById('essay-form');
+            const imageInput = document.getElementById('essay-image');
+            const videoInput = document.getElementById('essay-video');
+            const imagePreviewArea = document.getElementById('image-preview-area');
+            const videoPreviewArea = document.getElementById('video-preview-area');
+
+            function setupPreview(inputElement, previewAreaElement) {
+                inputElement.addEventListener('change', (event) => {
+                    previewAreaElement.innerHTML = `<p>${inputElement.accept.includes('image') ? '画像' : '動画'}プレビュー</p>`; // 古いプレビューをクリア
+                    const file = event.target.files[0];
+                    if (file) {
+                        if (inputElement.accept.includes('image') && file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                previewAreaElement.innerHTML = '';
+                                previewAreaElement.appendChild(img);
+                            }
+                            reader.readAsDataURL(file);
+                        } else if (inputElement.accept.includes('video') && file.type.startsWith('video/')) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const video = document.createElement('video');
+                                video.src = e.target.result;
+                                video.controls = true;
+                                previewAreaElement.innerHTML = '';
+                                previewAreaElement.appendChild(video);
+                            }
+                            reader.readAsDataURL(file);
+                        } else {
+                            previewAreaElement.innerHTML = `<p>選択されたファイルはサポートされていません。</p>`;
+                        }
+                    }
+                });
+            }
+
+            setupPreview(imageInput, imagePreviewArea);
+            setupPreview(videoInput, videoPreviewArea);
+
+            essayForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const title = document.getElementById('essay-title').value;
+                const content = document.getElementById('essay-content').value;
+                const imageFile = imageInput.files[0];
+                const videoFile = videoInput.files[0];
+
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('content', content);
+                if (imageFile) {
+                    formData.append('image', imageFile, imageFile.name);
+                }
+                if (videoFile) {
+                    formData.append('video', videoFile, videoFile.name);
+                }
+
+                // FormDataの内容をコンソールに出力する（デバッグ用）
+                // 通常、FormDataの中身は直接console.logでは見えにくいので、以下のように確認
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}:`, value);
+                }
+
+                alert('随筆を投稿しました！（仮処理）\nコンソールで送信データを確認してください。');
+                // window.location.href = 'logged_in.html';
+            });
+        });
+    </script>
+    {/* <script src="script.js"></script> */} {/* 必要であればコメントアウトを外して共通スクリプトを読み込む */}
+</body>
+</html>

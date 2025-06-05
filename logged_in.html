@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ミニブログ - ログイン後</title>
+    <title>座の人 - ログイン後</title>
     <link rel="stylesheet" href="style.css">
     <style>
         /* 基本的なスタイルは style.css に記述 */
@@ -155,7 +155,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>ミニブログ</h1>
+            <h1>座の人</h1>
             <nav>
                 <ul>
                     <li><a href="logged_in.html">ホーム</a></li>
@@ -169,7 +169,7 @@
                 <ul>
                     <li><a href="profile.html">ユーザー名</a></li>
                     <li><a href="notifications.html">通知</a></li>
-                    <li><a href="#">随筆を書く</a></li>
+                    <li><a href="create_essay.html">随筆を書く</a></li>
                     <li><a href="#">過去の随筆</a></li>
                     <li>刮目</li>
                     <ul id="following-list">
@@ -210,7 +210,7 @@
             </div>
         </main>
         <footer>
-            <p>&copy; 2025 ミニブログ</p>
+            <p>© 2025 座の人</p>
         </footer>
     </div>
     <script>
@@ -238,6 +238,9 @@
 
             // 仮の刮目リスト
             const followingList = document.getElementById('following-list');
+            // 元々あった仮のリストに追加する形で記述
+            // もし置き換えたい場合は、以下の初期化処理をコメントアウト解除してください
+            // followingList.innerHTML = ''; // 既存のリストをクリアする場合
             const followingUsers = ['ユーザーX', 'ユーザーY', 'ユーザーZ'];
             followingUsers.forEach(user => {
                 const listItem = document.createElement('li');

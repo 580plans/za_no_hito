@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 各要素を取得する前に、存在確認を行うように変更
     const essayTimelineList = document.getElementById('essay-timeline');
     const popularEssaysList = document.getElementById('popular-essays-list');
     const recentEssayImagesTab = document.getElementById('recent-essay-images-tab');
-    const activeThreadsList = document.getElementById('active-threads-list');
 
     const loginFormAside = document.getElementById('login-form-aside');
     const emailLoginInput = document.getElementById('email-login');
@@ -13,18 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let recentEssayImages = [];
     let activeThreads = [];
 
-    // ローカルストレージから随筆を読み込む
     const storedEssays = localStorage.getItem('essays');
     if (storedEssays) {
-        essays = JSON.parse(storedEssays);
-        renderEssayTimeline();
+        try {
+            essays = JSON.parse(storedEssays);
+        } catch (e) {
+            console.error("Error parsing essays from localStorage:", e);
+            essays = [];
+        }
     }
 
-    // 仮の随筆データ
     popularEssays = [{ id: 1, content: '人気の随筆 1' }, { id: 2, content: '注目の随筆' }];
     recentEssayImages = ['https://via.placeholder.com/80/800080', 'https://via.placeholder.com/80/008000'];
-
-    // 仮の掲示板データ
     activeThreads = [{ id: 3, title: '活況スレッドBBS' }];
 
     renderEssayTimeline();
@@ -32,64 +32,98 @@ document.addEventListener('DOMContentLoaded', () => {
     renderRecentEssayImages();
     renderActiveThreads();
 
-    loginFormAside.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const email = emailLoginInput.value;
-        const password = passwordLoginInput.value;
-        console.log('ログイン試行:', email, password);
-        // 実際のログイン処理は別途実装
-    });
+    if (loginFormAside && emailLoginInput && passwordLoginInput) {
+        loginFormAside.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = emailLoginInput.value;
+            const password = passwordLoginInput.value;
+            console.log('ログイン試行:', email, password);
+        });
+    }
 
     function renderEssayTimeline() {
-        essayTimelineList.innerHTML = '';
-        essays.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(essay => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<p>${escapeHtml(essay.content)}</p> <span class="post-meta">${essay.timestamp}</span>`;
-            essayTimelineList.appendChild(listItem);
-        });
+        if (essayTimelineList) {
+            essayTimelineList.innerHTML = '';
+            if (Array.isArray(essays)) {
+                essays.sort((a, b) => {
+                    const dateA = a && a.timestamp ? new Date(a.timestamp) : new Date(0);
+                    const dateB = b && b.timestamp ? new Date(b.timestamp) : new Date(0);
+                    return dateB - dateA;
+                }).forEach(essay => {
+                    if (essay && typeof essay.content !== 'undefined') {
+                        const listItem = document.createElement('li');
+                        const timestampText = essay.timestamp ? `<span class="post-meta">${new Date(essay.timestamp).toLocaleString()}</span>` : '';
+                        listItem.innerHTML = `<p>${escapeHtml(String(essay.content))}</p> ${timestampText}`;
+                        essayTimelineList.appendChild(listItem);
+                    }
+                });
+            }
+        }
     }
 
     function renderPopularEssays() {
-        popularEssaysList.innerHTML = '';
-        popularEssays.forEach(essay => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<p>${escapeHtml(essay.content)}</p>`;
-            popularEssaysList.appendChild(listItem);
-        });
+        if (popularEssaysList) {
+            popularEssaysList.innerHTML = '';
+            if (Array.isArray(popularEssays)) {
+                popularEssays.forEach(essay => {
+                    if (essay && typeof essay.content !== 'undefined') {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<p>${escapeHtml(String(essay.content))}</p>`;
+                        popularEssaysList.appendChild(listItem);
+                    }
+                });
+            }
+        }
     }
 
     function renderRecentEssayImages() {
-        recentEssayImagesTab.innerHTML = '';
-        recentEssayImages.forEach(imageUrl => {
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            recentEssayImagesTab.appendChild(img);
-        });
+        if (recentEssayImagesTab) {
+            recentEssayImagesTab.innerHTML = '';
+            if (Array.isArray(recentEssayImages)) {
+                recentEssayImages.forEach(imageUrl => {
+                    if (typeof imageUrl === 'string') {
+                        const img = document.createElement('img');
+                        img.src = imageUrl;
+                        img.alt = "Recent Essay Image";
+                        recentEssayImagesTab.appendChild(img);
+                    }
+                });
+            }
+        }
     }
 
     function renderActiveThreads() {
         const activeThreadsListElement = document.getElementById('active-threads-list');
         if (activeThreadsListElement) {
             activeThreadsListElement.innerHTML = '';
-            activeThreads.forEach(thread => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `<a href="thread.html?id=${thread.id}">${escapeHtml(thread.title)}</a>`;
-                activeThreadsListElement.appendChild(listItem);
-            });
+            if (Array.isArray(activeThreads)) {
+                activeThreads.forEach(thread => {
+                    if (thread && typeof thread.id !== 'undefined' && typeof thread.title !== 'undefined') {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<a href="thread.html?id=${thread.id}">${escapeHtml(String(thread.title))}</a>`;
+                        activeThreadsListElement.appendChild(listItem);
+                    }
+                });
+            }
         }
     }
 
     function escapeHtml(unsafe) {
-        return unsafe
-             .replace(/&/g, "&amp;")
-             .replace(/</g, "&lt;")
-             .replace(/>/g, "&gt;")
-             .replace(/"/g, "&quot;")
-             .replace(/'/g, "&#039;");
+        if (typeof unsafe !== 'string') {
+            return '';
+        }
+        let temp = unsafe;
+        temp = temp.replace(/&/g, "&");
+        temp = temp.replace(/</g, "<");
+        temp = temp.replace(/>/g, ">");
+        temp = temp.replace(/"/g, """);
+        temp = temp.replace(/'/g, "'");
+        return temp;
      }
 
-    renderEssayTimeline();
-    renderPopularEssays();
-    renderRecentEssayImages();
-    renderActiveThreads();
+    // DOMContentLoadedの最後で再度呼び出している箇所は、通常は不要なのでコメントアウト推奨
+    // renderEssayTimeline();
+    // renderPopularEssays();
+    // renderRecentEssayImages();
+    // renderActiveThreads();
 });
