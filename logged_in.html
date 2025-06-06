@@ -6,16 +6,14 @@
     <title>座の人 - ログイン後</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 基本的なスタイルは style.css に記述 */
         body {
             font-family: sans-serif;
             margin: 20px;
             background-color: #f4f4f4;
             display: flex;
             flex-direction: column;
-            align-items: center; /* 水平方向中央揃え */
+            align-items: center;
         }
-
         .container {
             max-width: 960px;
             background-color: #fff;
@@ -26,7 +24,6 @@
             flex-wrap: wrap;
             justify-content: space-between;
         }
-
         header {
             background-color: #333;
             color: white;
@@ -35,108 +32,187 @@
             margin-bottom: 20px;
             width: 100%;
         }
-
         nav ul {
             list-style: none;
             padding: 0;
             margin: 10px 0;
             text-align: center;
         }
-
         nav ul li {
             display: inline;
             margin: 0 10px;
         }
-
         nav a {
             color: white;
             text-decoration: none;
         }
-
         main {
             display: flex;
             width: 100%;
-            justify-content: center; /* メインコンテンツを中央に配置 */
+            justify-content: center;
             margin-bottom: 20px;
         }
-
         aside.left-column-logged-in {
             width: 200px;
             padding-right: 20px;
             border-right: 1px solid #ccc;
-            margin-right: 20px; /* 中央コンテンツとの間隔 */
+            margin-right: 20px;
         }
-
         aside.left-column-logged-in ul {
             list-style: none;
             padding: 0;
         }
-
         aside.left-column-logged-in li {
             padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
-
+        aside.left-column-logged-in li:last-child {
+            border-bottom: none;
+        }
         aside.left-column-logged-in li a {
             text-decoration: none;
             color: #333;
         }
-
         .user-image-logged-in {
             width: 80px;
             height: 80px;
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
-
         .main-content-logged-in {
-            width: calc(100% - 220px - 20px); /* 左カラムの幅とマージンを考慮 */
+            width: calc(100% - 220px - 20px);
         }
-
         .tab-container-logged-in {
             margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-            width: 100%; /* タブコンテナを親要素の幅に合わせる */
+            width: 100%;
         }
-
+        .tab-buttons-logged-in {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
         .tab-buttons-logged-in button {
             background-color: #f0f0f0;
             border: none;
+            border-bottom: 3px solid transparent;
             padding: 10px 15px;
             margin-right: 5px;
             cursor: pointer;
+            transition: background-color 0.2s, border-bottom-color 0.2s, color 0.2s;
+            color: #333;
         }
-
+        .tab-buttons-logged-in button:hover {
+            background-color: #e0e0e0;
+        }
         .tab-buttons-logged-in button.active {
-            background-color: #ddd;
+            background-color: #4a4a4a;
+            color: #fff;
+            border-bottom: 3px solid #fff;
+            font-weight: bold;
         }
-
         .tab-content-logged-in {
             display: none;
-            padding: 15px 0;
+            padding: 0 5px;
         }
-
         .tab-content-logged-in.active {
             display: block;
         }
-
-        #essay-timeline-logged-in ul {
+        #essay-timeline-logged-in {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .essay-item-logged-in {
+            padding: 0;
+            border-bottom: 1px solid #eee;
+        }
+        .essay-item-logged-in:last-child {
+            border-bottom: none;
+        }
+        .essay-title-container {
+            background-color: #f0f0f0;
+            padding: 10px 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h4.essay-title-logged-in {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            flex-grow: 1;
+            margin-right: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        h4.essay-title-logged-in a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        h4.essay-title-logged-in a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+        .essay-author-logged-in {
+            font-size: 0.9em;
+            color: #555;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .essay-author-logged-in a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .essay-author-logged-in a:hover {
+            color: #007bff;
+            text-decoration: underline;
+        }
+        .essay-snippet-logged-in {
+            padding: 0 15px;
+            margin-bottom: 12px;
+            color: #444;
+            line-height: 1.65;
+            font-size: 1em;
+        }
+        .essay-meta-logged-in {
+            padding: 0 15px;
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        #popular-essays-list, #active-threads-list {
             list-style: none;
             padding: 0;
         }
-
-        #essay-timeline-logged-in li {
+        #popular-essays-list li, #active-threads-list li {
             border-bottom: 1px solid #eee;
             padding: 10px 0;
         }
-
-        .essay-meta {
-            color: #777;
-            font-size: 0.9em;
-            margin-top: 5px;
+        #popular-essays-list li:last-child, #active-threads-list li:last-child {
+            border-bottom: none;
         }
-
+        #recent-essay-images-tab {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        #recent-essay-images-tab img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
         footer {
             text-align: center;
             padding: 10px 0;
@@ -144,7 +220,6 @@
             border-top: 1px solid #ddd;
             width: 100%;
         }
-
         .clearfix::after {
             content: "";
             clear: both;
@@ -160,6 +235,7 @@
                 <ul>
                     <li><a href="logged_in.html">ホーム</a></li>
                     <li><a href="bulletinboard.html">掲示板</a></li>
+                    <!-- <li><a href="index.html">ログアウト(仮)</a></li> ★削除 -->
                 </ul>
             </nav>
         </header>
@@ -167,16 +243,13 @@
             <aside class="left-column-logged-in">
                 <img src="default_user.png" alt="ユーザー画像" class="user-image-logged-in">
                 <ul>
-                    <li><a href="profile.html">ユーザー名</a></li>
+                    <li><a href="profile.html">ユーザー名(仮)</a></li>
                     <li><a href="notifications.html">通知</a></li>
                     <li><a href="create_essay.html">随筆を書く</a></li>
                     <li><a href="#">過去の随筆</a></li>
-                    <li>刮目</li>
+                    <li>刮目中の人</li>
                     <ul id="following-list">
-                        <li><a href="#">ユーザーA</a></li>
-                        <li><a href="#">ユーザーB</a></li>
-                        <li><a href="#">ユーザーC</a></li>
-                        </ul>
+                    </ul>
                 </ul>
             </aside>
             <div class="main-content-logged-in">
@@ -189,22 +262,22 @@
                     </div>
                     <div id="essays" class="tab-content-logged-in active">
                         <ul id="essay-timeline-logged-in">
-                            </ul>
+                        </ul>
                     </div>
                     <div id="popular-essays" class="tab-content-logged-in">
                         <h3>近頃多く読まれた随筆</h3>
                         <ul id="popular-essays-list">
-                            </ul>
+                        </ul>
                     </div>
                     <div id="recent-essay-images" class="tab-content-logged-in">
                         <h3>近頃の画像</h3>
                         <div id="recent-essay-images-tab">
-                            </div>
+                        </div>
                     </div>
                     <div id="active-threads" class="tab-content-logged-in">
                         <h3>近頃にぎやかなスレ</h3>
                         <ul id="active-threads-list">
-                            </ul>
+                        </ul>
                     </div>
                 </section>
             </div>
@@ -217,39 +290,37 @@
         document.addEventListener('DOMContentLoaded', () => {
             const tabButtons = document.querySelectorAll('.tab-button-logged-in');
             const tabContents = document.querySelectorAll('.tab-content-logged-in');
-
+            let activeTab = 'essays';
+            const initialActiveButton = document.querySelector(`.tab-button-logged-in[data-tab="${activeTab}"]`);
+            const initialActiveContent = document.getElementById(activeTab);
+            if (initialActiveButton && initialActiveContent) {
+                initialActiveButton.classList.add('active');
+                initialActiveContent.classList.add('active');
+            }
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const tabToShow = button.dataset.tab;
-
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
-
                     button.classList.add('active');
-                    document.getElementById(tabToShow).classList.add('active');
+                    const newActiveContent = document.getElementById(tabToShow);
+                    if (newActiveContent) {
+                        newActiveContent.classList.add('active');
+                    }
                 });
-
-                // 初期表示で「新規の随筆」タブをアクティブにする
-                if (button.dataset.tab === 'essays') {
-                    button.classList.add('active');
-                    document.getElementById('essays').classList.add('active');
-                }
             });
-
-            // 仮の刮目リスト
             const followingList = document.getElementById('following-list');
-            // 元々あった仮のリストに追加する形で記述
-            // もし置き換えたい場合は、以下の初期化処理をコメントアウト解除してください
-            // followingList.innerHTML = ''; // 既存のリストをクリアする場合
-            const followingUsers = ['ユーザーX', 'ユーザーY', 'ユーザーZ'];
-            followingUsers.forEach(user => {
-                const listItem = document.createElement('li');
-                const link = document.createElement('a');
-                link.href = '#'; // プロフィールページへのリンク（仮）
-                link.textContent = user;
-                listItem.appendChild(link);
-                followingList.appendChild(listItem);
-            });
+            if (followingList) {
+                const followingUsers = ['ユーザーA', 'ユーザーB', 'ユーザーC', 'ユーザーX', 'ユーザーY', 'ユーザーZ'];
+                followingUsers.forEach(user => {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.textContent = user;
+                    listItem.appendChild(link);
+                    followingList.appendChild(listItem);
+                });
+            }
         });
     </script>
     <script src="script.js"></script>
