@@ -7,107 +7,13 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* bulletinboard.html 専用のスタイル */
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        div.container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        main#bulletinboard-main-container {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            max-width: 960px;
-            margin: 20px auto;
-            gap: 20px;
-        }
-        aside#bulletinboard-categories {
-            width: 200px;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            flex-shrink: 0;
-            align-self: flex-start; /* 左カラムの高さをコンテンツに合わせる */
-        }
-        aside#bulletinboard-categories h3 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
-        }
-        aside#bulletinboard-categories ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        aside#bulletinboard-categories li a,
-        aside#bulletinboard-categories .board-top-link a { /* ★トップへのリンクスタイルも共通化 */
-            display: block;
-            padding: 8px 5px;
-            text-decoration: none;
-            color: #333;
-            border-bottom: 1px dotted #ccc;
-            transition: background-color 0.2s;
-        }
-        aside#bulletinboard-categories li:last-child a { /* 通常のカテゴリリンクの最後の罫線 */
-            /* border-bottom: none;  トップへのリンクが追加されるので、これは不要になるかも */
-        }
-        aside#bulletinboard-categories .board-top-link a { /* ★トップへのリンク専用スタイル */
-            font-weight: bold;
-            color: #0056b3; /* 少し目立たせる */
-            border-bottom: 1px solid #ccc; /* 他の項目と区切り線を合わせる */
-        }
-        aside#bulletinboard-categories li a:hover,
-        aside#bulletinboard-categories .board-top-link a:hover {
-            background-color: #e9e9e9;
-        }
-        div#bulletinboard-content {
-            flex-grow: 1;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-        }
-        #bulletinboard-top h3 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee;
-            font-size: 1.3em;
-        }
-        #popular-threads-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        #popular-threads-list li {
-            padding: 8px 5px;
-            border-bottom: 1px dotted #ccc;
-        }
-        #popular-threads-list li:last-child {
-            border-bottom: none;
-        }
-        #popular-threads-list li a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        #popular-threads-list li a:hover {
-            text-decoration: underline;
-        }
-        p.back-to-top-link {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
+        /* 基本的には style.css で管理するため、ここは空か最小限になるはず */
+        /* body, div.container, main#bulletinboard-main-container のスタイルはstyle.cssで定義済み */
+        
+        /* 右コンテンツエリアのスタイルは style.css で定義済み */
+        /* div#bulletinboard-content, #bulletinboard-top h3, #popular-threads-list など */
+
+        /* p.back-to-top-link のスタイルも style.css で定義済み */
     </style>
 </head>
 <body>
@@ -124,21 +30,10 @@
         </header>
 
         <main id="bulletinboard-main-container">
-            <aside id="bulletinboard-categories">
-                <div class="board-top-link"> <!-- ★トップへのリンク追加 -->
-                    <a href="bulletinboard.html">掲示板トップ（にぎやかなスレ）</a>
-                </div>
-                <h3>分類</h3>
-                <ul>
-                    <li><a href="category_zatsudan.html">雑談</a></li>
-                    <li><a href="category_news.html">ニュース</a></li>
-                    <li><a href="category_work.html">会社・仕事</a></li>
-                    <li><a href="category_anime.html">アニメ</a></li>
-                    <li><a href="category_sports.html">スポーツ</a></li>
-                    <li><a href="category_tv.html">テレビ</a></li>
-                    <li><a href="category_game.html">ゲーム</a></li>
-                </ul>
-            </aside>
+            <!-- 左カラムのプレースホルダー ★変更点 -->
+            <div id="left-column-placeholder">
+                <!-- ここに _left_column_bulletinboard.html の内容が挿入されます -->
+            </div>
 
             <div id="bulletinboard-content">
                 <section id="bulletinboard-top">
@@ -147,24 +42,25 @@
                         <!-- bulletinboard.jsによって内容がここに挿入されます -->
                     </ul>
                 </section>
-
-                <!-- 「新しいスレッドを作成」フォームは削除 -->
-                <!--
-                <div class="post-form">
-                    <h3>新しいスレッドを作成</h3>
-                    <input type="text" id="bulletin-board-title" placeholder="スレッド名">
-                    <button id="create-bulletin-board">作成</button>
-                </div>
-                -->
             </div>
         </main>
 
-        <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p> <!-- テキスト変更 -->
+        <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p>
 
         <footer>
             <p>© 2025 座の人</p>
         </footer>
     </div>
-    <script src="bulletinboard.js"></script> <!-- 掲示板トップ用のJS -->
+    <script src="load_parts.js"></script> <!-- ★部品読み込みJSを先に -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 左カラムを読み込む (このページは特定のカテゴリではないので、activeCategory は null)
+            // もし「和気あいあい」をアクティブにしたい場合は、
+            // _left_column_bulletinboard.html の該当リンクに data-category="wakiaiai" などを追加し、
+            // loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder', 'wakiaiai'); のようにする
+            loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder');
+        });
+    </script>
+    <script src="bulletinboard.js"></script>
 </body>
 </html>

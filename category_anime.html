@@ -3,20 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アニメ - 掲示板 - 座の人</title> <!-- ★変更 -->
+    <title>アニメ - 掲示板 - 座の人</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* category_*.html 共通のスタイル (category_zatsudan.html と同じ) */
         body { display: flex; flex-direction: column; min-height: 100vh; }
         div.container { flex: 1; display: flex; flex-direction: column; }
         main#bulletinboard-main-container { display: flex; flex: 1; width: 100%; max-width: 960px; margin: 20px auto; gap: 20px; }
-        aside#bulletinboard-categories { width: 200px; background-color: #f9f9f9; padding: 15px; border-radius: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); flex-shrink: 0; align-self: flex-start; }
-        aside#bulletinboard-categories h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.2em; padding-bottom: 5px; border-bottom: 1px solid #eee; }
-        aside#bulletinboard-categories ul { list-style: none; padding: 0; margin: 0; }
-        aside#bulletinboard-categories li a, aside#bulletinboard-categories .board-top-link a { display: block; padding: 8px 5px; text-decoration: none; color: #333; border-bottom: 1px dotted #ccc; transition: background-color 0.2s; }
-        aside#bulletinboard-categories .board-top-link a { font-weight: bold; color: #0056b3; border-bottom: 1px solid #ccc; }
-        aside#bulletinboard-categories li a.active-category { background-color: #d0e0ff; font-weight: bold; }
-        aside#bulletinboard-categories li a:hover, aside#bulletinboard-categories .board-top-link a:hover { background-color: #e9e9e9; }
         div#category-content { flex-grow: 1; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         div#category-content h2 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; color: #333; }
         ul#category-threads-list { list-style: none; padding: 0; margin: 0 0 20px 0; flex-grow: 1; }
@@ -35,37 +27,12 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>座の人</h1>
-            <nav>
-                <ul>
-                    <li><a href="index.html">トップ</a></li>
-                    <li><a href="logged_in.html">ホーム(ログイン後)</a></li>
-                    <li><a href="bulletinboard.html">掲示板</a></li>
-                </ul>
-            </nav>
-        </header>
+        <header><h1>座の人</h1><nav><ul><li><a href="index.html">トップ</a></li><li><a href="logged_in.html">ホーム(ログイン後)</a></li><li><a href="bulletinboard.html">掲示板</a></li></ul></nav></header>
         <main id="bulletinboard-main-container">
-            <aside id="bulletinboard-categories">
-                <div class="board-top-link">
-                    <a href="bulletinboard.html">掲示板トップ（にぎやかなスレ）</a>
-                </div>
-                <h3>分類</h3>
-                <ul>
-                    <li><a href="category_zatsudan.html">雑談</a></li>
-                    <li><a href="category_news.html">ニュース</a></li>
-                    <li><a href="category_work.html">会社・仕事</a></li>
-                    <li><a href="category_anime.html" class="active-category">アニメ</a></li> <!-- ★変更 -->
-                    <li><a href="category_sports.html">スポーツ</a></li>
-                    <li><a href="category_tv.html">テレビ</a></li>
-                    <li><a href="category_game.html">ゲーム</a></li>
-                </ul>
-            </aside>
+            <div id="left-column-placeholder"></div>
             <div id="category-content">
                 <h2 id="category-name-display">アニメスレッド一覧</h2>
-                <ul id="category-threads-list">
-                    <!-- category.jsによってこのカテゴリのスレッドがここに挿入されます -->
-                </ul>
+                <ul id="category-threads-list"></ul>
                 <div class="post-form">
                     <h3>新しいスレッドを「アニメ」に作成</h3>
                     <input type="text" id="new-thread-title" placeholder="スレッド名">
@@ -74,10 +41,15 @@
             </div>
         </main>
         <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p>
-        <footer>
-            <p>© 2025 座の人</p>
-        </footer>
+        <footer><p>© 2025 座の人</p></footer>
     </div>
+    <script src="load_parts.js"></script>
+    <script>
+        const currentCategoryForPage = 'anime';
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder', currentCategoryForPage);
+        });
+    </script>
     <script src="category.js"></script>
 </body>
 </html>
