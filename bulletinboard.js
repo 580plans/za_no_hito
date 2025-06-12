@@ -1,92 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const bulletinBoardList = document.getElementById('bulletin-board-list');
-    const createBulletinBoardButton = document.getElementById('create-bulletin-board');
-    const bulletinBoardTitleInput = document.getElementById('bulletin-board-title');
-    const popularThreadsList = document.getElementById('popular-threads-list');
-    const recentImagesBoard = document.getElementById('recent-images-board');
-    const activeThreadsList = document.getElementById('active-threads-list');
+    // const createBulletinBoardButton = document.getElementById('create-bulletin-board'); // ★削除
+    // const bulletinBoardTitleInput = document.getElementById('bulletin-board-title'); // ★削除
+    const popularThreadsList = document.getElementById('popular-threads-list'); // 「近頃にぎやかなスレ」用
 
-    let bulletinBoards = [];
-    let popularThreads = []; // 仮のデータ
-    let recentBoardImages = []; // 仮のデータ
-    let activeBoardThreads = []; // 仮のデータ
+    // let bulletinBoards = []; // bulletinboard.htmlではスレッド作成機能がなくなったため、このページでは直接使わない
+    let popularThreadsData = [];
 
-    // ローカルストレージから掲示板を読み込む
-    const storedBoards = localStorage.getItem('bulletinBoards');
-    if (storedBoards) {
-        bulletinBoards = JSON.parse(storedBoards);
-        renderBulletinBoards();
-    }
+    // 「近頃にぎやかなスレ」の仮データ
+    popularThreadsData = [
+        { id: 'pop1', title: '【雑談】今日の出来事 Part2', accessCount: 150 },
+        { id: 'pop2', title: 'おすすめのランチ教えてください！', accessCount: 120 },
+        { id: 'pop3', title: '最新ゲームの攻略情報交換', accessCount: 100 },
+        { id: 'pop4', title: '週末どこ行く？お出かけ相談', accessCount: 90 },
+        { id: 'pop5', title: '見てるアニメについて語ろう', accessCount: 85 }
+    ];
 
-    // 仮のデータ
-    popularThreads = [{ id: 1, title: '人気スレッドBBS 1' }, { id: 2, title: '注目スレッドBBS' }];
-    recentBoardImages = ['https://via.placeholder.com/50/0000FF', 'https://via.placeholder.com/50/FF0000'];
-    activeBoardThreads = [{ id: 3, title: '活況スレッドBBS' }];
+    renderLivelyThreads();
 
-    renderPopularThreads();
-    renderRecentBoardImages();
-    renderActiveThreads();
-
-    createBulletinBoardButton.addEventListener('click', () => {
-        const title = bulletinBoardTitleInput.value.trim();
-        if (title !== '') {
-            const newBoard = {
-                id: Date.now(),
-                title: title
-            };
-            bulletinBoards.push(newBoard);
-            saveBulletinBoards();
-            renderBulletinBoards();
-            bulletinBoardTitleInput.value = '';
-        }
-    });
-
-    function renderBulletinBoards() {
-        bulletinBoardList.innerHTML = '';
-        bulletinBoards.forEach(board => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<a href="thread.html?id=${board.id}">${escapeHtml(board.title)}</a>`;
-            bulletinBoardList.appendChild(listItem);
+    /* ★スレッド作成フォームがなくなったため、以下の処理は不要
+    if (createBulletinBoardButton && bulletinBoardTitleInput) {
+        createBulletinBoardButton.addEventListener('click', () => {
+            // ...
         });
     }
+    */
 
-    function renderPopularThreads() {
+    function renderLivelyThreads() {
+        if (!popularThreadsList) return;
         popularThreadsList.innerHTML = '';
-        popularThreads.forEach(thread => {
+
+        const sortedThreads = [...popularThreadsData].sort((a, b) => (b.accessCount || 0) - (a.accessCount || 0));
+
+        if (sortedThreads.length === 0) {
+            popularThreadsList.innerHTML = '<li>現在、にぎやかなスレはありません。</li>';
+            return;
+        }
+        sortedThreads.forEach(thread => {
             const listItem = document.createElement('li');
-            listItem.innerHTML = `<a href="thread.html?id=${thread.id}">${escapeHtml(thread.title)}</a>`;
+            // thread.html はまだないので、href="#" にしておくか、将来のパスを指定
+            listItem.innerHTML = `<a href="thread_detail.html?id=${thread.id}">${escapeHtml(thread.title)}</a>`;
             popularThreadsList.appendChild(listItem);
         });
     }
 
-    function renderRecentBoardImages() {
-        recentImagesBoard.innerHTML = '';
-        recentBoardImages.forEach(imageUrl => {
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            recentImagesBoard.appendChild(img);
-        });
-    }
-
-    function renderActiveThreads() {
-        activeThreadsList.innerHTML = '';
-        activeBoardThreads.forEach(thread => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `<a href="thread.html?id=${thread.id}">${escapeHtml(thread.title)}</a>`;
-            activeThreadsList.appendChild(listItem);
-        });
-    }
-
+    /* ★bulletinboard.html ではスレッド作成を行わないため、saveBulletinBoardsは不要
     function saveBulletinBoards() {
-        localStorage.setItem('bulletinBoards', JSON.stringify(bulletinBoards));
+        // localStorage.setItem('bulletinBoards', JSON.stringify(bulletinBoards));
     }
+    */
 
     function escapeHtml(unsafe) {
+        if (typeof unsafe !== 'string') return '';
         return unsafe
-             .replace(/&/g, "&amp;")
-             .replace(/</g, "&lt;")
-             .replace(/>/g, "&gt;")
-             .replace(/"/g, "&quot;")
-             .replace(/'/g, "&#039;");
+             .replace(/&/g, "&")
+             .replace(/</g, "<")
+             .replace(/>/g, ">")
+             .replace(/"/g, """)
+             .replace(/'/g, "'");
      }
 });

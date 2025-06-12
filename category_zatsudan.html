@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>掲示板 - 座の人</title>
+    <title>雑談 - 掲示板 - 座の人</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* bulletinboard.html 専用のスタイル */
+        /* category_zatsudan.html 専用のスタイル */
         body {
             display: flex;
             flex-direction: column;
@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: column;
         }
-        main#bulletinboard-main-container {
+        main#bulletinboard-main-container { /* bulletinboard.html と共通のIDを使用 */
             display: flex;
             flex: 1;
             width: 100%;
@@ -25,14 +25,14 @@
             margin: 20px auto;
             gap: 20px;
         }
-        aside#bulletinboard-categories {
+        aside#bulletinboard-categories { /* bulletinboard.html と共通のIDを使用 */
             width: 200px;
             background-color: #f9f9f9;
             padding: 15px;
             border-radius: 5px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             flex-shrink: 0;
-            align-self: flex-start; /* 左カラムの高さをコンテンツに合わせる */
+            align-self: flex-start;
         }
         aside#bulletinboard-categories h3 {
             margin-top: 0;
@@ -47,7 +47,7 @@
             margin: 0;
         }
         aside#bulletinboard-categories li a,
-        aside#bulletinboard-categories .board-top-link a { /* ★トップへのリンクスタイルも共通化 */
+        aside#bulletinboard-categories .board-top-link a {
             display: block;
             padding: 8px 5px;
             text-decoration: none;
@@ -55,19 +55,21 @@
             border-bottom: 1px dotted #ccc;
             transition: background-color 0.2s;
         }
-        aside#bulletinboard-categories li:last-child a { /* 通常のカテゴリリンクの最後の罫線 */
-            /* border-bottom: none;  トップへのリンクが追加されるので、これは不要になるかも */
-        }
-        aside#bulletinboard-categories .board-top-link a { /* ★トップへのリンク専用スタイル */
+        aside#bulletinboard-categories .board-top-link a {
             font-weight: bold;
-            color: #0056b3; /* 少し目立たせる */
-            border-bottom: 1px solid #ccc; /* 他の項目と区切り線を合わせる */
+            color: #0056b3;
+            border-bottom: 1px solid #ccc;
+        }
+        aside#bulletinboard-categories li a.active-category { /* ★アクティブなカテゴリを強調 */
+            background-color: #d0e0ff;
+            font-weight: bold;
         }
         aside#bulletinboard-categories li a:hover,
         aside#bulletinboard-categories .board-top-link a:hover {
             background-color: #e9e9e9;
         }
-        div#bulletinboard-content {
+
+        div#category-content { /* ★カテゴリページ用のコンテンツエリアID */
             flex-grow: 1;
             background-color: #fff;
             padding: 20px;
@@ -76,31 +78,71 @@
             display: flex;
             flex-direction: column;
         }
-        #bulletinboard-top h3 {
+        div#category-content h2 { /* カテゴリ名表示用 */
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            color: #333;
+        }
+        ul#category-threads-list { /* カテゴリ内スレッド一覧 */
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            flex-grow: 1; /* スレッド一覧がスペースを埋める */
+        }
+        ul#category-threads-list li {
+            padding: 10px 5px;
+            border-bottom: 1px solid #eee;
+        }
+        ul#category-threads-list li:last-child {
+            border-bottom: none;
+        }
+        ul#category-threads-list li a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 1.1em;
+        }
+        ul#category-threads-list li a:hover {
+            text-decoration: underline;
+        }
+        ul#category-threads-list .thread-meta {
+            font-size: 0.8em;
+            color: #777;
+            margin-top: 3px;
+        }
+
+        .post-form { /* スレッド作成フォーム (bulletinboard.htmlのスタイルを流用または微調整) */
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .post-form h3 {
             margin-top: 0;
             margin-bottom: 10px;
             padding-bottom: 5px;
             border-bottom: 1px solid #eee;
             font-size: 1.3em;
         }
-        #popular-threads-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
+        .post-form input[type="text"] {
+            width: calc(100% - 92px);
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
         }
-        #popular-threads-list li {
-            padding: 8px 5px;
-            border-bottom: 1px dotted #ccc;
+        .post-form button {
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 80px;
         }
-        #popular-threads-list li:last-child {
-            border-bottom: none;
-        }
-        #popular-threads-list li a {
-            text-decoration: none;
-            color: #007bff;
-        }
-        #popular-threads-list li a:hover {
-            text-decoration: underline;
+        .post-form button:hover {
+            background-color: #218838;
         }
         p.back-to-top-link {
             text-align: center;
@@ -125,12 +167,12 @@
 
         <main id="bulletinboard-main-container">
             <aside id="bulletinboard-categories">
-                <div class="board-top-link"> <!-- ★トップへのリンク追加 -->
+                <div class="board-top-link">
                     <a href="bulletinboard.html">掲示板トップ（にぎやかなスレ）</a>
                 </div>
                 <h3>分類</h3>
                 <ul>
-                    <li><a href="category_zatsudan.html">雑談</a></li>
+                    <li><a href="category_zatsudan.html" class="active-category">雑談</a></li> <!-- ★このカテゴリをアクティブに -->
                     <li><a href="category_news.html">ニュース</a></li>
                     <li><a href="category_work.html">会社・仕事</a></li>
                     <li><a href="category_anime.html">アニメ</a></li>
@@ -140,31 +182,26 @@
                 </ul>
             </aside>
 
-            <div id="bulletinboard-content">
-                <section id="bulletinboard-top">
-                    <h3>近頃にぎやかなスレ</h3>
-                    <ul id="popular-threads-list">
-                        <!-- bulletinboard.jsによって内容がここに挿入されます -->
-                    </ul>
-                </section>
+            <div id="category-content">
+                <h2 id="category-name-display">雑談スレッド一覧</h2> <!-- JSで動的に変更も可能 -->
+                <ul id="category-threads-list">
+                    <!-- category.jsによってこのカテゴリのスレッドがここに挿入されます -->
+                </ul>
 
-                <!-- 「新しいスレッドを作成」フォームは削除 -->
-                <!--
                 <div class="post-form">
-                    <h3>新しいスレッドを作成</h3>
-                    <input type="text" id="bulletin-board-title" placeholder="スレッド名">
-                    <button id="create-bulletin-board">作成</button>
+                    <h3>新しいスレッドを「雑談」に作成</h3>
+                    <input type="text" id="new-thread-title" placeholder="スレッド名">
+                    <button id="create-new-thread-button">作成</button>
                 </div>
-                -->
             </div>
         </main>
 
-        <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p> <!-- テキスト変更 -->
+        <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p>
 
         <footer>
             <p>© 2025 座の人</p>
         </footer>
     </div>
-    <script src="bulletinboard.js"></script> <!-- 掲示板トップ用のJS -->
+    <script src="category.js"></script> <!-- カテゴリページ共通のJS -->
 </body>
 </html>
