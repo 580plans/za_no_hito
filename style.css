@@ -48,7 +48,7 @@ nav a {
     text-decoration: none;
 }
 
-main {
+main { /* index.html, logged_in.html 用の main */
     display: flex;
     width: 100%;
     margin-bottom: 20px;
@@ -64,7 +64,6 @@ main {
     margin-right: 20px;
     flex-shrink: 0;
 }
-/* ... (index, logged_in 用の左カラムスタイルは既存のまま) ... */
 .left-column-logged-in ul { list-style: none; padding: 0; margin: 0; }
 .left-column-logged-in li { padding: 0; border-bottom: 1px solid #eee; }
 .left-column-logged-in li:last-child { border-bottom: none; }
@@ -83,7 +82,7 @@ main {
     flex-grow: 1;
     min-width: 0;
 }
-/* ... (タブ関連、随筆タイムライン関連のスタイルは既存のまま) ... */
+/* --- タブコンテナ共通スタイル (index, logged_in 用) --- */
 .tab-container, .tab-container-logged-in { margin-bottom: 20px; width: 100%; }
 .tab-buttons, .tab-buttons-logged-in { border-bottom: 1px solid #ddd; margin-bottom: 15px; padding-bottom: 5px; display: flex; flex-wrap: wrap; }
 .tab-buttons button, .tab-buttons-logged-in button { background-color: #f0f0f0; border: none; border-bottom: 3px solid transparent; padding: 10px 15px; margin-right: 5px; margin-bottom: 5px; cursor: pointer; transition: background-color 0.2s, border-bottom-color 0.2s, color 0.2s; color: #333; }
@@ -92,6 +91,7 @@ main {
 .tab-buttons-logged-in button.active { background-color: #4a4a4a; color: #fff; border-bottom: 3px solid #fff; font-weight: bold; }
 .tab-content, .tab-content-logged-in { display: none; padding: 0 5px; }
 .tab-content.active, .tab-content-logged-in.active { display: block; }
+/* --- 随筆タイムライン (index, logged_in 用) --- */
 #essay-timeline-logged-in, #popular-essays-list { list-style: none; padding: 0; margin: 0; }
 .essay-item-logged-in { padding: 0; border-bottom: 1px solid #eee; }
 .essay-item-logged-in:last-child { border-bottom: none; }
@@ -104,19 +104,19 @@ h4.essay-title-logged-in a:hover { color: #0056b3; text-decoration: underline; }
 .essay-author-logged-in a:hover { color: #007bff; text-decoration: underline; }
 .essay-snippet-logged-in { padding: 0 15px; margin-bottom: 12px; color: #444; line-height: 1.65; font-size: 1em; }
 .essay-meta-logged-in { padding: 0 15px; font-size: 0.8em; color: #888; margin-bottom: 20px; }
-#active-threads-list { list-style: none; padding: 0; }
+#active-threads-list { list-style: none; padding: 0; } /* index.html 用 */
 #active-threads-list li { border-bottom: 1px solid #eee; padding: 10px 0; }
 #active-threads-list li:last-child { border-bottom: none; }
 #active-threads-list li a { text-decoration: none; color: #007bff; }
 #active-threads-list li a:hover { text-decoration: underline; }
 #recent-essay-images-tab { display: flex; flex-wrap: wrap; gap: 10px; }
 #recent-essay-images-tab img { width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px; }
-#essay-timeline { list-style: none; padding: 0; margin:0; }
+#essay-timeline { list-style: none; padding: 0; margin:0; } /* index.html 用 */
 #essay-timeline li { border-bottom: 1px solid #eee; padding: 10px 0; }
 #essay-timeline li:last-child { border-bottom: none; }
 #essay-timeline li h4 { margin-top: 0; margin-bottom: 5px; }
 #essay-timeline li p.post-meta { font-size: 0.8em; color: #777; margin-top: 0; margin-bottom: 0; }
-.left-column h3 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; text-align: center; }
+.left-column h3 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; text-align: center; } /* index.html ログインフォーム見出し */
 #login-form-aside label { display: block; margin-bottom: 5px; font-size: 0.9em; }
 #login-form-aside input[type="email"], #login-form-aside input[type="password"] { width: calc(100% - 12px); padding: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 3px; }
 #login-form-aside button[type="submit"] { background-color: #5cb85c; color: white; padding: 8px 15px; border: none; border-radius: 3px; cursor: pointer; width: 100%; }
@@ -168,7 +168,7 @@ aside#bulletinboard-categories ul li a {
     display: block;
     padding: 8px 10px;
     text-decoration: none;
-    color: #333; /* ★ 通常時のリンク色を黒系に */
+    color: #333;
     border-bottom: 1px dotted #ccc;
     transition: background-color 0.2s, color 0.2s;
     word-wrap: break-word;
@@ -180,15 +180,13 @@ aside#bulletinboard-categories ul li:last-child a {
 
 aside#bulletinboard-categories .board-top-link a {
     font-weight: bold;
-    /* color: #0056b3; ★「和気あいあい」リンクのデフォルト色は他のリンクと統一するため削除 */
 }
 
-/* アクティブなカテゴリまたは「和気あいあい」リンクを強調表示 */
 aside#bulletinboard-categories .board-top-link a.active-category,
 aside#bulletinboard-categories ul li a.active-category {
-    background-color: #5a6268; /* ★濃いグレーに変更 (例: Bootstrapのbtn-secondaryに近い色) */
+    background-color: #5a6268;
     font-weight: bold;
-    color: #fff;             /* ★文字色を白に変更 */
+    color: #fff;
 }
 
 aside#bulletinboard-categories .board-top-link a:hover,
@@ -207,21 +205,142 @@ div#category-content {
     display: flex;
     flex-direction: column;
 }
-/* ... (掲示板の右コンテンツエリアのスタイルは既存のまま) ... */
-div#bulletinboard-content #bulletinboard-top h3, div#category-content h2 { margin-top: 0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd; font-size: 1.4em; color: #333; }
-ul#popular-threads-list, ul#category-threads-list { list-style: none; padding: 0; margin: 0 0 20px 0; flex-grow: 1; }
-ul#popular-threads-list li, ul#category-threads-list li { padding: 10px 5px; border-bottom: 1px solid #eee; }
-ul#popular-threads-list li:last-child, ul#category-threads-list li:last-child { border-bottom: none; }
-ul#popular-threads-list li a, ul#category-threads-list li a { text-decoration: none; color: #007bff; font-size: 1.1em; display: block; }
-ul#popular-threads-list li a:hover, ul#category-threads-list li a:hover { text-decoration: underline; }
-ul#category-threads-list .thread-meta { font-size: 0.85em; color: #666; margin-top: 4px; }
-.post-form { margin-top: auto; padding: 20px; background-color: #f0f0f0; border-radius: 5px; border-top: 1px solid #ddd; }
-.post-form h3 { margin-top: 0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ccc; font-size: 1.2em; }
-.post-form input[type="text"] { width: calc(100% - 100px); padding: 10px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-.post-form button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; width: 80px; transition: background-color 0.2s; }
-.post-form button:hover { background-color: #0056b3; }
-p.back-to-top-link { text-align: center; margin-top: 25px; padding-top: 15px; }
 
+div#bulletinboard-content section,
+div#category-content section {
+    margin-bottom: 30px;
+}
+div#bulletinboard-content section:last-child,
+div#category-content section:last-child {
+    margin-bottom: 0;
+}
+
+div#bulletinboard-content section h3,
+div#category-content h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.3em;
+    color: #333;
+}
+
+ul#featured-threads-list,
+ul#hot-threads-list,
+ul#category-threads-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+ul#category-threads-list { flex-grow: 1; }
+
+ul#featured-threads-list li,
+ul#hot-threads-list li,
+ul#category-threads-list li {
+    padding: 10px 5px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: flex-start;
+}
+ul#featured-threads-list li:last-child,
+ul#hot-threads-list li:last-child,
+ul#category-threads-list li:last-child {
+    border-bottom: none;
+}
+
+.rank-display {
+    width: 60px;
+    font-weight: bold;
+    margin-right: 10px;
+    text-align: right;
+    flex-shrink: 0;
+    color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.rank-display .crown { /* 1位の王冠用スタイル */
+    margin-right: 4px;
+    font-size: 1em;
+    line-height: 1;
+}
+.rank-display .crown.gold { color: gold; } /* 1位の王冠の色（テキスト色として） */
+/* .rank-display .crown.silver { color: silver; } ★削除 */
+/* .rank-display .crown.bronze { color: #b08d57; } ★削除 */
+
+.thread-info-container {
+    flex-grow: 1;
+}
+.thread-info-container .thread-title-link,
+ul#category-threads-list li a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 3px;
+}
+.thread-info-container .thread-title-link:hover,
+ul#category-threads-list li a:hover {
+    text-decoration: underline;
+    color: #000;
+}
+
+.thread-category-badge {
+    font-size: 0.8em;
+    background-color: #6c757d;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 8px;
+}
+.thread-stats,
+ul#category-threads-list .thread-meta {
+    font-size: 0.85em;
+    color: #555;
+    margin-top: 2px;
+}
+
+.post-form {
+    margin-top: auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    border-top: 1px solid #ddd;
+}
+.post-form h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.2em;
+}
+.post-form input[type="text"] {
+    width: calc(100% - 100px);
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.post-form button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 80px;
+    transition: background-color 0.2s;
+}
+.post-form button:hover {
+    background-color: #0056b3;
+}
+
+p.back-to-top-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 15px;
+}
 
 footer {
     text-align: center;

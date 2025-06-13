@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>掲示板 - 座の人</title>
+    <title>掲示板 - 和気あいあい - 座の人</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* bulletinboard.html 専用のスタイル */
-        /* 基本的には style.css で管理するため、ここは空か最小限になるはず */
-        /* body, div.container, main#bulletinboard-main-container のスタイルはstyle.cssで定義済み */
-        
-        /* 右コンテンツエリアのスタイルは style.css で定義済み */
-        /* div#bulletinboard-content, #bulletinboard-top h3, #popular-threads-list など */
-
-        /* p.back-to-top-link のスタイルも style.css で定義済み */
+        /* このページのスタイルは style.css で管理します */
     </style>
 </head>
 <body>
@@ -30,15 +23,19 @@
         </header>
 
         <main id="bulletinboard-main-container">
-            <!-- 左カラムのプレースホルダー ★変更点 -->
-            <div id="left-column-placeholder">
-                <!-- ここに _left_column_bulletinboard.html の内容が挿入されます -->
-            </div>
+            <div id="left-column-placeholder"></div>
 
             <div id="bulletinboard-content">
-                <section id="bulletinboard-top">
-                    <h3>近頃にぎやかなスレ</h3>
-                    <ul id="popular-threads-list">
+                <section id="featured-threads-section">
+                    <h3>みんなが注目してるスレ</h3>
+                    <ul id="featured-threads-list">
+                        <!-- bulletinboard.jsによって内容がここに挿入されます -->
+                    </ul>
+                </section>
+
+                <section id="hot-threads-section">
+                    <h3>盛り上がってるスレ</h3>
+                    <ul id="hot-threads-list">
                         <!-- bulletinboard.jsによって内容がここに挿入されます -->
                     </ul>
                 </section>
@@ -51,14 +48,10 @@
             <p>© 2025 座の人</p>
         </footer>
     </div>
-    <script src="load_parts.js"></script> <!-- ★部品読み込みJSを先に -->
+    <script src="load_parts.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 左カラムを読み込む (このページは特定のカテゴリではないので、activeCategory は null)
-            // もし「和気あいあい」をアクティブにしたい場合は、
-            // _left_column_bulletinboard.html の該当リンクに data-category="wakiaiai" などを追加し、
-            // loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder', 'wakiaiai'); のようにする
-            loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder');
+            loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder', 'wakiaiai');
         });
     </script>
     <script src="bulletinboard.js"></script>
