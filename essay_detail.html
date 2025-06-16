@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随筆詳細 - 座の人</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* essay_detail.html 固有のスタイルがあればここに記述できますが、
+           基本的には style.css で一元管理しましょう */
+        .main-content-essay-detail {
+            padding: 20px;
+            background-color: #fff; /* 背景を白に */
+        }
+        .essay-content-area {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .essay-header {
+            margin-bottom: 20px;
+        }
+        .essay-header h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        .essay-meta-detail {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .essay-meta-detail span {
+            margin-right: 15px;
+        }
+        .essay-media img,
+        .essay-media video { /* 仮のスタイル */
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .essay-body {
+            line-height: 1.7;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .comments-section h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .comments-section h4 {
+            font-size: 1.2em;
+            margin-top: 30px; /* コメントリストとの間隔 */
+            margin-bottom: 10px;
+        }
+        .comment-item {
+            padding: 10px 0;
+            border-bottom: 1px dotted #eee;
+        }
+        .comment-item:last-child {
+            border-bottom: none;
+        }
+        .comment-author {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .comment-text {
+            margin-bottom: 5px;
+        }
+        .comment-date {
+            font-size: 0.8em;
+            color: #777;
+        }
+        #comment-form div {
+            margin-bottom: 10px;
+        }
+        #comment-form label {
+            display: block;
+            margin-bottom: 3px;
+            font-weight: bold;
+        }
+        #comment-form textarea { /* input[type="text"] のセレクタを削除 */
+            width: calc(100% - 22px); /* paddingとborderを考慮 */
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        #comment-form textarea {
+            resize: vertical; /* 縦方向のみリサイズ可 */
+        }
+        #comment-form button[type="submit"] {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        #comment-form button[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>座の人</h1>
+            <nav>
+                <ul>
+                    <li><a href="logged_in.html">ホーム</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div class="main-content-essay-detail">
+                <article class="essay-content-area">
+                    <header class="essay-header">
+                        <h2 id="essay-title-detail">（随筆タイトル）</h2>
+                        <div class="essay-meta-detail">
+                            <span id="essay-author-detail">投稿者: （投稿者名）</span>
+                            <time id="essay-datetime-detail" datetime="">投稿日時: （投稿日時）</time>
+                        </div>
+                    </header>
+
+                    <section class="essay-media">
+                        <!-- 画像が表示されるコンテナ -->
+                        <div id="essay-image-detail-container" style="display: none;">
+                            <img id="essay-image-detail" src="" alt="随筆の画像">
+                        </div>
+                        <!-- 動画が表示されるコンテナ（今は非表示） -->
+                        <div id="essay-video-detail-container" style="display: none;">
+                            <p>（動画はここに表示されます）</p>
+                            <!-- 例: <video id="essay-video-detail" controls src=""></video> -->
+                            <!-- 例: YouTube埋め込みなど -->
+                        </div>
+                    </section>
+
+                    <section class="essay-body">
+                        <p id="essay-text-detail">（随筆の本文がここに表示されます。複数段落に対応できるよう、将来的には script.js で <p> タグを動的に生成したり、innerHTMLに改行を含むテキストをセットしたりすることを想定しています。）</p>
+                    </section>
+                </article>
+
+                <section class="comments-section">
+                    <h3>コメント</h3>
+                    <div id="comments-list">
+                        <!-- script.jsによって動的にコメントがここに挿入される想定 -->
+                        <div class="comment-item">
+                            <p class="comment-author">サンプルユーザー1</p>
+                            <p class="comment-text">これは素晴らしい随筆ですね。とても共感しました。</p>
+                            <p class="comment-date"><time datetime="2024-05-23T10:00:00Z">2024年5月23日 10:00</time></p>
+                        </div>
+                        <div class="comment-item">
+                            <p class="comment-author">サンプルユーザー2</p>
+                            <p class="comment-text">勉強になります！</p>
+                            <p class="comment-date"><time datetime="2024-05-23T11:30:00Z">2024年5月23日 11:30</time></p>
+                        </div>
+                    </div>
+
+                    <h4>コメントを投稿する</h4>
+                    <form id="comment-form">
+                        <div>
+                            <label for="comment-text-input">コメント:</label>
+                            <textarea id="comment-text-input" name="comment-text" rows="4" placeholder="コメントを入力してください..." required></textarea>
+                        </div>
+                        <button type="submit">投稿する</button>
+                    </form>
+                </section>
+
+                <p style="margin-top: 30px;"><a href="logged_in.html">ホームに戻る</a></p>
+
+            </div><!-- /.main-content-essay-detail -->
+        </main>
+
+        <footer>
+            <p>© 2025 座の人</p>
+        </footer>
+    </div><!-- /.container -->
+
+    <script src="script.js"></script>
+    <!-- <script src="essay_detail_script.js"></script>  将来的に専用JSファイルを作る場合 -->
+</body>
+</html>

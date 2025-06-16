@@ -1,25 +1,12 @@
 // script.js
-
-// グローバルスコープの escapeHtml 関数
-function escapeHtml(unsafe) {
-    if (typeof unsafe !== 'string') {
-        return unsafe;
-    }
-    return unsafe
-         .replace(/&/g, "&")
-         .replace(/</g, "<")
-         .replace(/>/g, ">")
-         .replace(/"/g, '"')
-         .replace(/'/g, "'");
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOMContentLoaded event fired. script.js execution started.");
 
+    // --- グローバル変数 ---
     let essays = [];
     let popularEssaysData = [];
     let recentEssayImages = [];
-    let allComments = {};
+    let allComments = {}; // 仮: 全てのコメントを保持するオブジェクト { essayId: [comments] }
 
     const allThreadsSampleDataForLoggedInPage = [
         { id: 'thread001', title: '今週末の天気とおすすめスポット', category: 'zatsudan', accessCount: 2580, commentCount: 35, createdAt: new Date(Date.now() - 86400000 * 1).toISOString() },
@@ -36,8 +23,10 @@ document.addEventListener('DOMContentLoaded', () => {
         sports: 'スポーツ', tv: 'テレビ', game: 'ゲーム', unknown: 'その他'
     };
 
+    // --- データ初期化関数 ---
     function initializeSampleEssays() {
-        localStorage.removeItem('essays');
+        localStorage.removeItem('essays'); // 開発中は常に最新のサンプルデータで初期化
+
         const storedEssays = localStorage.getItem('essays');
         if (storedEssays) {
             essays = JSON.parse(storedEssays);
@@ -73,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
     }
 
-    function initializeRecentEssayImages() {
+    function initializeRecentEssayImages() { // ★関数名を変更して明確化
         recentEssayImages = [
             'https://dummyimage.com/80x80/800080/FFFFFF&text=Img1',
             'https://dummyimage.com/80x80/008000/FFFFFF&text=Img2',
@@ -82,11 +71,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
     }
 
+    // --- ヘルパー関数 ---
+    function escapeHtml(unsafe) {
+        if (typeof unsafe !== 'string') { return unsafe; }
+        return unsafe.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, '"').replace(/'/g, "'");
+    }
+
     function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     }
 
+    // --- logged_in.html 用レンダリング関数 ---
     function renderEssayTimeline(targetElement) {
         if (!targetElement) return;
         targetElement.innerHTML = '';
@@ -199,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function initializeTabs(tabButtonSelector, tabContentSelector, initialTabId) {
         const tabButtons = document.querySelectorAll(tabButtonSelector);
         const tabContents = document.querySelectorAll(tabContentSelector);
-        if (tabButtons.length === 0 || tabContents.length === 0) return;
+        if (tabButtons.length === 0 || tabContents.length === 0) return; // 要素がなければ何もしない
 
         function showTab(tabId) {
             tabContents.forEach(content => {
@@ -214,13 +210,14 @@ document.addEventListener('DOMContentLoaded', () => {
         tabButtons.forEach(button => {
             button.addEventListener('click', () => { showTab(button.dataset.tab); });
         });
-        if (initialTabId && document.getElementById(initialTabId)) {
+        if (initialTabId && document.getElementById(initialTabId)) { // 初期タブIDの存在確認
             showTab(initialTabId);
         } else if (tabButtons.length > 0) {
             showTab(tabButtons[0].dataset.tab);
         }
     }
 
+    // --- essay_detail.html 用レンダリング関数 ---
     function renderEssayDetail(essayId, elements) {
         const idToFind = parseInt(essayId, 10);
         const essay = essays.find(e => e.id === idToFind);
@@ -279,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const commentTextInput = document.getElementById('comment-text-input');
         if (!commentTextInput) return;
         const commentText = commentTextInput.value.trim();
-        const loggedInUser = "ログインユーザー名(仮)";
+        const loggedInUser = "ログインユーザー名(仮)"; // ★ 後で動的に
 
         if (commentText && essayId) {
             const newComment = { author: loggedInUser, text: commentText, date: new Date().toISOString() };
@@ -291,12 +288,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    initializeSampleEssays();
-    initializeSampleComments();
 
-    const currentPage = window.location.pathname.split("/").pop();
+    // --- ページごとの初期化処理 ---
+    initializeSampleEssays(); // 全ページで随筆データは必要
+    initializeSampleComments(); // 全ページでコメントデータは必要（詳細ページで使うため）
 
-    if (currentPage === 'logged_in.html' || document.getElementById('essay-timeline-logged-in')) {
+    if (document.getElementById('essay-timeline-logged-in')) { // logged_in.html の場合
         console.log("Initializing logged_in.html specific content...");
         initializePopularEssaysData();
         initializeRecentEssayImages();
@@ -307,14 +304,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const loggedInActiveThreadsListEl = document.getElementById('active-threads-list');
         const followingListEl = document.getElementById('following-list');
 
-        if (essayTimelineLoggedInEl) renderEssayTimeline(essayTimelineLoggedInEl);
-        if (popularEssaysListEl) renderPopularEssays(popularEssaysListEl);
-        if (recentEssayImagesTabEl) renderRecentEssayImages(recentEssayImagesTabEl);
-        if (loggedInActiveThreadsListEl) renderLoggedInActiveThreads(loggedInActiveThreadsListEl);
-        if (followingListEl) renderFollowingList(followingListEl);
+        renderEssayTimeline(essayTimelineLoggedInEl);
+        renderPopularEssays(popularEssaysListEl);
+        renderRecentEssayImages(recentEssayImagesTabEl);
+        renderLoggedInActiveThreads(loggedInActiveThreadsListEl);
+        renderFollowingList(followingListEl);
         initializeTabs('.tab-button-logged-in', '.tab-content-logged-in', 'essays');
 
-    } else if (currentPage === 'essay_detail.html' || document.getElementById('essay-title-detail')) {
+    } else if (document.getElementById('essay-title-detail')) { // essay_detail.html の場合
         console.log("Initializing essay_detail.html specific content...");
         const essayId = getQueryParam('id');
         const detailElements = {
