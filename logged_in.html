@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>座の人 - ログイン後</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* logged_in.html 固有のスタイルがあればここに記述 */
-        /* 例えば、aside.left-column-logged-in ul li 内の「刮目中の人」テキストのスタイルなど */
-        /* 今回の変更は style.css に集約したので、ここは空でもOK */
-    </style>
 </head>
 <body>
     <div class="container">
@@ -23,31 +18,19 @@
             </nav>
         </header>
         <main>
-            <aside class="left-column-logged-in">
-                <img src="default_user.png" alt="ユーザー画像" class="user-image-logged-in">
-                <ul>
-                    <li><a href="profile.html">ユーザー名(仮)</a></li>
-                    <li><a href="notifications.html">通知</a></li>
-                    <li><a href="essay_detail.html">随筆を書く</a></li>
-                    <li><a href="#">過去の随筆</a></li>
-                    <li class="following-section-header"> <!-- ★変更点: クラス追加とulのネスト -->
-                        刮目中の人
-                        <ul id="following-list">
-                            <!-- script.jsによってフォロー中のユーザーがここに挿入されます -->
-                        </ul>
-                    </li>
-                    <li><a href="index.html">ログアウト</a></li>
-                </ul>
-            </aside>
+            <div id="left-column-container">
+                <!--ここに _left_column_logged_in.html が読み込まれる -->
+            </div>
+
             <div class="main-content-logged-in">
                 <section class="tab-container-logged-in">
                     <div class="tab-buttons-logged-in">
-                        <button class="tab-button-logged-in" data-tab="essays">新規の随筆</button>
+                        <button class="tab-button-logged-in active" data-tab="essays">新規の随筆</button>
                         <button class="tab-button-logged-in" data-tab="popular-essays">近頃多く読まれた随筆</button>
                         <button class="tab-button-logged-in" data-tab="recent-essay-images">近頃の画像</button>
                         <button class="tab-button-logged-in" data-tab="active-threads">近頃にぎやかなスレ</button>
                     </div>
-                    <div id="essays" class="tab-content-logged-in">
+                    <div id="essays" class="tab-content-logged-in active">
                         <ul id="essay-timeline-logged-in">
                             <!-- script.jsによって内容がここに挿入されます -->
                         </ul>
@@ -74,6 +57,33 @@
             <p>© 2025 座の人</p>
         </footer>
     </div>
+    <script src="load_parts.js"></script>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded for logged_in.html inline script.");
+            if (typeof loadHTMLPart === 'function') {
+                console.log("Calling loadHTMLPart for _left_column_logged_in.html on logged_in.html...");
+                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
+                    console.log("CALLBACK: Left column loaded into logged_in.html by loadHTMLPart.");
+                    if (typeof initializeLeftColumnContent === "function") {
+                        console.log("CALLBACK: Calling initializeLeftColumnContent for logged_in.html...");
+                        initializeLeftColumnContent();
+                    } else {
+                        console.error("CALLBACK: initializeLeftColumnContent is not defined on logged_in.html!");
+                    }
+                    // ★左カラム初期化後にメインコンテンツの初期化を呼び出す
+                    if (typeof initializeLoggedInMainContent === "function") {
+                        console.log("CALLBACK: Calling initializeLoggedInMainContent for logged_in.html...");
+                        initializeLoggedInMainContent();
+                    } else {
+                        console.error("CALLBACK: initializeLoggedInMainContent is not defined on logged_in.html!");
+                    }
+                });
+            } else {
+                console.error("loadHTMLPart function is not defined on logged_in.html.");
+            }
+        });
+    </script>
 </body>
 </html>
