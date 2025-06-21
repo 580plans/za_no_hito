@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>過去の随筆 - 座の人</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* past_essays.html 固有のスタイル */
+        .main-content-past-essays {
+            padding: 20px;
+            background-color: #fff;
+        }
+        .main-content-past-essays h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .past-essay-list { /* このページのメインとなるリスト */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .past-essay-list-item { /* 各随筆アイテム */
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .past-essay-list-item:last-child {
+            border-bottom: none;
+        }
+        .past-essay-list-item a { /* リンク全体をブロック要素に */
+            display: block;
+            text-decoration: none;
+            color: inherit; /* 親要素の色を継承 */
+        }
+        .past-essay-list-item a:hover .past-essay-list-title { /* ホバー時のタイトル色変更 */
+            color: #0056b3;
+        }
+        .past-essay-list-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .past-essay-list-meta {
+            font-size: 0.85em;
+            color: #777;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .past-essay-list-snippet {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.5;
+            /* 複数行表示と省略 (必要に応じて調整) */
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 表示行数を2行に制限 */
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>座の人</h1>
+            <nav>
+                <ul>
+                    <li><a href="logged_in.html">ホーム</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div id="left-column-container">
+                <!-- _left_column_logged_in.html が読み込まれる -->
+            </div>
+
+            <div class="main-content-past-essays">
+                <h2>過去の随筆一覧</h2>
+                <ul id="past-essays-list-area" class="past-essay-list">
+                    <!-- script.jsによって過去の随筆がここに挿入されます -->
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 座の人</p>
+        </footer>
+    </div>
+
+    <script src="load_parts.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof loadHTMLPart === 'function') {
+                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
+                    if (typeof initializeLeftColumnContent === "function") {
+                        initializeLeftColumnContent();
+                    }
+                    // ★ 過去の随筆ページのメインコンテンツ初期化関数を呼び出す
+                    if (typeof initializePastEssaysPage === "function") {
+                        console.log("CALLBACK: Calling initializePastEssaysPage...");
+                        initializePastEssaysPage();
+                    } else {
+                        console.error("CALLBACK: initializePastEssaysPage is not defined!");
+                    }
+                });
+            } else {
+                console.error("loadHTMLPart function is not defined on past_essays.html.");
+            }
+        });
+    </script>
+</body>
+</html>

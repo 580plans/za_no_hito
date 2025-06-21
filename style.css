@@ -55,7 +55,7 @@ main {
     flex-grow: 1;
 }
 
-/* --- 左カラム共通スタイル (index, logged_in 用) --- */
+/* --- 左カラム共通スタイル --- */
 .left-column,
 .left-column-logged-in {
     width: 200px;
@@ -64,42 +64,95 @@ main {
     margin-right: 20px;
     flex-shrink: 0;
 }
-/* ... (index, logged_in 用の左カラムスタイルは既存のまま) ... */
+
+.left-column-user-profile-link-container {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+.left-column-user-profile-link-container a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+.left-column-user-profile-link-container a:hover .left-column-username-label {
+    text-decoration: underline;
+    color: #0056b3;
+}
+img.left-column-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+}
+span.left-column-username-label {
+    font-weight: bold;
+    font-size: 0.95em;
+    display: block;
+}
+
 .left-column-logged-in ul { list-style: none; padding: 0; margin: 0; }
 .left-column-logged-in li { padding: 0; border-bottom: 1px solid #eee; }
 .left-column-logged-in li:last-child { border-bottom: none; }
 .left-column-logged-in li a { text-decoration: none; color: #333; display: block; padding: 10px 10px; transition: background-color 0.2s; }
 .left-column-logged-in li a:hover { background-color: #e9e9e9; }
 .left-column-logged-in li.following-section-header { background-color: #f0f0f0; text-align: center; padding-top: 10px; padding-bottom: 5px; font-weight: bold; color: #333; margin: 5px 0; border-radius: 4px; border-bottom: 1px solid #ddd; }
-.left-column-logged-in li.following-section-header ul#following-list { list-style: none; padding: 0; margin-top: 8px; margin-bottom: 5px; }
-.left-column-logged-in li.following-section-header ul#following-list li { padding: 0; text-align: left; font-weight: normal; border-bottom: none; }
-.left-column-logged-in li.following-section-header ul#following-list li a { color: #333; font-size: 0.9em; display: block; padding: 4px 15px; text-decoration: none; transition: color 0.2s, background-color 0.2s; }
-.left-column-logged-in li.following-section-header ul#following-list li a:hover { color: #007bff; background-color: #e0e0e0; }
-.user-image-logged-in { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+.left-column-logged-in li.following-section-header ul#following-list-left-column { list-style: none; padding: 0; margin-top: 8px; margin-bottom: 5px; }
+.left-column-logged-in li.following-section-header ul#following-list-left-column li { padding: 0; text-align: left; font-weight: normal; border-bottom: none; }
+.left-column-logged-in li.following-section-header ul#following-list-left-column li a { color: #333; font-size: 0.9em; display: block; padding: 4px 15px; text-decoration: none; transition: color 0.2s, background-color 0.2s; }
+.left-column-logged-in li.following-section-header ul#following-list-left-column li a:hover { color: #007bff; background-color: #e0e0e0; }
 
-/* --- メインコンテンツエリア共通スタイル (index, logged_in 用) --- */
+/* --- メインコンテンツエリア共通スタイル --- */
 .main-content,
-.main-content-logged-in {
+.main-content-logged-in,
+.main-content-essay-detail,
+.main-content-notifications,
+.main-content-form,
+.main-content-past-essays, /* past_essays.html 用 */
+.main-content-profile      /* profile.html 用 */ {
     flex-grow: 1;
     min-width: 0;
 }
-/* --- タブコンテナ共通スタイル (index, logged_in 用) --- */
-.tab-container, .tab-container-logged-in { margin-bottom: 20px; width: 100%; }
-/* ... (タブボタン、タブコンテンツのスタイルは既存のまま) ... */
-.tab-buttons, .tab-buttons-logged-in { border-bottom: 1px solid #ddd; margin-bottom: 15px; padding-bottom: 5px; display: flex; flex-wrap: wrap; }
-.tab-buttons button, .tab-buttons-logged-in button { background-color: #f0f0f0; border: none; border-bottom: 3px solid transparent; padding: 10px 15px; margin-right: 5px; margin-bottom: 5px; cursor: pointer; transition: background-color 0.2s, border-bottom-color 0.2s, color 0.2s; color: #333; }
-.tab-buttons button:hover, .tab-buttons-logged-in button:hover { background-color: #e0e0e0; }
-.tab-buttons button.active { background-color: #ddd; font-weight: bold; }
-.tab-buttons-logged-in button.active { background-color: #4a4a4a; color: #fff; border-bottom: 3px solid #fff; font-weight: bold; }
-.tab-content, .tab-content-logged-in { display: none; padding: 0 5px; }
-.tab-content.active, .tab-content-logged-in.active { display: block; }
 
-/* --- 随筆タイムライン (logged_in.html) --- */
-#essay-timeline-logged-in, #popular-essays-list { list-style: none; padding: 0; margin: 0; }
-.essay-item-logged-in { padding: 0; border-bottom: 1px solid #eee; }
-/* ... (随筆タイムラインのスタイルは既存のまま) ... */
-.essay-item-logged-in:last-child { border-bottom: none; }
-.essay-title-container { background-color: #f0f0f0; padding: 10px 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box; }
+/* --- タブコンテナ共通スタイル (logged_in.html 用) --- */
+.tab-container-logged-in { margin-bottom: 20px; width: 100%; }
+.tab-buttons-logged-in { border-bottom: 1px solid #ddd; margin-bottom: 15px; padding-bottom: 5px; display: flex; flex-wrap: wrap; }
+.tab-buttons-logged-in button { background-color: #f0f0f0; border: none; border-bottom: 3px solid transparent; padding: 10px 15px; margin-right: 5px; margin-bottom: 5px; cursor: pointer; transition: background-color 0.2s, border-bottom-color 0.2s, color 0.2s; color: #333; }
+.tab-buttons-logged-in button:hover { background-color: #e0e0e0; }
+.tab-buttons-logged-in button.active { background-color: #4a4a4a; color: #fff; border-bottom: 3px solid #fff; font-weight: bold; }
+.tab-content-logged-in { display: none; padding: 0 5px; }
+.tab-content-logged-in.active { display: block; }
+
+/* --- 随筆タイムライン (logged_in.html & profile.html recent essays) --- */
+#essay-timeline-logged-in,
+#popular-essays-list,
+#recent-profile-essays-list { /* profile.htmlの最近の随筆リストにも適用 */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.essay-item-logged-in { /* logged_in.html, profile.html の各随筆アイテム */
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.essay-item-logged-in:last-child {
+    border-bottom: none;
+}
+.essay-title-container {
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
 h4.essay-title-logged-in { margin: 0; font-size: 1.2em; font-weight: bold; flex-grow: 1; margin-right: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 h4.essay-title-logged-in a { color: #333; text-decoration: none; transition: color 0.2s; }
 h4.essay-title-logged-in a:hover { color: #0056b3; text-decoration: underline; }
@@ -107,18 +160,58 @@ h4.essay-title-logged-in a:hover { color: #0056b3; text-decoration: underline; }
 .essay-author-logged-in a { color: #555; text-decoration: none; transition: color 0.2s; }
 .essay-author-logged-in a:hover { color: #007bff; text-decoration: underline; }
 .essay-snippet-logged-in { padding: 0 15px; margin-bottom: 12px; color: #444; line-height: 1.65; font-size: 1em; }
-.essay-meta-logged-in { padding: 0 15px; font-size: 0.8em; color: #888; margin-bottom: 20px; }
+.essay-meta-logged-in { padding: 0 15px; font-size: 0.8em; color: #888; margin-bottom: 10px; }
 
-/* --- 近頃の画像 (logged_in.html) --- */
-#recent-essay-images-tab { display: flex; flex-wrap: wrap; gap: 10px; }
-#recent-essay-images-tab img { width: 80px; height: 80px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px; }
 
-/* --- index.html 関連スタイル --- */
-#essay-timeline { list-style: none; padding: 0; margin:0; }
-#essay-timeline li { border-bottom: 1px solid #eee; padding: 10px 0; }
-#essay-timeline li:last-child { border-bottom: none; }
-#essay-timeline li h4 { margin-top: 0; margin-bottom: 5px; }
-#essay-timeline li p.post-meta { font-size: 0.8em; color: #777; margin-top: 0; margin-bottom: 0; }
+/* --- 近頃の画像タブ (logged_in.html) --- */
+#recent-essay-images-tab { /* div#recent-essay-images-tab に適用 */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+}
+.recent-media-item { /* 各画像/動画アイテムを囲むdiv */
+    width: calc(25% - 10px); /* 4列表示、gapを考慮 */
+    aspect-ratio: 1 / 1; /* 正方形 */
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out;
+}
+.recent-media-item:hover {
+    transform: scale(1.05);
+}
+.recent-media-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.recent-media-item img { /* videoも同様にスタイルを適用する場合 */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+/* 近頃の画像のレスポンシブ対応 */
+@media (max-width: 768px) {
+    .recent-media-item {
+        width: calc(33.333% - 10px); /* 3列 */
+    }
+}
+@media (max-width: 480px) {
+    .recent-media-item {
+        width: calc(50% - 10px); /* 2列 */
+    }
+}
+
+
+/* --- index.html 関連スタイル (ログイン前) --- */
+.main-content #essay-timeline { list-style: none; padding: 0; margin:0; }
+.main-content #essay-timeline li { border-bottom: 1px solid #eee; padding: 10px 0; }
+.main-content #essay-timeline li:last-child { border-bottom: none; }
+.main-content #essay-timeline li h4 { margin-top: 0; margin-bottom: 5px; }
+.main-content #essay-timeline li p.post-meta { font-size: 0.8em; color: #777; margin-top: 0; margin-bottom: 0; }
 .left-column h3 { margin-top: 0; margin-bottom: 15px; font-size: 1.5em; text-align: center; }
 #login-form-aside label { display: block; margin-bottom: 5px; font-size: 0.9em; }
 #login-form-aside input[type="email"], #login-form-aside input[type="password"] { width: calc(100% - 12px); padding: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 3px; }
@@ -129,32 +222,11 @@ h4.essay-title-logged-in a:hover { color: #0056b3; text-decoration: underline; }
 #login-form-aside p a { color: #007bff; text-decoration: none; font-size: 0.9em; }
 #login-form-aside p a:hover { text-decoration: underline; }
 
-
 /* =============================================== */
 /* --- 掲示板ページ 及び ログイン後ホームの「にぎやかなスレ」共通スタイル --- */
 /* =============================================== */
-
-/* 掲示板ページのメインレイアウトコンテナ */
-main#bulletinboard-main-container {
-    display: flex;
-    flex: 1;
-    width: 100%;
-    gap: 20px;
-}
-
-/* 掲示板左カラム */
-#left-column-placeholder,
-aside#bulletinboard-categories {
-    width: 200px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    flex-shrink: 0;
-    align-self: flex-start;
-    height: fit-content;
-}
-/* ... (掲示板左カラムの内部スタイルは既存のまま) ... */
+main#bulletinboard-main-container { display: flex; flex: 1; width: 100%; gap: 20px; }
+#left-column-placeholder, aside#bulletinboard-categories { width: 200px; background-color: #f9f9f9; padding: 15px; border-radius: 5px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); flex-shrink: 0; align-self: flex-start; height: fit-content; }
 aside#bulletinboard-categories h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.2em; padding-bottom: 5px; border-bottom: 1px solid #eee; }
 aside#bulletinboard-categories ul { list-style: none; padding: 0; margin: 0; }
 aside#bulletinboard-categories .board-top-link a, aside#bulletinboard-categories ul li a { display: block; padding: 8px 10px; text-decoration: none; color: #333; border-bottom: 1px dotted #ccc; transition: background-color 0.2s, color 0.2s; word-wrap: break-word; }
@@ -163,153 +235,34 @@ aside#bulletinboard-categories .board-top-link a { font-weight: bold; }
 aside#bulletinboard-categories .board-top-link a.active-category, aside#bulletinboard-categories ul li a.active-category { background-color: #5a6268; font-weight: bold; color: #fff; }
 aside#bulletinboard-categories .board-top-link a:hover, aside#bulletinboard-categories ul li a:hover { background-color: #e0e0e0; color: #000; }
 
+div#bulletinboard-content, div#category-content { flex-grow: 1; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+div#bulletinboard-content section, div#category-content section { margin-bottom: 30px; }
+div#bulletinboard-content section:last-child, div#category-content section:last-child { margin-bottom: 0; }
+div#bulletinboard-content section h3, div#category-content h2, .tab-content-logged-in #active-threads-list-title { margin-top: 0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd; font-size: 1.3em; color: #333; }
 
-/* 掲示板右コンテンツエリア / カテゴリページ右コンテンツエリア */
-div#bulletinboard-content,
-div#category-content {
-    flex-grow: 1;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-}
+ul#featured-threads-list, ul#hot-threads-list, ul#category-threads-list, ul#active-threads-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
+ul#category-threads-list { flex-grow: 1; }
 
-/* 掲示板・カテゴリページのセクション */
-div#bulletinboard-content section,
-div#category-content section {
-    margin-bottom: 30px;
-}
-div#bulletinboard-content section:last-child,
-div#category-content section:last-child {
-    margin-bottom: 0;
-}
+ul#featured-threads-list li, ul#hot-threads-list li, ul#category-threads-list li, ul#active-threads-list li.thread-list-item { padding: 10px 5px; border-bottom: 1px solid #eee; display: flex; align-items: flex-start; }
+ul#featured-threads-list li:last-child, ul#hot-threads-list li:last-child, ul#category-threads-list li:last-child, ul#active-threads-list li.thread-list-item:last-child { border-bottom: none; }
 
-/* 掲示板・カテゴリページの見出し */
-div#bulletinboard-content section h3, /* 掲示板トップのセクション見出し */
-div#category-content h2,             /* カテゴリページの見出し */
-.tab-content-logged-in #active-threads-list-title /* ログイン後ホームの「にぎやかなスレ」見出し用 (HTML側で追加想定) */ {
-    margin-top: 0;
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #ddd;
-    font-size: 1.3em;
-    color: #333;
-}
-
-
-/* スレッドリスト (掲示板トップ、カテゴリ、ログイン後ホーム「にぎやかなスレ」で共通化) */
-ul#featured-threads-list,  /* 掲示板トップ */
-ul#hot-threads-list,        /* 掲示板トップ */
-ul#category-threads-list,   /* カテゴリページ */
-ul#active-threads-list      /* ログイン後ホーム (IDは既存のまま) */ {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
-}
-ul#category-threads-list { flex-grow: 1; } /* カテゴリページでは高さを可変に */
-
-/* スレッドリストアイテム (共通) */
-ul#featured-threads-list li,
-ul#hot-threads-list li,
-ul#category-threads-list li,
-ul#active-threads-list li.thread-list-item /* logged_in.html 用 (JSでクラス付与) */ {
-    padding: 10px 5px;
-    border-bottom: 1px solid #eee;
-    display: flex; /* ランキングやカテゴリバッジとタイトルを横並びにするため */
-    align-items: flex-start;
-}
-ul#featured-threads-list li:last-child,
-ul#hot-threads-list li:last-child,
-ul#category-threads-list li:last-child,
-ul#active-threads-list li.thread-list-item:last-child {
-    border-bottom: none;
-}
-
-/* ランキング表示 (bulletinboard.html のみで使用) */
-.rank-display {
-    width: 60px;
-    font-weight: bold;
-    margin-right: 10px;
-    text-align: right;
-    flex-shrink: 0;
-    color: #555;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-.rank-display .crown {
-    margin-right: 4px;
-    font-size: 1em;
-    line-height: 1;
-}
+.rank-display { width: 60px; font-weight: bold; margin-right: 10px; text-align: right; flex-shrink: 0; color: #555; display: flex; align-items: center; justify-content: flex-end; }
+.rank-display .crown { margin-right: 4px; font-size: 1em; line-height: 1; }
 .rank-display .crown.gold { color: gold; }
 
-/* スレッド情報コンテナ (共通) */
-.thread-info-container {
-    flex-grow: 1;
-}
+.thread-info-container { flex-grow: 1; }
+.thread-info-container .thread-title-link, ul#category-threads-list li a, ul#active-threads-list li.thread-list-item .thread-title-link { text-decoration: none; color: #555; font-size: 1.1em; display: block; margin-bottom: 3px; }
+.thread-info-container .thread-title-link:hover, ul#category-threads-list li a:hover, ul#active-threads-list li.thread-list-item .thread-title-link:hover { text-decoration: underline; color: #000; }
+.thread-category-badge { font-size: 0.8em; background-color: #6c757d; color: white; padding: 2px 6px; border-radius: 3px; margin-right: 8px; display: inline-block; }
+.thread-stats, ul#category-threads-list .thread-meta, ul#active-threads-list li.thread-list-item .thread-stats { font-size: 0.85em; color: #555; margin-top: 2px; }
 
-/* スレッドタイトルリンク (共通) */
-.thread-info-container .thread-title-link,
-ul#category-threads-list li a, /* カテゴリページはa直下 */
-ul#active-threads-list li.thread-list-item .thread-title-link /* ログイン後ページ用 */ {
-    text-decoration: none;
-    color: #555; /* グレー系の文字色 */
-    font-size: 1.1em;
-    display: block;
-    margin-bottom: 3px;
-}
-.thread-info-container .thread-title-link:hover,
-ul#category-threads-list li a:hover,
-ul#active-threads-list li.thread-list-item .thread-title-link:hover {
-    text-decoration: underline;
-    color: #000;
-}
-
-/* カテゴリバッジ (共通) */
-.thread-category-badge {
-    font-size: 0.8em;
-    background-color: #6c757d;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 3px;
-    margin-right: 8px;
-    display: inline-block;
-}
-
-/* スレッド統計情報 (アクセス数、コメント数など) (共通) */
-.thread-stats,
-ul#category-threads-list .thread-meta, /* カテゴリページ用 */
-ul#active-threads-list li.thread-list-item .thread-stats /* ログイン後ページ用 */ {
-    font-size: 0.85em;
-    color: #555;
-    margin-top: 2px;
-}
-
-
-/* スレッド作成フォーム (category_*.html 用) */
-.post-form {
-    margin-top: auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-    border-top: 1px solid #ddd;
-}
-/* ... (スレッド作成フォームのスタイルは既存のまま) ... */
+.post-form { margin-top: auto; padding: 20px; background-color: #f0f0f0; border-radius: 5px; border-top: 1px solid #ddd; }
 .post-form h3 { margin-top: 0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ccc; font-size: 1.2em; }
 .post-form input[type="text"] { width: calc(100% - 100px); padding: 10px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
 .post-form button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; width: 80px; transition: background-color 0.2s; }
 .post-form button:hover { background-color: #0056b3; }
 
-
-/* 「サイトトップに戻る」リンク */
-p.back-to-top-link {
-    text-align: center;
-    margin-top: 25px;
-    padding-top: 15px;
-}
+p.back-to-top-link { text-align: center; margin-top: 25px; padding-top: 15px; }
 
 footer {
     text-align: center;

@@ -3,31 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>通知 - ミニブログ</title>
+    <title>一目瞭然 - 座の人</title> <!-- ★変更: (通知) を削除 -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* notifications.html 固有のスタイル */
+        .main-content-notifications {
+            padding: 20px;
+            background-color: #fff;
+        }
+        .main-content-notifications h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .notification-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .notification-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+            color: #6c757d;
+        }
+        .notification-content {
+            flex-grow: 1;
+        }
+        .notification-text {
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        .notification-text a {
+            font-weight: bold;
+            color: #0056b3;
+            text-decoration: none;
+        }
+        .notification-text a:hover {
+            text-decoration: underline;
+        }
+        .notification-date {
+            font-size: 0.85em;
+            color: #777;
+        }
+        .notification-unread {
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d; /* ★変更: 青から濃いグレー (#6c757d) に変更 */
+            padding-left: 11px; /* 境界線とのスペースを維持するため、元の15px - 4px = 11px */
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>ミニブログ</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">トップ</a></li>
-                <li><a href="register.html">登録</a></li>
-                <li><a href="login.html">ログイン</a></li>
-                <li><a href="profile.html">プロフィール</a></li>
-                <li><a href="search.html">検索</a></li>
-                <li><a href="notifications.html">通知</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main id="notifications-page">
-        <h2>通知</h2>
-        <ul id="notifications-list">
-            </ul>
-        <p><a href="index.html">トップに戻る</a></p>
-    </main>
-    <footer>
-        <p>&copy; 2025 ミニブログ</p>
-    </footer>
+    <div class="container">
+        <header>
+            <h1>座の人</h1>
+            <nav>
+                <ul>
+                    <li><a href="logged_in.html">ホーム</a></li>
+                    <li><a href="bulletinboard.html">掲示板</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div id="left-column-container">
+                <!-- _left_column_logged_in.html が読み込まれる -->
+            </div>
+
+            <div class="main-content-notifications">
+                <h2>一目瞭然</h2> <!-- ★変更: (通知) を削除 -->
+                <ul id="notification-list-area" class="notification-list">
+                    <!-- script.jsによって通知がここに挿入されます -->
+                </ul>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 座の人</p>
+        </footer>
+    </div>
+
+    <script src="load_parts.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof loadHTMLPart === 'function') {
+                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
+                    // console.log("CALLBACK: Left column loaded into notifications.html.");
+                    if (typeof initializeLeftColumnContent === "function") {
+                        initializeLeftColumnContent();
+                    }
+                    if (typeof initializeNotificationsPage === "function") {
+                        // console.log("CALLBACK: Calling initializeNotificationsPage...");
+                        initializeNotificationsPage();
+                    } else {
+                        console.error("CALLBACK: initializeNotificationsPage is not defined!");
+                    }
+                });
+            } else {
+                console.error("loadHTMLPart function is not defined on notifications.html.");
+            }
+        });
+    </script>
 </body>
 </html>

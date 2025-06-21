@@ -6,14 +6,14 @@
     <title>随筆を書く - 座の人</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* このページ専用のスタイルを追加する場合はここに記述 */
-        .editor-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        /* このページ専用のスタイル */
+        .main-content-form { /* style.cssでflex-grow:1が設定される想定 */
+            padding: 20px; /* このエリアの内側の余白 */
+            background-color: #fff; /* 必要であれば背景色を設定 */
+        }
+        .editor-form-inner { /* フォーム要素をグループ化し、最大幅を設定 */
+            max-width: 800px; /* フォーム自体の最大幅 */
+            margin: 0 auto;   /* フォームを中央寄せ */
         }
         .form-group {
             margin-bottom: 20px;
@@ -31,8 +31,8 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        .form-group textarea {
-            min-height: 200px;
+        .form-group textarea#essay-content {
+            min-height: 300px;
             resize: vertical;
         }
         .form-group input[type="file"] {
@@ -44,22 +44,20 @@
             border: 1px dashed #ccc;
             padding: 10px;
             min-height: 50px;
-            display: flex; /* プレビュー要素を中央揃えにしやすくする */
-            justify-content: center; /* 水平中央揃え */
-            align-items: center; /* 垂直中央揃え */
-            flex-direction: column; /* プレビュー要素が縦に並ぶように */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
         .preview-area img,
-        .preview-area video {
+        .preview-area video { /* videoプレビューは現在使っていないが念のため残す */
             max-width: 100%;
-            max-height: 300px; /* プレビューの最大高さを設定 */
+            max-height: 300px;
             height: auto;
             display: block;
             margin-bottom: 10px;
         }
-        .preview-area p { /* プレビューがない時のテキスト用 */
-            color: #777;
-        }
+        .preview-area p { color: #777; }
         .submit-button {
             background-color: #007bff;
             color: white;
@@ -68,45 +66,11 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            display: block;
+            margin: 20px auto 0 auto;
         }
         .submit-button:hover {
             background-color: #0056b3;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 10px 0;
-            text-align: center;
-        }
-        nav ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-        }
-        footer {
-            text-align: center;
-            padding: 10px 0;
-            background-color: #eee;
-            border-top: 1px solid #ddd;
-            width: 100%;
-            margin-top: 20px;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
         }
     </style>
 </head>
@@ -122,29 +86,37 @@
             </nav>
         </header>
 
-        <main class="editor-container">
-            <h2>随筆を執筆する</h2>
-            <form id="essay-form">
-                <div class="form-group">
-                    <label for="essay-title">タイトル:</label>
-                    <input type="text" id="essay-title" name="essay-title" required>
-                </div>
+        <main>
+            <div id="left-column-container">
+                <!-- _left_column_logged_in.html が読み込まれる -->
+            </div>
 
-                <div class="form-group">
-                    <label for="essay-content">本文:</label>
-                    <textarea id="essay-content" name="essay-content" required></textarea>
-                </div>
+            <div class="main-content-form"> <!-- 右側メインコンテンツエリア -->
+                <div class="editor-form-inner"> <!-- フォームコンテンツのラッパー -->
+                    <h2>随筆を執筆する</h2>
+                    <form id="essay-form">
+                        <div class="form-group">
+                            <label for="essay-title">タイトル:</label>
+                            <input type="text" id="essay-title" name="essay-title" required>
+                        </div>
 
-                <div class="form-group">
-                    <label for="essay-media">メディアファイルを選択 (画像または動画, 任意):</label>
-                    <input type="file" id="essay-media" name="essay-media" accept="image/*,video/*">
-                    <div class="preview-area" id="media-preview-area">
-                        <p>メディアプレビュー</p>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label for="essay-content">本文:</label>
+                            <textarea id="essay-content" name="essay-content" required></textarea>
+                        </div>
 
-                <button type="submit" class="submit-button">投稿する</button>
-            </form>
+                        <div class="form-group">
+                            <label for="essay-media">メディアファイルを選択 (画像のみ, 任意):</label>
+                            <input type="file" id="essay-media" name="essay-media" accept="image/*">
+                            <div class="preview-area" id="media-preview-area">
+                                <p>画像プレビュー</p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-button">投稿する</button>
+                    </form>
+                </div> <!-- /.editor-form-inner -->
+            </div> <!-- /.main-content-form -->
         </main>
 
         <footer>
@@ -152,59 +124,28 @@
         </footer>
     </div>
 
+    <script src="load_parts.js"></script>
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const essayForm = document.getElementById('essay-form');
-            const mediaInput = document.getElementById('essay-media');
-            const mediaPreviewArea = document.getElementById('media-preview-area');
-
-            mediaInput.addEventListener('change', (event) => {
-                mediaPreviewArea.innerHTML = '<p>メディアプレビュー</p>'; // 古いプレビューをクリア
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        mediaPreviewArea.innerHTML = ''; // "メディアプレビュー"のテキストを消す
-                        if (file.type.startsWith('image/')) {
-                            const img = document.createElement('img');
-                            img.src = e.target.result;
-                            mediaPreviewArea.appendChild(img);
-                        } else if (file.type.startsWith('video/')) {
-                            const video = document.createElement('video');
-                            video.src = e.target.result;
-                            video.controls = true;
-                            mediaPreviewArea.appendChild(video);
-                        } else {
-                            mediaPreviewArea.innerHTML = '<p>選択されたファイル形式はサポートされていません。</p>';
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            essayForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-
-                const title = document.getElementById('essay-title').value;
-                const content = document.getElementById('essay-content').value;
-                const mediaFile = mediaInput.files[0];
-
-                const formData = new FormData();
-                formData.append('title', title);
-                formData.append('content', content);
-                if (mediaFile) {
-                    formData.append('media', mediaFile, mediaFile.name);
-                }
-
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}:`, value);
-                }
-
-                alert('随筆を投稿しました！（仮処理）\nコンソールで送信データを確認してください。');
-                // window.location.href = 'logged_in.html';
-            });
+            // console.log("DOMContentLoaded for create_essay.html inline script."); // デバッグ用
+            if (typeof loadHTMLPart === 'function') {
+                // console.log("Calling loadHTMLPart for _left_column_logged_in.html on create_essay.html..."); // デバッグ用
+                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
+                    // console.log("CALLBACK: Left column loaded into create_essay.html."); // デバッグ用
+                    if (typeof initializeLeftColumnContent === "function") {
+                        // console.log("CALLBACK: Calling initializeLeftColumnContent for create_essay.html..."); // デバッグ用
+                        initializeLeftColumnContent();
+                    }
+                    if (typeof initializeCreateEssayPage === "function") { // このページ専用のJS初期化
+                        // console.log("CALLBACK: Calling initializeCreateEssayPage..."); // デバッグ用
+                        initializeCreateEssayPage();
+                    }
+                });
+            } else {
+                console.error("loadHTMLPart function is not defined on create_essay.html.");
+            }
         });
     </script>
-    <!-- <script src="script.js"></script> --> 
 </body>
 </html>
