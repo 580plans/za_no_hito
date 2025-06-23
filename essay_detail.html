@@ -6,7 +6,8 @@
     <title>随筆詳細 - 座の人</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .main-content-essay-detail { background-color: #fff; }
+        /* essay_detail.html 固有のスタイル */
+        .main-content-essay-detail { padding: 20px; background-color: #fff; }
         .essay-title-area { background-color: #f0f0f0; padding: 15px 20px; margin-bottom: 15px; }
         .essay-title-area h2 { margin: 0; font-size: 1.8em; font-weight: bold; color: #333; text-align: left; }
         .essay-meta-detail-wrapper { text-align: right; margin-bottom: 20px; padding: 0 20px; }
@@ -15,9 +16,10 @@
         .essay-meta-detail span:first-child { margin-left: 0; }
         .essay-meta-detail a { color: #555; text-decoration: none; }
         .essay-meta-detail a:hover { text-decoration: underline; }
-        .essay-media img, .essay-media video { max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 4px; display: block; margin-left: auto; margin-right: auto; }
-        .essay-body { line-height: 1.7; font-size: 1.1em; margin-bottom: 30px; padding: 0 20px; }
-        .comments-section { padding: 0 20px; }
+        .essay-media { margin-bottom: 20px; }
+        .essay-media img, .essay-media video { max-width: 100%; max-height: 500px; height: auto; display: block; margin-left: auto; margin-right: auto; border-radius: 4px; border: 1px solid #ddd; background-color: #f0f0f0; }
+        .essay-body { line-height: 1.7; font-size: 1.1em; margin-bottom: 30px; }
+        .comments-section {}
         .comments-section h3 { font-size: 1.5em; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 1px solid #ddd; }
         .comments-section h4 { font-size: 1.2em; margin-top: 30px; margin-bottom: 10px; }
         .comment-item { padding: 10px 0; border-bottom: 1px dotted #eee; }
@@ -36,17 +38,10 @@
     <div class="container">
         <header>
             <h1>座の人</h1>
-            <nav>
-                <ul>
-                    <li><a href="logged_in.html">ホーム</a></li>
-                    <li><a href="bulletinboard.html">掲示板</a></li>
-                </ul>
-            </nav>
+            <nav><ul><li><a href="logged_in.html">ホーム</a></li><li><a href="bulletinboard.html">掲示板</a></li></ul></nav>
         </header>
         <main>
-            <div id="left-column-container">
-                <!--ここに _left_column_logged_in.html が読み込まれる -->
-            </div>
+            <div id="left-column-container"></div>
             <div class="main-content-essay-detail">
                 <div class="essay-title-area">
                     <h2 id="essay-title-detail">（随筆タイトル）</h2>
@@ -63,7 +58,7 @@
                             <img id="essay-image-detail" src="" alt="随筆の画像">
                         </div>
                         <div id="essay-video-detail-container" style="display: none;">
-                            <p>（動画はここに表示されます）</p>
+                            <video id="essay-video-detail" controls width="100%">お使いのブラウザは動画タグをサポートしていません。</video>
                         </div>
                     </section>
                     <section class="essay-body">
@@ -72,51 +67,28 @@
                 </article>
                 <section class="comments-section">
                     <h3>コメント</h3>
-                    <div id="comments-list">
-                        <!-- コメントは動的に挿入 -->
-                    </div>
+                    <div id="comments-list"></div>
                     <h4>コメントを投稿する</h4>
                     <form id="comment-form">
-                        <div>
-                            <label for="comment-text-input">コメント:</label>
-                            <textarea id="comment-text-input" name="comment-text" rows="4" placeholder="コメントを入力してください..." required></textarea>
-                        </div>
+                        <div><label for="comment-text-input">コメント:</label><textarea id="comment-text-input" name="comment-text" rows="4" placeholder="コメントを入力してください..." required></textarea></div>
                         <button type="submit">投稿する</button>
                     </form>
                 </section>
                 <p style="margin-top: 30px; text-align: center;"><a href="logged_in.html">ホームに戻る</a></p>
             </div>
         </main>
-        <footer>
-            <p>© 2025 座の人</p>
-        </footer>
+        <footer><p>© 2025 座の人</p></footer>
     </div>
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOMContentLoaded for essay_detail.html inline script.");
             if (typeof loadHTMLPart === 'function') {
-                console.log("Calling loadHTMLPart for _left_column_logged_in.html on essay_detail.html...");
                 loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
-                    console.log("CALLBACK: Left column loaded into essay_detail.html by loadHTMLPart.");
-                    if (typeof initializeLeftColumnContent === "function") {
-                        console.log("CALLBACK: Calling initializeLeftColumnContent for essay_detail.html...");
-                        initializeLeftColumnContent();
-                    } else {
-                        console.error("CALLBACK: initializeLeftColumnContent is not defined on essay_detail.html!");
-                    }
-                    // ★左カラム初期化後にメインコンテンツの初期化を呼び出す
-                    if (typeof initializeEssayDetailMainContent === "function") {
-                        console.log("CALLBACK: Calling initializeEssayDetailMainContent for essay_detail.html...");
-                        initializeEssayDetailMainContent();
-                    } else {
-                        console.error("CALLBACK: initializeEssayDetailMainContent is not defined on essay_detail.html!");
-                    }
+                    if (typeof initializeLeftColumnContent === "function") { initializeLeftColumnContent(); }
+                    if (typeof initializeEssayDetailMainContent === "function") { initializeEssayDetailMainContent(); } // ★ これが詳細表示用JS関数
                 });
-            } else {
-                console.error("loadHTMLPart function is not defined on essay_detail.html.");
-            }
+            } else { console.error("loadHTMLPart function is not defined on essay_detail.html."); }
         });
     </script>
 </body>
