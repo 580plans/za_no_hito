@@ -64,152 +64,160 @@ function initializeLeftColumnContent() {
 // グローバルスコープの logged_in.html メインコンテンツ初期化関数
 function initializeLoggedInMainContent() {
     window.initializePopularEssaysData();
-    window.initializeMediaTimelineItems(); // ★動画対応のため、recentEssayImagesから変更
-
+    window.initializeMediaTimelineItems();
     const essayTimelineLoggedInEl = document.getElementById('essay-timeline-logged-in');
     const popularEssaysListEl = document.getElementById('popular-essays-list');
     const recentMediaTabEl = document.getElementById('recent-essay-images-tab');
     const loggedInActiveThreadsListEl = document.getElementById('active-threads-list');
-
     if(essayTimelineLoggedInEl) window.renderEssayTimeline(essayTimelineLoggedInEl);
-    else console.warn("essayTimelineLoggedInEl not found for logged_in.html");
-
     if(popularEssaysListEl) window.renderPopularEssays(popularEssaysListEl);
-    else console.warn("popularEssaysListEl not found for logged_in.html");
-
-    if(recentMediaTabEl) window.renderRecentMedia(recentMediaTabEl); // ★動画対応のため、renderRecentEssayImagesから変更
-    else console.warn("recent-essay-images-tab not found for logged_in.html");
-    
+    if(recentMediaTabEl) window.renderRecentMedia(recentMediaTabEl);
     if(loggedInActiveThreadsListEl) window.renderLoggedInActiveThreads(loggedInActiveThreadsListEl);
-    else console.warn("loggedInActiveThreadsListEl not found for logged_in.html");
-    
-    setTimeout(() => {
-        window.initializeTabs('.tab-button-logged-in', '.tab-content-logged-in', 'essays');
-    }, 0);
+    setTimeout(() => { window.initializeTabs('.tab-button-logged-in', '.tab-content-logged-in', 'essays'); }, 0);
 }
 
 // グローバルスコープの essay_detail.html メインコンテンツ初期化関数
 function initializeEssayDetailMainContent() {
     const essayIdFromUrl = window.getQueryParam('id');
     const detailElements = {
-        title: document.getElementById('essay-title-detail'),
-        author: document.getElementById('essay-author-detail'),
-        datetime: document.getElementById('essay-datetime-detail'),
-        imageContainer: document.getElementById('essay-image-detail-container'),
-        image: document.getElementById('essay-image-detail'),
-        videoContainer: document.getElementById('essay-video-detail-container'),
-        video: document.getElementById('essay-video-detail'),
-        text: document.getElementById('essay-text-detail'),
-        commentsList: document.getElementById('comments-list'),
-        commentForm: document.getElementById('comment-form')
+        title: document.getElementById('essay-title-detail'), author: document.getElementById('essay-author-detail'), datetime: document.getElementById('essay-datetime-detail'),
+        imageContainer: document.getElementById('essay-image-detail-container'), image: document.getElementById('essay-image-detail'),
+        videoContainer: document.getElementById('essay-video-detail-container'), video: document.getElementById('essay-video-detail'),
+        text: document.getElementById('essay-text-detail'), commentsList: document.getElementById('comments-list'), commentForm: document.getElementById('comment-form')
     };
     if (essayIdFromUrl) {
         window.renderEssayDetail(essayIdFromUrl, detailElements);
-        if (detailElements.commentForm) {
-            const submitHandler = (event) => window.handleCommentSubmit(event, parseInt(essayIdFromUrl, 10), detailElements);
-            if (detailElements.commentForm._submitHandler) {
-                detailElements.commentForm.removeEventListener('submit', detailElements.commentForm._submitHandler);
-            }
-            detailElements.commentForm.addEventListener('submit', submitHandler);
-            detailElements.commentForm._submitHandler = submitHandler;
+        if (detailElements.commentForm) { // 随筆詳細ページのコメントフォームイベントリスナー
+            const submitHandler = (event) => window.handleCommentSubmit(event, parseInt(essayIdFromUrl, 10), detailElements); // handleCommentSubmit を呼び出す
+            if (detailElements.commentForm._submitHandler) { detailElements.commentForm.removeEventListener('submit', detailElements.commentForm._submitHandler); }
+            detailElements.commentForm.addEventListener('submit', submitHandler); detailElements.commentForm._submitHandler = submitHandler;
         }
     } else {
-        console.error("Essay ID not found in URL for essay_detail.html.");
-        if (detailElements.title) detailElements.title.textContent = 'エラー';
-        if (detailElements.text) detailElements.text.innerHTML = '<p>表示する随筆のIDが指定されていません。</p>';
-        if (detailElements.commentForm) detailElements.commentForm.style.display = 'none';
-        if (detailElements.commentsList) detailElements.commentsList.innerHTML = '';
+        if (detailElements.title) detailElements.title.textContent = 'エラー'; if (detailElements.text) detailElements.text.innerHTML = '<p>表示する随筆のIDが指定されていません。</p>';
+        if (detailElements.commentForm) detailElements.commentForm.style.display = 'none'; if (detailElements.commentsList) detailElements.commentsList.innerHTML = '';
     }
 }
 
 // グローバルスコープの通知ページ初期化関数
 function initializeNotificationsPage() {
     const notificationListAreaEl = document.getElementById('notification-list-area');
-    if (notificationListAreaEl) {
-        window.renderNotifications(notificationListAreaEl);
-    } else {
-        console.warn("Notification list area ('notification-list-area') not found on notifications.html.");
-    }
+    if (notificationListAreaEl) { window.renderNotifications(notificationListAreaEl); }
+    else { console.warn("Notification list area ('notification-list-area') not found on notifications.html."); }
 }
 
 // グローバルスコープの create_essay.html 初期化関数
 function initializeCreateEssayPage() {
-    const essayForm = document.getElementById('essay-form');
-    const mediaInput = document.getElementById('essay-media');
-    const mediaPreviewArea = document.getElementById('media-preview-area');
+    const essayForm = document.getElementById('essay-form'); const mediaInput = document.getElementById('essay-media'); const mediaPreviewArea = document.getElementById('media-preview-area');
     if (mediaInput && mediaPreviewArea) {
-        mediaPreviewArea.innerHTML = '<p class="empty-preview-text">イメージ</p>'; // 初期テキスト
+        mediaPreviewArea.innerHTML = '<p class="empty-preview-text">イメージ</p>';
         mediaInput.addEventListener('change', (event) => {
-            mediaPreviewArea.innerHTML = '';
-            const file = event.target.files[0];
+            mediaPreviewArea.innerHTML = ''; const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    if (file.type.startsWith('image/')) {
-                        const img = document.createElement('img'); img.src = e.target.result; mediaPreviewArea.appendChild(img);
-                    } else if (file.type.startsWith('video/')) {
-                        const video = document.createElement('video'); video.src = e.target.result; video.controls = true; video.style.maxWidth = '100%'; video.style.maxHeight = '300px'; mediaPreviewArea.appendChild(video);
-                    } else {
-                        mediaPreviewArea.innerHTML = '<p style="color:red;">サポート外のファイル形式です。</p>'; mediaInput.value = "";
-                    }
-                };
-                reader.readAsDataURL(file);
-            } else {
-                 mediaPreviewArea.innerHTML = '<p class="empty-preview-text">イメージ</p>'; // クリアされた場合
-            }
+                    if (file.type.startsWith('image/')) { const img = document.createElement('img'); img.src = e.target.result; mediaPreviewArea.appendChild(img); }
+                    else if (file.type.startsWith('video/')) { const video = document.createElement('video'); video.src = e.target.result; video.controls = true; video.style.maxWidth = '100%'; video.style.maxHeight = '300px'; mediaPreviewArea.appendChild(video); }
+                    else { mediaPreviewArea.innerHTML = '<p style="color:red;">サポート外のファイル形式です。</p>'; mediaInput.value = ""; }
+                }; reader.readAsDataURL(file);
+            } else { mediaPreviewArea.innerHTML = '<p class="empty-preview-text">イメージ</p>'; }
         });
     }
     if (essayForm) {
         essayForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const title = document.getElementById('essay-title').value.trim();
-            const content = document.getElementById('essay-content').value.trim();
-            const mediaFile = mediaInput.files[0];
+            event.preventDefault(); const title = document.getElementById('essay-title').value.trim(); const content = document.getElementById('essay-content').value.trim(); const mediaFile = mediaInput.files[0];
             if (!title || !content) { alert("タイトルと本文は必須です。"); return; }
             const newEssayId = window.essays.length > 0 ? Math.max(...window.essays.map(e => e.id)) + 1 : 1;
             const newEssay = { id: newEssayId, title: title, author: window.currentLoggedInUser.name, snippet: content.substring(0, 100) + (content.length > 100 ? "..." : ""), body: content.replace(/\n/g, '<br>'), date: new Date().toISOString().split('T')[0], image: null, videoUrl: null };
             if (mediaFile) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    if (mediaFile.type.startsWith('image/')) { newEssay.image = e.target.result; }
-                    else if (mediaFile.type.startsWith('video/')) { newEssay.videoUrl = e.target.result; }
+                    if (mediaFile.type.startsWith('image/')) { newEssay.image = e.target.result; } else if (mediaFile.type.startsWith('video/')) { newEssay.videoUrl = e.target.result; }
                     window.saveNewEssay(newEssay);
-                };
-                reader.readAsDataURL(mediaFile);
+                }; reader.readAsDataURL(mediaFile);
             } else { window.saveNewEssay(newEssay); }
         });
     }
 }
 
 // グローバルスコープの新しい随筆を保存しリダイレクトする関数
-function saveNewEssay(essayData) {
-    window.essays.push(essayData);
-    localStorage.setItem('essays', JSON.stringify(window.essays));
-    alert('随筆を投稿しました！');
-    window.location.href = 'logged_in.html';
-}
+function saveNewEssay(essayData) { window.essays.push(essayData); localStorage.setItem('essays', JSON.stringify(window.essays)); alert('随筆を投稿しました！'); window.location.href = 'logged_in.html'; }
 
 // グローバルスコープの past_essays.html のメインコンテンツを初期化/描画する関数
-function initializePastEssaysPage() {
-    const pastEssaysListAreaEl = document.getElementById('past-essays-list-area');
-    if (pastEssaysListAreaEl) {
-        window.renderPastEssaysList(pastEssaysListAreaEl);
-    } else {
-        console.warn("Past essays list area ('past-essays-list-area') not found on past_essays.html.");
-    }
-}
+function initializePastEssaysPage() { const pastEssaysListAreaEl = document.getElementById('past-essays-list-area'); if (pastEssaysListAreaEl) { window.renderPastEssaysList(pastEssaysListAreaEl); } else { console.warn("Past essays list area not found."); } }
 
 // グローバルスコープの profile.html のメインコンテンツを初期化/描画する関数
-function initializeProfilePage() {
-    const recentProfileEssaysListEl = document.getElementById('recent-profile-essays-list');
-    if (recentProfileEssaysListEl) {
-        const targetUserName = window.currentLoggedInUser ? window.currentLoggedInUser.name : null;
-        if (targetUserName) {
-            window.renderRecentProfileEssays(recentProfileEssaysListEl, targetUserName);
+function initializeProfilePage() { const recentProfileEssaysListEl = document.getElementById('recent-profile-essays-list'); if (recentProfileEssaysListEl) { const targetUserName = window.currentLoggedInUser ? window.currentLoggedInUser.name : null; if (targetUserName) { window.renderRecentProfileEssays(recentProfileEssaysListEl, targetUserName); } else { recentProfileEssaysListEl.innerHTML = '<li>ユーザー情報が取得できませんでした。</li>'; } } }
+
+// グローバルスコープの thread_detail.html のメインコンテンツを初期化/描画する関数
+function initializeThreadDetailPage() {
+    // console.log("Attempting to initialize thread_detail.html MAIN CONTENT...");
+    const threadTitleDetailEl = document.getElementById('thread-title-detail');
+    const threadAuthorDetailEl = document.getElementById('thread-author-detail');
+    const threadCreatedAtDetailEl = document.getElementById('thread-created-at-detail');
+    const threadCategoryDetailEl = document.getElementById('thread-category-detail');
+    const initialPostAuthorEl = document.getElementById('initial-post-author');
+    const initialPostDateEl = document.getElementById('initial-post-date');
+    const initialPostBodyEl = document.getElementById('initial-post-body');
+    const threadCommentsListEl = document.getElementById('thread-comments-list');
+    const threadCommentFormEl = document.getElementById('comment-form');
+    const commentTextInputEl = document.getElementById('comment-text-input'); // コメント入力欄
+    const commentCharCounterEl = document.getElementById('comment-char-counter'); // 文字数カウンター
+
+    const threadId = window.getQueryParam('id');
+    const loggedInUserName = window.currentLoggedInUser ? window.currentLoggedInUser.name : "ゲスト";
+
+    if (threadId) {
+        const threadData = window.allThreadsSampleDataForLoggedInPage.find(t => t.id === threadId);
+        if (threadData) {
+            if (threadTitleDetailEl) threadTitleDetailEl.textContent = escapeHtml(threadData.title);
+            if (threadAuthorDetailEl) { threadAuthorDetailEl.innerHTML = `作成者: <a href="profile.html">${escapeHtml(loggedInUserName)}</a>`; }
+            if (threadCreatedAtDetailEl) { const createdDate = new Date(threadData.createdAt); threadCreatedAtDetailEl.textContent = `作成日時: ${createdDate.toLocaleDateString('ja-JP')} ${createdDate.toLocaleTimeString('ja-JP')}`; threadCreatedAtDetailEl.setAttribute('datetime', createdDate.toISOString()); }
+            if (threadCategoryDetailEl && window.categoryDisplayNamesForLoggedInPage) { threadCategoryDetailEl.textContent = `カテゴリ: ${escapeHtml(window.categoryDisplayNamesForLoggedInPage[threadData.category] || threadData.category)}`; }
+            if (initialPostAuthorEl) { initialPostAuthorEl.innerHTML = `<a href="profile.html">${escapeHtml(loggedInUserName)}</a>`; }
+            if (initialPostDateEl) { const postDate = new Date(threadData.createdAt); initialPostDateEl.textContent = `${postDate.toLocaleDateString('ja-JP')} ${postDate.toLocaleTimeString('ja-JP')}`; initialPostDateEl.setAttribute('datetime', postDate.toISOString()); }
+            if (initialPostBodyEl) initialPostBodyEl.innerHTML = `<p>これは「${escapeHtml(threadData.title)}」スレッドの最初の投稿のサンプル本文です。スレッドID: ${escapeHtml(threadData.id)}</p>`;
+            if (threadCommentsListEl) { window.renderThreadComments(threadCommentsListEl, threadId); }
+
+            if (threadCommentFormEl) { // スレッド詳細ページのコメントフォーム
+                const submitThreadCommentHandler = (event) => {
+                    event.preventDefault();
+                    const commentTextInput = threadCommentFormEl.querySelector('#comment-text-input'); // フォーム内の要素を特定
+                    if (!commentTextInput) return;
+                    const commentText = commentTextInput.value.trim();
+                    if (commentText && threadId && window.currentLoggedInUser && window.currentLoggedInUser.name) {
+                        const newComment = { author: window.currentLoggedInUser.name, text: commentText, date: new Date().toISOString() };
+                        if (!window.threadSampleComments[threadId]) { window.threadSampleComments[threadId] = []; }
+                        window.threadSampleComments[threadId].push(newComment);
+                        window.renderThreadComments(threadCommentsListEl, threadId); // コメントリストを再描画
+                        commentTextInput.value = ''; // 入力欄クリア
+                        if(commentCharCounterEl) commentCharCounterEl.textContent = `0 / ${commentTextInputEl.maxLength || 100}`; // カウンターリセット
+                    }
+                };
+                if (threadCommentFormEl._submitHandler) { threadCommentFormEl.removeEventListener('submit', threadCommentFormEl._submitHandler); }
+                threadCommentFormEl.addEventListener('submit', submitThreadCommentHandler);
+                threadCommentFormEl._submitHandler = submitThreadCommentHandler;
+            }
+
+            if (commentTextInputEl && commentCharCounterEl) { // 文字数カウンター処理
+                const maxLength = parseInt(commentTextInputEl.getAttribute('maxlength'), 10) || 100;
+                commentCharCounterEl.textContent = `${commentTextInputEl.value.length} / ${maxLength}`;
+                commentTextInputEl.addEventListener('input', () => {
+                    const currentLength = commentTextInputEl.value.length;
+                    commentCharCounterEl.textContent = `${currentLength} / ${maxLength}`;
+                    if (currentLength > maxLength) { commentCharCounterEl.style.color = 'red'; }
+                    else { commentCharCounterEl.style.color = '#777'; }
+                });
+            }
+
         } else {
-            recentProfileEssaysListEl.innerHTML = '<li>ユーザー情報が取得できませんでした。</li>';
+            if (threadTitleDetailEl) threadTitleDetailEl.textContent = 'スレッドが見つかりません';
+            if (initialPostBodyEl) initialPostBodyEl.innerHTML = '<p>指定されたスレッドは存在しないか、削除された可能性があります。</p>';
         }
+    } else {
+        if (threadTitleDetailEl) threadTitleDetailEl.textContent = 'エラー';
+        if (initialPostBodyEl) initialPostBodyEl.innerHTML = '<p>表示するスレッドのIDが指定されていません。</p>';
     }
+    // console.log("Finished initializing thread_detail.html MAIN CONTENT.");
 }
 
 
@@ -227,6 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.popularEssaysData = [];
     window.mediaTimelineItems = [];
     window.allComments = {};
+    window.threadSampleComments = {};
+
     window.allThreadsSampleDataForLoggedInPage = [
         { id: 'thread001', title: '今週末の天気とおすすめスポット', category: 'zatsudan', accessCount: 2580, commentCount: 35, createdAt: new Date(Date.now() - 86400000 * 1).toISOString() }, { id: 'thread002', title: 'あの新作映画、見た人いる？【ネタバレ注意】', category: 'tv', accessCount: 1890, commentCount: 152, createdAt: new Date(Date.now() - 86400000 * 2).toISOString() }, { id: 'thread003', title: 'プログラミング学習で最初にぶつかる壁', category: 'work', accessCount: 1550, commentCount: 88, createdAt: new Date(Date.now() - 86400000 * 3).toISOString() }, { id: 'thread004', title: '健康のための食生活改善レポート', category: 'zatsudan', accessCount: 1230, commentCount: 45, createdAt: new Date(Date.now() - 86400000 * 0.5).toISOString() }, { id: 'thread005', title: '最新AI技術の活用事例と倫理問題', category: 'news', accessCount: 2200, commentCount: 62, createdAt: new Date(Date.now() - 86400000 * 4).toISOString() }, { id: 'thread006', title: 'お気に入りのインディーズゲーム教えて！', category: 'game', accessCount: 980, commentCount: 180, createdAt: new Date(Date.now() - 86400000 * 1.5).toISOString() }, { id: 'thread007', title: '今期の覇権アニメはこれだ！徹底討論', category: 'anime', accessCount: 1750, commentCount: 210, createdAt: new Date(Date.now() - 86400000 * 2.5).toISOString() }, { id: 'thread008', title: '応援してるスポーツチームの現状と未来', category: 'sports', accessCount: 1100, commentCount: 75, createdAt: new Date(Date.now() - 86400000 * 0.8).toISOString() }, { id: 'thread009', title: '買ってよかったガジェット2024年上半期', category: 'zatsudan', accessCount: 1950, commentCount: 92, createdAt: new Date(Date.now() - 86400000 * 5).toISOString() }, { id: 'thread010', title: '最近のテレビ番組、面白いの減った？', category: 'tv', accessCount: 850, commentCount: 130, createdAt: new Date(Date.now() - 86400000 * 6).toISOString() },
     ];
@@ -240,9 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.initializeSampleEssays = function() {
         localStorage.removeItem('essays');
         const storedEssays = localStorage.getItem('essays');
-        if (storedEssays) {
-            window.essays = JSON.parse(storedEssays);
-        } else {
+        if (storedEssays) { window.essays = JSON.parse(storedEssays); }
+        else {
             window.essays = [
                 { id: 1, title: 'サイト開設のご挨拶', author: '管理人', snippet: 'このサイト「座の人」を開設しました。日々の雑記や思ったことを気ままに綴っていきます。', date: '2024-05-21', image: 'https://dummyimage.com/600x400/777/fff&text=Greeting+Image', videoUrl: null, body: 'このサイト「座の人」を開設しました。<br>日々の雑記や思ったことを気ままに綴っていきます。<br><br>どうぞよろしくお願いいたします。' },
                 { id: 2, title: 'お気に入りのカフェ紹介 (動画あり)', author: 'ユーザーA', snippet: '最近見つけたカフェがとても素敵です。動画で雰囲気をご覧ください。', date: '2024-05-20', image: null, videoUrl: 'sample_video.mp4', body: '最近見つけたカフェがとても素敵です。<br>静かで落ち着いた雰囲気で、コーヒーも美味しい。<br>作業にも読書にもぴったりな空間です。お店の名前は「カフェ・ド・リラックス」。<br>ぜひ一度訪れてみてください。 (sample_video.mp4はローカルにダミーファイルを置いてください)' },
@@ -281,7 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         window.mediaTimelineItems.sort((a, b) => b.timestamp - a.timestamp);
-        console.log("Initialized mediaTimelineItems (ensure linkUrl is correct):", JSON.parse(JSON.stringify(window.mediaTimelineItems)));
     };
 
     window.getQueryParam = function(param) { const urlParams = new URLSearchParams(window.location.search); return urlParams.get(param); };
@@ -295,9 +303,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.mediaTimelineItems.forEach(item => {
             const mediaItemDiv = document.createElement('div'); mediaItemDiv.classList.add('recent-media-item'); let mediaHtml = '';
             if (item.type === 'essay_image' && item.thumbnailUrl) { mediaHtml = `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.essayTitle || '画像')}">`; }
-            else if (item.type === 'essay_video' && item.mediaUrl) { // videoUrl を mediaUrl に統一して参照
-                mediaHtml = `<video src="${escapeHtml(item.mediaUrl)}" poster="${escapeHtml(item.thumbnailUrl)}" autoplay loop muted playsinline preload="metadata" width="100%" height="100%" style="object-fit: cover;">お使いのブラウザは動画タグをサポートしていません。</video>`;
-            } else { mediaHtml = '<p style="font-size:0.8em; padding:5px; text-align:center;">プレビュー不可</p>'; }
+            else if (item.type === 'essay_video' && item.mediaUrl) { mediaHtml = `<video src="${escapeHtml(item.mediaUrl)}" poster="${escapeHtml(item.thumbnailUrl)}" autoplay loop muted playsinline preload="metadata" width="100%" height="100%" style="object-fit: cover;">お使いのブラウザは動画タグをサポートしていません。</video>`; }
+            else { mediaHtml = '<p style="font-size:0.8em; padding:5px; text-align:center;">プレビュー不可</p>'; }
             let linkTitle = `投稿者: ${escapeHtml(item.author || item.userName || '不明')}`; if (item.essayTitle) { linkTitle += `\n随筆: ${escapeHtml(item.essayTitle)}`; } else if (item.type === 'essay_video') { linkTitle += `\n動画`; } else if (item.type === 'profile_image') { linkTitle += `\nプロフィール画像`; }
             mediaItemDiv.innerHTML = `<a href="${escapeHtml(item.linkUrl)}" title="${linkTitle}">${mediaHtml}</a>`;
             targetElement.appendChild(mediaItemDiv);
@@ -319,6 +326,32 @@ document.addEventListener('DOMContentLoaded', () => {
     window.renderPastEssaysList = function(targetElement) { if (!targetElement) { return; } targetElement.innerHTML = ''; if (!window.essays || window.essays.length === 0) { const li = document.createElement('li'); li.classList.add('past-essay-list-item'); li.textContent = '過去の随筆はありません。'; targetElement.appendChild(li); return; } const sortedPastEssays = [...window.essays].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); sortedPastEssays.forEach(essay => { const listItem = document.createElement('li'); listItem.classList.add('past-essay-list-item'); const commentCount = (window.allComments[essay.id] || []).length; let snippetText = ''; if (essay.body) { const firstBrIndex = essay.body.indexOf('<br>'); if (firstBrIndex !== -1) { snippetText = essay.body.substring(0, firstBrIndex); } else { snippetText = essay.body.substring(0, 50) + (essay.body.length > 50 ? '...' : ''); } } snippetText = escapeHtml(snippetText.replace(/<[^>]+>/g, '')); listItem.innerHTML = `<a href="essay_detail.html?id=${essay.id}"><span class="past-essay-list-title">${escapeHtml(essay.title)}</span><span class="past-essay-list-meta">投稿日: ${new Date(essay.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })} | コメント: ${commentCount}件</span><p class="past-essay-list-snippet">${snippetText}</p></a>`; targetElement.appendChild(listItem); }); };
 
     window.renderRecentProfileEssays = function(targetElement, authorName) { if (!targetElement) { return; } targetElement.innerHTML = ''; if (!window.essays || window.essays.length === 0) { const li = document.createElement('li'); li.classList.add('essay-item-logged-in'); li.style.padding = "10px 15px"; li.textContent = 'まだ随筆がありません。(全体)'; targetElement.appendChild(li); return; } const userEssays = window.essays.filter(essay => essay.author === authorName); const sortedUserEssays = [...userEssays].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5); if (sortedUserEssays.length === 0) { const li = document.createElement('li'); li.classList.add('essay-item-logged-in'); li.style.padding = "10px 15px"; li.textContent = `ユーザー「${escapeHtml(authorName)}」の随筆はまだありません。`; targetElement.appendChild(li); return; } sortedUserEssays.forEach(essay => { const listItem = document.createElement('li'); listItem.classList.add('essay-item-logged-in'); listItem.innerHTML = `<div class="essay-title-container"><h4 class="essay-title-logged-in"><a href="essay_detail.html?id=${essay.id}">${escapeHtml(essay.title)}</a></h4></div><p class="essay-snippet-logged-in">${escapeHtml(essay.snippet)}</p><p class="essay-meta-logged-in">投稿日: ${escapeHtml(essay.date)}</p>`; targetElement.appendChild(listItem); }); };
+
+    window.renderThreadComments = function(targetElement, threadId) {
+        if (!targetElement) { return; } targetElement.innerHTML = '';
+        if (!window.threadSampleComments[threadId]) {
+            window.threadSampleComments[threadId] = [
+                { author: window.currentLoggedInUser.name, text: `これはスレッドID「${threadId}」への最初のコメントのサンプルです！`, date: new Date(Date.now() - 3600000 * 2 * Math.random()).toISOString() },
+                { author: window.currentLoggedInUser.name, text: 'ふむふむ、なるほどですね。これは2番目のコメント。', date: new Date(Date.now() - 3600000 * 1 * Math.random()).toISOString() }
+            ];
+        }
+        const currentThreadComments = window.threadSampleComments[threadId] || [];
+        if (currentThreadComments.length === 0) { const noCommentItem = document.createElement('div'); noCommentItem.classList.add('comment-item'); noCommentItem.textContent = 'まだコメントはありません。'; targetElement.appendChild(noCommentItem); return; }
+        const sortedComments = [...currentThreadComments].sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        sortedComments.forEach((comment, index) => {
+            const commentItem = document.createElement('div'); commentItem.classList.add('comment-item'); const commentDate = new Date(comment.date);
+            const commentNumber = index + 1;
+            const commentAuthorLink = `<a href="profile.html">${escapeHtml(comment.author)}</a>`;
+            commentItem.innerHTML = `
+                <p class="comment-meta">
+                    <span class="comment-number">${commentNumber}.</span>
+                    <span class="comment-author">${commentAuthorLink}</span>
+                    <time class="comment-date" datetime="${commentDate.toISOString()}">${commentDate.toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</time>
+                </p>
+                <p class="comment-text">${escapeHtml(comment.text)}</p>`;
+            targetElement.appendChild(commentItem);
+        });
+    };
 
     // --- 共通のデータ初期化の呼び出し ---
     window.initializeSampleEssays();
