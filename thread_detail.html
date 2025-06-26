@@ -6,21 +6,19 @@
     <title>スレッド詳細 - 座の人</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* thread_detail.html 固有のスタイル */
+        /* thread_detail.html 固有のスタイル (前回提供のものから変更なし) */
         .main-content-thread-detail { padding-top: 20px; padding-bottom: 20px; padding-left: 0; padding-right: 0; background-color: #fff; }
         .thread-header { background-color: #f0f0f0; padding: 15px 20px; margin-bottom: 20px; border-radius: 4px; box-sizing: border-box; width: 100%; }
         .thread-header h2 { margin-top: 0; margin-bottom: 8px; font-size: 1.8em; color: #333; text-align: left; word-wrap: break-word; overflow-wrap: break-word; }
         .thread-meta-detail { font-size: 0.85em; color: #555; text-align: left; }
         .thread-meta-detail span { margin-right: 15px; }
         .thread-meta-detail span:last-child { margin-right: 0; }
-
         .thread-initial-post, .comments-section, .main-content-thread-detail > p[style*="text-align: center"] { padding-left: 20px; padding-right: 20px; box-sizing: border-box; width: 100%; }
-        .thread-initial-post { margin-bottom: 30px; padding-top:15px; padding-bottom:15px; background-color: #f8f9fa; border: 1px solid #eee; border-radius: 4px; }
+        .thread-initial-post { margin-bottom: 20px; padding-top:10px; padding-bottom:10px; /* background-color: #f8f9fa; border: 1px solid #eee; */ border-radius: 4px; }
         .thread-initial-post .post-author { font-weight: bold; color: #0056b3; margin-bottom: 5px; }
         .thread-initial-post .post-date { font-size: 0.8em; color: #777; margin-bottom: 10px; }
         .thread-initial-post .post-body { line-height: 1.7; word-wrap: break-word; overflow-wrap: break-word; }
-
-        .comments-section { margin-top: 30px; }
+        .comments-section { margin-top: 0; }
         .comment-item { padding: 10px 0; border-bottom: 1px dotted #eee; }
         .comment-item:last-child { border-bottom: none; }
         p.comment-meta { margin-bottom: 5px; font-size: 0.9em; color: #555; display: flex; align-items: baseline; }
@@ -28,45 +26,14 @@
         span.comment-author { font-weight: bold; color: #0056b3; margin-right: 10px; flex-shrink: 0; }
         time.comment-date { font-size: 0.9em; color: #777; white-space: nowrap; }
         p.comment-text { margin-top: 0; margin-bottom: 5px; padding-left: calc(20px + 8px); line-height: 1.6; word-wrap: break-word; overflow-wrap: break-word; }
-
         #comment-form { margin-top: 20px; }
-        #comment-form .form-group { /* ラベルとtextareaをまとめるdiv */
-            margin-bottom: 10px;
-        }
+        #comment-form .form-group { margin-bottom: 10px; }
         #comment-form label { display: block; margin-bottom: 5px; font-weight: bold; }
-        #comment-form textarea {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-            resize: vertical;
-            box-sizing: border-box;
-            min-height: 80px;
-        }
-        .comment-form-actions { /* ボタンとカウンターを横並びにするためのラッパー */
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-top: 10px;
-        }
-        #comment-char-counter {
-            margin-left: 15px;
-            font-size: 0.9em;
-            color: #777;
-        }
-        #comment-form button[type="submit"] {
-            background-color: #5cb85c;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        #comment-form button[type="submit"]:hover {
-            background-color: #4cae4c;
-        }
+        #comment-form textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; resize: vertical; box-sizing: border-box; min-height: 80px; }
+        .comment-form-actions { display: flex; justify-content: flex-start; align-items: center; margin-top: 10px; }
+        #comment-char-counter { margin-left: 15px; font-size: 0.9em; color: #777; }
+        #comment-form button[type="submit"] { background-color: #5cb85c; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        #comment-form button[type="submit"]:hover { background-color: #4cae4c; }
     </style>
 </head>
 <body>
@@ -87,21 +54,21 @@
                     </div>
                 </header>
                 <section class="thread-initial-post">
-                    <p class="post-author" id="initial-post-author">（最初の投稿者）</p>
-                    <p class="post-date"><time id="initial-post-date" datetime="">（投稿日時）</time></p>
-                    <div class="post-body" id="initial-post-body"><p>（スレッドの最初の投稿内容がここに表示されます。）</p></div>
+                    {/* ★ このセクションの投稿者と日時は非表示にするか、JSで制御 */}
+                    <p class="post-author" id="initial-post-author" style="display:none;"></p>
+                    <p class="post-date" id="initial-post-date" style="display:none;"><time datetime=""></time></p>
+                    <div class="post-body" id="initial-post-body">
+                        {/* ここに「1げっと」メッセージまたは最初の投稿が表示される */}
+                    </div>
                 </section>
                 <section class="comments-section">
                     <div id="thread-comments-list"></div>
                     <form id="comment-form">
-                        
                         <div class="form-group">
                             <label for="comment-text-input">あなたの声:</label>
-                            <textarea id="comment-text-input" name="comment-text" rows="4" 
-                                      placeholder="１回の声は100文字までです、、、" 
-                                      maxlength="100" required></textarea>
+                            <textarea id="comment-text-input" name="comment-text" rows="4" placeholder="１回の声は100文字までです、、、" maxlength="100" required></textarea>
                         </div>
-                        <div class="comment-form-actions"> 
+                        <div class="comment-form-actions">
                             <button type="submit">投稿する</button>
                             <span id="comment-char-counter">0 / 100</span>
                         </div>
@@ -114,13 +81,32 @@
     </div>
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
+    <script src="thread.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            console.log("DOMContentLoaded for thread_detail.html inline script.");
             if (typeof loadHTMLPart === 'function') {
-                loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder-thread', null, () => {
-                    if (typeof initializeThreadDetailPage === "function") { initializeThreadDetailPage(); }
+                console.log("Calling loadHTMLPart for _left_column_bulletinboard.html on thread_detail.html...");
+                const urlParamsForCategory = new URLSearchParams(window.location.search);
+                const threadIdForCategory = urlParamsForCategory.get('id');
+                let activeCategoryKey = null;
+                if(threadIdForCategory && window.allThreadsSampleDataForLoggedInPage){ // script.js のデータ確認
+                    const currentThreadData = window.allThreadsSampleDataForLoggedInPage.find(t => t.id === threadIdForCategory);
+                    if(currentThreadData) activeCategoryKey = currentThreadData.category;
+                }
+                loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder-thread', activeCategoryKey, () => {
+                    console.log("CALLBACK: Bulletin board left column loaded into thread_detail.html.");
+                    // ★ initializeThreadDetailPage が thread.js でグローバルに定義されていることを期待
+                    if (typeof initializeThreadDetailPage === "function") {
+                        console.log("CALLBACK: Calling initializeThreadDetailPage from thread_detail.html inline script...");
+                        initializeThreadDetailPage();
+                    } else {
+                        console.error("CALLBACK: initializeThreadDetailPage is not defined! Check thread.js and script loading order.");
+                    }
                 });
-            } else { console.error("loadHTMLPart function is not defined on thread_detail.html."); }
+            } else {
+                console.error("loadHTMLPart function is not defined on thread_detail.html.");
+            }
         });
     </script>
 </body>
