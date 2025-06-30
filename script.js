@@ -4,11 +4,11 @@
 function escapeHtml(unsafe) {
     if (typeof unsafe !== 'string') { return unsafe; }
     return unsafe
-         .replace(/&/g, "&")
-         .replace(/</g, "<")
-         .replace(/>/g, ">")
-         .replace(/"/g, '"')
-         .replace(/'/g, "'");
+         .replace(/&/g, "&") // ★修正
+         .replace(/</g, "<")   // ★修正
+         .replace(/>/g, ">")   // ★修正
+         .replace(/"/g, '"') // ★修正
+         .replace(/'/g, "'"); // ★修正
 }
 
 // グローバルスコープの getCrownHtml 関数
@@ -21,6 +21,7 @@ function getCrownHtml(rank) {
 
 // グローバルスコープの左カラム初期化関数
 function initializeLeftColumnContent() {
+    // console.log("Attempting to initialize left column content FROM GLOBAL FUNCTION...");
     const userImageEl = document.getElementById('left-column-user-image');
     const usernameTextEl = document.getElementById('left-column-username-text');
     const followingListEl = document.getElementById('following-list-left-column');
@@ -87,8 +88,8 @@ function initializeEssayDetailMainContent() {
     };
     if (essayIdFromUrl) {
         window.renderEssayDetail(essayIdFromUrl, detailElements);
-        if (detailElements.commentForm) { // 随筆詳細ページのコメントフォームイベントリスナー
-            const submitHandler = (event) => window.handleCommentSubmit(event, parseInt(essayIdFromUrl, 10), detailElements); // handleCommentSubmit を呼び出す
+        if (detailElements.commentForm) {
+            const submitHandler = (event) => window.handleCommentSubmit(event, parseInt(essayIdFromUrl, 10), detailElements);
             if (detailElements.commentForm._submitHandler) { detailElements.commentForm.removeEventListener('submit', detailElements.commentForm._submitHandler); }
             detailElements.commentForm.addEventListener('submit', submitHandler); detailElements.commentForm._submitHandler = submitHandler;
         }
@@ -150,7 +151,6 @@ function initializeProfilePage() { const recentProfileEssaysListEl = document.ge
 
 // グローバルスコープの thread_detail.html のメインコンテンツを初期化/描画する関数
 function initializeThreadDetailPage() {
-    // console.log("Attempting to initialize thread_detail.html MAIN CONTENT...");
     const threadTitleDetailEl = document.getElementById('thread-title-detail');
     const threadAuthorDetailEl = document.getElementById('thread-author-detail');
     const threadCreatedAtDetailEl = document.getElementById('thread-created-at-detail');
@@ -160,8 +160,8 @@ function initializeThreadDetailPage() {
     const initialPostBodyEl = document.getElementById('initial-post-body');
     const threadCommentsListEl = document.getElementById('thread-comments-list');
     const threadCommentFormEl = document.getElementById('comment-form');
-    const commentTextInputEl = document.getElementById('comment-text-input'); // コメント入力欄
-    const commentCharCounterEl = document.getElementById('comment-char-counter'); // 文字数カウンター
+    const commentTextInputEl = document.getElementById('comment-text-input');
+    const commentCharCounterEl = document.getElementById('comment-char-counter');
 
     const threadId = window.getQueryParam('id');
     const loggedInUserName = window.currentLoggedInUser ? window.currentLoggedInUser.name : "ゲスト";
@@ -177,28 +177,26 @@ function initializeThreadDetailPage() {
             if (initialPostDateEl) { const postDate = new Date(threadData.createdAt); initialPostDateEl.textContent = `${postDate.toLocaleDateString('ja-JP')} ${postDate.toLocaleTimeString('ja-JP')}`; initialPostDateEl.setAttribute('datetime', postDate.toISOString()); }
             if (initialPostBodyEl) initialPostBodyEl.innerHTML = `<p>これは「${escapeHtml(threadData.title)}」スレッドの最初の投稿のサンプル本文です。スレッドID: ${escapeHtml(threadData.id)}</p>`;
             if (threadCommentsListEl) { window.renderThreadComments(threadCommentsListEl, threadId); }
-
-            if (threadCommentFormEl) { // スレッド詳細ページのコメントフォーム
+            if (threadCommentFormEl) {
                 const submitThreadCommentHandler = (event) => {
                     event.preventDefault();
-                    const commentTextInput = threadCommentFormEl.querySelector('#comment-text-input'); // フォーム内の要素を特定
+                    const commentTextInput = threadCommentFormEl.querySelector('#comment-text-input');
                     if (!commentTextInput) return;
                     const commentText = commentTextInput.value.trim();
                     if (commentText && threadId && window.currentLoggedInUser && window.currentLoggedInUser.name) {
                         const newComment = { author: window.currentLoggedInUser.name, text: commentText, date: new Date().toISOString() };
                         if (!window.threadSampleComments[threadId]) { window.threadSampleComments[threadId] = []; }
                         window.threadSampleComments[threadId].push(newComment);
-                        window.renderThreadComments(threadCommentsListEl, threadId); // コメントリストを再描画
-                        commentTextInput.value = ''; // 入力欄クリア
-                        if(commentCharCounterEl) commentCharCounterEl.textContent = `0 / ${commentTextInputEl.maxLength || 100}`; // カウンターリセット
+                        window.renderThreadComments(threadCommentsListEl, threadId);
+                        commentTextInput.value = '';
+                        if(commentCharCounterEl) commentCharCounterEl.textContent = `0 / ${commentTextInputEl.maxLength || 100}`;
                     }
                 };
                 if (threadCommentFormEl._submitHandler) { threadCommentFormEl.removeEventListener('submit', threadCommentFormEl._submitHandler); }
                 threadCommentFormEl.addEventListener('submit', submitThreadCommentHandler);
                 threadCommentFormEl._submitHandler = submitThreadCommentHandler;
             }
-
-            if (commentTextInputEl && commentCharCounterEl) { // 文字数カウンター処理
+            if (commentTextInputEl && commentCharCounterEl) {
                 const maxLength = parseInt(commentTextInputEl.getAttribute('maxlength'), 10) || 100;
                 commentCharCounterEl.textContent = `${commentTextInputEl.value.length} / ${maxLength}`;
                 commentTextInputEl.addEventListener('input', () => {
@@ -208,7 +206,6 @@ function initializeThreadDetailPage() {
                     else { commentCharCounterEl.style.color = '#777'; }
                 });
             }
-
         } else {
             if (threadTitleDetailEl) threadTitleDetailEl.textContent = 'スレッドが見つかりません';
             if (initialPostBodyEl) initialPostBodyEl.innerHTML = '<p>指定されたスレッドは存在しないか、削除された可能性があります。</p>';
@@ -217,7 +214,6 @@ function initializeThreadDetailPage() {
         if (threadTitleDetailEl) threadTitleDetailEl.textContent = 'エラー';
         if (initialPostBodyEl) initialPostBodyEl.innerHTML = '<p>表示するスレッドのIDが指定されていません。</p>';
     }
-    // console.log("Finished initializing thread_detail.html MAIN CONTENT.");
 }
 
 
@@ -237,9 +233,38 @@ document.addEventListener('DOMContentLoaded', () => {
     window.allComments = {};
     window.threadSampleComments = {};
 
-    window.allThreadsSampleDataForLoggedInPage = [
-        { id: 'thread001', title: '今週末の天気とおすすめスポット', category: 'zatsudan', accessCount: 2580, commentCount: 35, createdAt: new Date(Date.now() - 86400000 * 1).toISOString() }, { id: 'thread002', title: 'あの新作映画、見た人いる？【ネタバレ注意】', category: 'tv', accessCount: 1890, commentCount: 152, createdAt: new Date(Date.now() - 86400000 * 2).toISOString() }, { id: 'thread003', title: 'プログラミング学習で最初にぶつかる壁', category: 'work', accessCount: 1550, commentCount: 88, createdAt: new Date(Date.now() - 86400000 * 3).toISOString() }, { id: 'thread004', title: '健康のための食生活改善レポート', category: 'zatsudan', accessCount: 1230, commentCount: 45, createdAt: new Date(Date.now() - 86400000 * 0.5).toISOString() }, { id: 'thread005', title: '最新AI技術の活用事例と倫理問題', category: 'news', accessCount: 2200, commentCount: 62, createdAt: new Date(Date.now() - 86400000 * 4).toISOString() }, { id: 'thread006', title: 'お気に入りのインディーズゲーム教えて！', category: 'game', accessCount: 980, commentCount: 180, createdAt: new Date(Date.now() - 86400000 * 1.5).toISOString() }, { id: 'thread007', title: '今期の覇権アニメはこれだ！徹底討論', category: 'anime', accessCount: 1750, commentCount: 210, createdAt: new Date(Date.now() - 86400000 * 2.5).toISOString() }, { id: 'thread008', title: '応援してるスポーツチームの現状と未来', category: 'sports', accessCount: 1100, commentCount: 75, createdAt: new Date(Date.now() - 86400000 * 0.8).toISOString() }, { id: 'thread009', title: '買ってよかったガジェット2024年上半期', category: 'zatsudan', accessCount: 1950, commentCount: 92, createdAt: new Date(Date.now() - 86400000 * 5).toISOString() }, { id: 'thread010', title: '最近のテレビ番組、面白いの減った？', category: 'tv', accessCount: 850, commentCount: 130, createdAt: new Date(Date.now() - 86400000 * 6).toISOString() },
-    ];
+    // ★★★ スレッドデータの初期化処理をlocalStorage対応に修正 ★★★
+    const storedThreads = localStorage.getItem('allThreads'); // キー名を統一
+    if (storedThreads) {
+        try {
+            window.allThreadsSampleDataForLoggedInPage = JSON.parse(storedThreads);
+            console.log("Loaded threads from localStorage.");
+        } catch(e) {
+            console.error("Failed to parse threads from localStorage, initializing with defaults.", e);
+            initializeDefaultThreads();
+        }
+    } else {
+        initializeDefaultThreads();
+    }
+
+    function initializeDefaultThreads() {
+        console.log("Initializing threads with sample data and saving to localStorage.");
+        window.allThreadsSampleDataForLoggedInPage = [
+            { id: 'thread001', title: '今週末の天気とおすすめスポット', category: 'zatsudan', accessCount: 2580, commentCount: 35, createdAt: new Date(Date.now() - 86400000 * 1).toISOString(), author: "管理人" },
+            { id: 'thread002', title: 'あの新作映画、見た人いる？【ネタバレ注意】', category: 'tv', accessCount: 1890, commentCount: 152, createdAt: new Date(Date.now() - 86400000 * 2).toISOString(), author: "ユーザーA" },
+            { id: 'thread003', title: 'プログラミング学習で最初にぶつかる壁', category: 'work', accessCount: 1550, commentCount: 88, createdAt: new Date(Date.now() - 86400000 * 3).toISOString(), author: "ユーザーB" },
+            { id: 'thread004', title: '健康のための食生活改善レポート', category: 'zatsudan', accessCount: 1230, commentCount: 45, createdAt: new Date(Date.now() - 86400000 * 0.5).toISOString(), author: "ユーザーC" },
+            { id: 'thread005', title: '最新AI技術の活用事例と倫理問題', category: 'news', accessCount: 2200, commentCount: 62, createdAt: new Date(Date.now() - 86400000 * 4).toISOString(), author: "管理人" },
+            { id: 'thread006', title: 'お気に入りのインディーズゲーム教えて！', category: 'game', accessCount: 980, commentCount: 180, createdAt: new Date(Date.now() - 86400000 * 1.5).toISOString(), author: "ユーザーA" },
+            { id: 'thread007', title: '今期の覇権アニメはこれだ！徹底討論', category: 'anime', accessCount: 1750, commentCount: 210, createdAt: new Date(Date.now() - 86400000 * 2.5).toISOString(), author: "ユーザーB" },
+            { id: 'thread008', title: '応援してるスポーツチームの現状と未来', category: 'sports', accessCount: 1100, commentCount: 75, createdAt: new Date(Date.now() - 86400000 * 0.8).toISOString(), author: "ユーザーC" },
+            { id: 'thread009', title: '買ってよかったガジェット2024年上半期', category: 'zatsudan', accessCount: 1950, commentCount: 92, createdAt: new Date(Date.now() - 86400000 * 5).toISOString(), author: "管理人" },
+            { id: 'thread010', title: '最近のテレビ番組、面白いの減った？', category: 'tv', accessCount: 850, commentCount: 130, createdAt: new Date(Date.now() - 86400000 * 6).toISOString(), author: "ユーザーA" },
+        ];
+        localStorage.setItem('allThreads', JSON.stringify(window.allThreadsSampleDataForLoggedInPage));
+    }
+    // ★★★ ここまで ★★★
+
     window.categoryDisplayNamesForLoggedInPage = {
         zatsudan: '雑談', news: 'ニュース', work: '会社・仕事', anime: 'アニメ', sports: 'スポーツ', tv: 'テレビ', game: 'ゲーム', unknown: 'その他'
     };
@@ -298,18 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.renderPopularEssays = function(targetElement) { if (!targetElement) { return; } targetElement.innerHTML = ''; if (window.popularEssaysData.length === 0) { targetElement.innerHTML = '<li>現在、多く読まれた随筆はありません。</li>'; return; } window.popularEssaysData.forEach(essay => { const listItem = document.createElement('li'); listItem.classList.add('essay-item-logged-in'); listItem.innerHTML = `<div class="essay-title-container"><h4 class="essay-title-logged-in"><a href="essay_detail.html?id=${essay.id}">${escapeHtml(essay.title)}</a></h4><span class="essay-author-logged-in">投稿者: <a href="profile.html?user=${escapeHtml(String(essay.author))}">${escapeHtml(String(essay.author))}</a></span></div><p class="essay-snippet-logged-in">${escapeHtml(essay.snippet)}</p><p class="essay-meta-logged-in">投稿日: ${escapeHtml(essay.date)} / 閲覧数: ${essay.views || 0}</p>`; targetElement.appendChild(listItem); }); };
 
-    window.renderRecentMedia = function(targetElement) {
-        if (!targetElement) { return; } targetElement.innerHTML = ''; if (!window.mediaTimelineItems || window.mediaTimelineItems.length === 0) { targetElement.innerHTML = '<p>最近投稿された画像や動画はありません。</p>'; return; }
-        window.mediaTimelineItems.forEach(item => {
-            const mediaItemDiv = document.createElement('div'); mediaItemDiv.classList.add('recent-media-item'); let mediaHtml = '';
-            if (item.type === 'essay_image' && item.thumbnailUrl) { mediaHtml = `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.essayTitle || '画像')}">`; }
-            else if (item.type === 'essay_video' && item.mediaUrl) { mediaHtml = `<video src="${escapeHtml(item.mediaUrl)}" poster="${escapeHtml(item.thumbnailUrl)}" autoplay loop muted playsinline preload="metadata" width="100%" height="100%" style="object-fit: cover;">お使いのブラウザは動画タグをサポートしていません。</video>`; }
-            else { mediaHtml = '<p style="font-size:0.8em; padding:5px; text-align:center;">プレビュー不可</p>'; }
-            let linkTitle = `投稿者: ${escapeHtml(item.author || item.userName || '不明')}`; if (item.essayTitle) { linkTitle += `\n随筆: ${escapeHtml(item.essayTitle)}`; } else if (item.type === 'essay_video') { linkTitle += `\n動画`; } else if (item.type === 'profile_image') { linkTitle += `\nプロフィール画像`; }
-            mediaItemDiv.innerHTML = `<a href="${escapeHtml(item.linkUrl)}" title="${linkTitle}">${mediaHtml}</a>`;
-            targetElement.appendChild(mediaItemDiv);
-        });
-    };
+    window.renderRecentMedia = function(targetElement) { if (!targetElement) { return; } targetElement.innerHTML = ''; if (!window.mediaTimelineItems || window.mediaTimelineItems.length === 0) { targetElement.innerHTML = '<p>最近投稿された画像や動画はありません。</p>'; return; } window.mediaTimelineItems.forEach(item => { const mediaItemDiv = document.createElement('div'); mediaItemDiv.classList.add('recent-media-item'); let mediaHtml = ''; if (item.type === 'essay_image' && item.thumbnailUrl) { mediaHtml = `<img src="${escapeHtml(item.thumbnailUrl)}" alt="${escapeHtml(item.essayTitle || '画像')}">`; } else if (item.type === 'essay_video' && item.mediaUrl) { mediaHtml = `<video src="${escapeHtml(item.mediaUrl)}" poster="${escapeHtml(item.thumbnailUrl)}" autoplay loop muted playsinline preload="metadata" width="100%" height="100%" style="object-fit: cover;">お使いのブラウザは動画タグをサポートしていません。</video>`; } else { mediaHtml = '<p style="font-size:0.8em; padding:5px; text-align:center;">プレビュー不可</p>'; } let linkTitle = `投稿者: ${escapeHtml(item.author || item.userName || '不明')}`; if (item.essayTitle) { linkTitle += `\n随筆: ${escapeHtml(item.essayTitle)}`; } else if (item.type === 'essay_video') { linkTitle += `\n動画`; } else if (item.type === 'profile_image') { linkTitle += `\nプロフィール画像`; } mediaItemDiv.innerHTML = `<a href="${escapeHtml(item.linkUrl)}" title="${linkTitle}">${mediaHtml}</a>`; targetElement.appendChild(mediaItemDiv); }); };
 
     window.renderLoggedInActiveThreads = function(targetElement) { if (!targetElement) { return; } targetElement.innerHTML = ''; if (!window.allThreadsSampleDataForLoggedInPage || window.allThreadsSampleDataForLoggedInPage.length === 0) { targetElement.innerHTML = '<li>表示できるにぎやかなスレのデータがありません。</li>'; return; } const sortedByAccess = [...window.allThreadsSampleDataForLoggedInPage].sort((a, b) => (b.accessCount || 0) - (a.accessCount || 0)).slice(0, 5); if (sortedByAccess.length === 0) { targetElement.innerHTML = '<li>現在、にぎやかなスレはありません。</li>'; return; } sortedByAccess.forEach((thread, index) => { const listItem = document.createElement('li'); const rank = index + 1; const crownHtml = getCrownHtml(rank); const categoryName = window.categoryDisplayNamesForLoggedInPage[thread.category] || window.categoryDisplayNamesForLoggedInPage.unknown; listItem.classList.add('thread-list-item'); listItem.innerHTML = `<div class="rank-display">${crownHtml}${rank}位</div><div class="thread-info-container"><div><span class="thread-category-badge">${escapeHtml(categoryName)}</span><a href="thread_detail.html?id=${thread.id}" class="thread-title-link">${escapeHtml(thread.title)}</a></div><div class="thread-stats">アクセス数: ${thread.accessCount || 0}</div></div>`; targetElement.appendChild(listItem); }); };
 

@@ -112,8 +112,10 @@ span.left-column-username-label {
 .main-content-essay-detail,
 .main-content-notifications,
 .main-content-form,
-.main-content-past-essays, /* past_essays.html 用 */
-.main-content-profile      /* profile.html 用 */ {
+.main-content-past-essays,
+.main-content-profile,
+div#category-content, /* ★掲示板のカテゴリ右コンテンツも共通化 */
+div#bulletinboard-content /* ★掲示板トップの右コンテンツも共通化 */ {
     flex-grow: 1;
     min-width: 0;
 }
@@ -128,31 +130,10 @@ span.left-column-username-label {
 .tab-content-logged-in.active { display: block; }
 
 /* --- 随筆タイムライン (logged_in.html & profile.html recent essays) --- */
-#essay-timeline-logged-in,
-#popular-essays-list,
-#recent-profile-essays-list { /* profile.htmlの最近の随筆リストにも適用 */
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.essay-item-logged-in { /* logged_in.html, profile.html の各随筆アイテム */
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-.essay-item-logged-in:last-child {
-    border-bottom: none;
-}
-.essay-title-container {
-    background-color: #f0f0f0;
-    padding: 10px 15px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-    border-radius: 4px;
-}
+#essay-timeline-logged-in, #popular-essays-list, #recent-profile-essays-list { list-style: none; padding: 0; margin: 0; }
+.essay-item-logged-in { padding: 10px 0; border-bottom: 1px solid #eee; }
+.essay-item-logged-in:last-child { border-bottom: none; }
+.essay-title-container { background-color: #f0f0f0; padding: 10px 15px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box; border-radius: 4px; }
 h4.essay-title-logged-in { margin: 0; font-size: 1.2em; font-weight: bold; flex-grow: 1; margin-right: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 h4.essay-title-logged-in a { color: #333; text-decoration: none; transition: color 0.2s; }
 h4.essay-title-logged-in a:hover { color: #0056b3; text-decoration: underline; }
@@ -164,46 +145,13 @@ h4.essay-title-logged-in a:hover { color: #0056b3; text-decoration: underline; }
 
 
 /* --- 近頃の画像タブ (logged_in.html) --- */
-#recent-essay-images-tab { /* div#recent-essay-images-tab に適用 */
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
-}
-.recent-media-item { /* 各画像/動画アイテムを囲むdiv */
-    width: calc(25% - 10px); /* 4列表示、gapを考慮 */
-    aspect-ratio: 1 / 1; /* 正方形 */
-    overflow: hidden;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease-in-out;
-}
-.recent-media-item:hover {
-    transform: scale(1.05);
-}
-.recent-media-item a {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-.recent-media-item img { /* videoも同様にスタイルを適用する場合 */
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-/* 近頃の画像のレスポンシブ対応 */
-@media (max-width: 768px) {
-    .recent-media-item {
-        width: calc(33.333% - 10px); /* 3列 */
-    }
-}
-@media (max-width: 480px) {
-    .recent-media-item {
-        width: calc(50% - 10px); /* 2列 */
-    }
-}
+#recent-essay-images-tab { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
+.recent-media-item { width: calc(25% - 10px); aspect-ratio: 1 / 1; overflow: hidden; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: transform 0.2s ease-in-out; }
+.recent-media-item:hover { transform: scale(1.05); }
+.recent-media-item a { display: block; width: 100%; height: 100%; }
+.recent-media-item img, .recent-media-item video { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 768px) { .recent-media-item { width: calc(33.333% - 10px); } }
+@media (max-width: 480px) { .recent-media-item { width: calc(50% - 10px); } }
 
 
 /* --- index.html 関連スタイル (ログイン前) --- */
@@ -235,7 +183,6 @@ aside#bulletinboard-categories .board-top-link a { font-weight: bold; }
 aside#bulletinboard-categories .board-top-link a.active-category, aside#bulletinboard-categories ul li a.active-category { background-color: #5a6268; font-weight: bold; color: #fff; }
 aside#bulletinboard-categories .board-top-link a:hover, aside#bulletinboard-categories ul li a:hover { background-color: #e0e0e0; color: #000; }
 
-div#bulletinboard-content, div#category-content { flex-grow: 1; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
 div#bulletinboard-content section, div#category-content section { margin-bottom: 30px; }
 div#bulletinboard-content section:last-child, div#category-content section:last-child { margin-bottom: 0; }
 div#bulletinboard-content section h3, div#category-content h2, .tab-content-logged-in #active-threads-list-title { margin-top: 0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ddd; font-size: 1.3em; color: #333; }
@@ -243,24 +190,51 @@ div#bulletinboard-content section h3, div#category-content h2, .tab-content-logg
 ul#featured-threads-list, ul#hot-threads-list, ul#category-threads-list, ul#active-threads-list { list-style: none; padding: 0; margin: 0 0 20px 0; }
 ul#category-threads-list { flex-grow: 1; }
 
-ul#featured-threads-list li, ul#hot-threads-list li, ul#category-threads-list li, ul#active-threads-list li.thread-list-item { padding: 10px 5px; border-bottom: 1px solid #eee; display: flex; align-items: flex-start; }
-ul#featured-threads-list li:last-child, ul#hot-threads-list li:last-child, ul#category-threads-list li:last-child, ul#active-threads-list li.thread-list-item:last-child { border-bottom: none; }
+/* ★★★ スレッド一覧アイテムのスタイル修正 ★★★ */
+ul#featured-threads-list li,
+ul#hot-threads-list li,
+ul#category-threads-list li, /* このセレクタが適用される */
+ul#active-threads-list li.thread-list-item {
+    padding: 10px 5px;
+    border-bottom: 1px solid #eee;
+    /* display: flex; は削除 */
+}
+ul#featured-threads-list li:last-child,
+ul#hot-threads-list li:last-child,
+ul#category-threads-list li:last-child,
+ul#active-threads-list li.thread-list-item:last-child {
+    border-bottom: none;
+}
+/* ★★★ ここまで ★★★ */
 
 .rank-display { width: 60px; font-weight: bold; margin-right: 10px; text-align: right; flex-shrink: 0; color: #555; display: flex; align-items: center; justify-content: flex-end; }
 .rank-display .crown { margin-right: 4px; font-size: 1em; line-height: 1; }
 .rank-display .crown.gold { color: gold; }
 
-.thread-info-container { flex-grow: 1; }
+.thread-info-container { flex-grow: 1; display: block; /* ★横並びをやめるため block に */ }
 .thread-info-container .thread-title-link, ul#category-threads-list li a, ul#active-threads-list li.thread-list-item .thread-title-link { text-decoration: none; color: #555; font-size: 1.1em; display: block; margin-bottom: 3px; }
 .thread-info-container .thread-title-link:hover, ul#category-threads-list li a:hover, ul#active-threads-list li.thread-list-item .thread-title-link:hover { text-decoration: underline; color: #000; }
 .thread-category-badge { font-size: 0.8em; background-color: #6c757d; color: white; padding: 2px 6px; border-radius: 3px; margin-right: 8px; display: inline-block; }
-.thread-stats, ul#category-threads-list .thread-meta, ul#active-threads-list li.thread-list-item .thread-stats { font-size: 0.85em; color: #555; margin-top: 2px; }
+.thread-stats,
+ul#category-threads-list .thread-meta { /* ★このセレクタが適用される */
+    font-size: 0.85em;
+    color: #555;
+    margin-top: 4px; /* ★タイトルとの間隔を少し空ける */
+}
+/* ★追加: カテゴリページのスレッドメタ情報内の span の間隔調整 */
+ul#category-threads-list .thread-meta span {
+    margin-right: 15px;
+}
+
 
 .post-form { margin-top: auto; padding: 20px; background-color: #f0f0f0; border-radius: 5px; border-top: 1px solid #ddd; }
 .post-form h3 { margin-top: 0; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #ccc; font-size: 1.2em; }
-.post-form input[type="text"] { width: calc(100% - 100px); padding: 10px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-.post-form button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; width: 80px; transition: background-color 0.2s; }
-.post-form button:hover { background-color: #0056b3; }
+/* ★ category.html のフォームスタイル */
+.post-form .input-with-counter { display: flex; align-items: center; margin-bottom: 10px; }
+.post-form input[type="text"]#new-thread-title { flex-grow: 1; margin-right: 10px; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;}
+.post-form .char-counter { font-size: 0.9em; color: #777; white-space: nowrap; margin-right: 10px; }
+.post-form button#create-new-thread-button { flex-shrink: 0; padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+.post-form button#create-new-thread-button:hover { background-color: #0056b3; }
 
 p.back-to-top-link { text-align: center; margin-top: 25px; padding-top: 15px; }
 
