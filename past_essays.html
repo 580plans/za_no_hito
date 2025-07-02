@@ -33,6 +33,12 @@
             display: block;
             text-decoration: none;
             color: inherit; /* 親要素の色を継承 */
+            padding: 10px; /* クリック領域を広げる */
+            margin: -10px; /* 親要素のpaddingを相殺 */
+            transition: background-color 0.2s;
+        }
+        .past-essay-list-item a:hover {
+             background-color: #f9f9f9;
         }
         .past-essay-list-item a:hover .past-essay-list-title { /* ホバー時のタイトル色変更 */
             color: #0056b3;
@@ -54,7 +60,6 @@
             font-size: 0.95em;
             color: #555;
             line-height: 1.5;
-            /* 複数行表示と省略 (必要に応じて調整) */
             overflow: hidden;
             display: -webkit-box;
             -webkit-line-clamp: 2; /* 表示行数を2行に制限 */
@@ -76,7 +81,7 @@
 
         <main>
             <div id="left-column-container">
-                <!-- _left_column_logged_in.html が読み込まれる -->
+                <!-- script.jsによって _left_column_logged_in.html がここに読み込まれます -->
             </div>
 
             <div class="main-content-past-essays">
@@ -95,23 +100,12 @@
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
     <script>
+        // ★★★ インラインスクリプトを簡素化 ★★★
+        // script.js 内の App.init() がページのパスを判定して、
+        // このページの初期化（部品読み込み、データ描画など）を
+        // すべて自動的に行ってくれます。
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof loadHTMLPart === 'function') {
-                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
-                    if (typeof initializeLeftColumnContent === "function") {
-                        initializeLeftColumnContent();
-                    }
-                    // ★ 過去の随筆ページのメインコンテンツ初期化関数を呼び出す
-                    if (typeof initializePastEssaysPage === "function") {
-                        console.log("CALLBACK: Calling initializePastEssaysPage...");
-                        initializePastEssaysPage();
-                    } else {
-                        console.error("CALLBACK: initializePastEssaysPage is not defined!");
-                    }
-                });
-            } else {
-                console.error("loadHTMLPart function is not defined on past_essays.html.");
-            }
+            console.log("past_essays.html is loaded. App.init() in script.js will handle everything.");
         });
     </script>
 </body>

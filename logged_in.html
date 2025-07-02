@@ -19,7 +19,7 @@
         </header>
         <main>
             <div id="left-column-container">
-                <!--ここに _left_column_logged_in.html が読み込まれる -->
+                <!-- script.jsのApp.initLoggedInPage()によって _left_column_logged_in.html がここに読み込まれます -->
             </div>
 
             <div class="main-content-logged-in">
@@ -60,29 +60,12 @@
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
     <script>
+        // script.js 内の App.init() が DOMContentLoaded をリッスンしており、
+        // ページのパスを判定して適切な初期化処理（部品読み込み、データ描画など）を
+        // すべて自動的に行ってくれます。
+        // そのため、このHTMLファイル固有の初期化スクリプトは不要になります。
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOMContentLoaded for logged_in.html inline script.");
-            if (typeof loadHTMLPart === 'function') {
-                console.log("Calling loadHTMLPart for _left_column_logged_in.html on logged_in.html...");
-                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
-                    console.log("CALLBACK: Left column loaded into logged_in.html by loadHTMLPart.");
-                    if (typeof initializeLeftColumnContent === "function") {
-                        console.log("CALLBACK: Calling initializeLeftColumnContent for logged_in.html...");
-                        initializeLeftColumnContent();
-                    } else {
-                        console.error("CALLBACK: initializeLeftColumnContent is not defined on logged_in.html!");
-                    }
-                    // ★左カラム初期化後にメインコンテンツの初期化を呼び出す
-                    if (typeof initializeLoggedInMainContent === "function") {
-                        console.log("CALLBACK: Calling initializeLoggedInMainContent for logged_in.html...");
-                        initializeLoggedInMainContent();
-                    } else {
-                        console.error("CALLBACK: initializeLoggedInMainContent is not defined on logged_in.html!");
-                    }
-                });
-            } else {
-                console.error("loadHTMLPart function is not defined on logged_in.html.");
-            }
+            console.log("logged_in.html is loaded. App.init() in script.js will handle the rest.");
         });
     </script>
 </body>
