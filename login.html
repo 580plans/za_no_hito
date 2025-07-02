@@ -3,118 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン - ミニブログ</title>
+    <title>座の人 - トップ</title> <!-- ★タイトル変更 -->
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            max-width: 400px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button[type="submit"] {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        p {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
+        /* ★ このページのインラインスタイルは style.css に統合していくため、一旦空にします */
+        /* ログインフォームなどのスタイルは style.css に記述されているものを流用します */
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>ミニブログ</h1>
+            <h1>座の人</h1> <!-- ★サイト名変更 -->
             <nav>
                 <ul>
                     <li><a href="index.html">トップ</a></li>
                     <li><a href="bulletinboard.html">掲示板</a></li>
+                    <!-- <li><a href="logged_in.html">ホーム(ログイン後)</a></li> このページからは不要 -->
                 </ul>
             </nav>
         </header>
         <main>
-            <h2>ログイン</h2>
-            <form id="login-form">
-                <div>
-                    <label for="email">メールアドレス:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div>
-                    <label for="password">パスワード:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">ログイン</button>
-            </form>
-            <p>アカウントをお持ちでないですか？ <a href="register.html">新規登録</a></p>
+            <!-- ★★★ 左カラム: ログインフォーム ★★★ -->
+            <aside class="left-column">
+                <h3>ログイン</h3>
+                <form id="login-form-aside">
+                    <div>
+                        <label for="email">メールアドレス:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div>
+                        <label for="password">パスワード:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit">ログイン</button>
+                </form>
+                <hr>
+                <p>アカウントをお持ちでないですか？</p>
+                <p><a href="register.html">新規登録はこちら</a></p>
+            </aside>
+            <!-- ★★★ ここまで左カラム ★★★ -->
+
+            <!-- ★★★ 右カラム: 最近の随筆 ★★★ -->
+            <div class="main-content">
+                <section class="tab-container"> <!-- タブ構造は将来的な拡張のため残しても良い -->
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="essays-index">最近の随筆</button>
+                    </div>
+                    <div id="essays-index" class="tab-content active">
+                        <ul id="essay-timeline-index">
+                            <!-- script.jsによって内容がここに挿入されます -->
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <!-- ★★★ ここまで右カラム ★★★ -->
         </main>
         <footer>
-            <p>&copy; 2025 ミニブログ</p>
+            <p>© 2025 座の人</p> <!-- ★コピーライト名変更 -->
         </footer>
     </div>
+    <script src="script.js"></script> <!-- ★ script.js を読み込む -->
     <script>
+        // ★★★ index.html 専用の初期化処理 ★★★
         document.addEventListener('DOMContentLoaded', () => {
-            const loginForm = document.getElementById('login-form');
-            loginForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                console.log('ログイン試行:', email, password);
-                // ここで実際のログイン処理を行う（通常はサーバーへ送信）
-                // 成功したら logged_in.html へリダイレクトするなど
-                window.location.href = 'logged_in.html'; // ログイン成功後のページへリダイレクト（仮）
-            });
+            if (typeof initializeIndexPage === "function") {
+                console.log("Calling initializeIndexPage...");
+                initializeIndexPage();
+            } else {
+                console.error("initializeIndexPage is not defined! Check script.js.");
+            }
         });
     </script>
 </body>

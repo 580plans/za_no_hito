@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>座の人</title>
+    <title>座の人 - トップ</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* index.html 固有のスタイルがあればここに記述 */
-        .left-column h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
+        /* index.html のインラインスタイルは style.css に集約済みなので空 */
     </style>
 </head>
 <body>
@@ -29,44 +24,27 @@
             <aside class="left-column">
                 <h3>ログイン</h3>
                 <form id="login-form-aside">
-                    <label for="email-login">メールアドレス:</label>
-                    <input type="email" id="email-login" name="email" required><br>
-                    <label for="password-login">パスワード:</label>
-                    <input type="password" id="password-login" name="password" required><br>
+                    <div>
+                        <label for="email">メールアドレス:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div>
+                        <label for="password">パスワード:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
                     <button type="submit">ログイン</button>
                 </form>
                 <hr>
+                <p>アカウントをお持ちでないですか？</p>
                 <p><a href="register.html">新規登録はこちら</a></p>
             </aside>
             <div class="main-content">
                 <section class="tab-container">
                     <div class="tab-buttons">
-                        <button class="tab-button" data-tab="essays">新規の随筆</button>
-                        <button class="tab-button" data-tab="popular-essays">近頃多く読まれた随筆</button>
-                        <button class="tab-button" data-tab="recent-essay-images">近頃の画像</button>
-                        <button class="tab-button" data-tab="active-threads">近頃にぎやかなスレ</button>
+                        <button class="tab-button active" data-tab="essays-index">最近の随筆</button>
                     </div>
-                    <div id="essays" class="tab-content">
-                        <!-- <h3>新規の随筆</h3> ★削除 -->
-                        <ul id="essay-timeline">
-                            <!-- script.jsによって内容がここに挿入されます -->
-                        </ul>
-                    </div>
-                    <div id="popular-essays" class="tab-content">
-                        <!-- <h3>近頃多く読まれた随筆</h3> ★削除 -->
-                        <ul id="popular-essays-list">
-                            <!-- script.jsによって内容がここに挿入されます -->
-                        </ul>
-                    </div>
-                    <div id="recent-essay-images" class="tab-content">
-                        <!-- <h3>近頃の画像</h3> ★削除 -->
-                        <div id="recent-essay-images-tab">
-                            <!-- script.jsによって内容がここに挿入されます -->
-                        </div>
-                    </div>
-                    <div id="active-threads" class="tab-content">
-                        <!-- <h3>近頃にぎやかなスレ</h3> ★削除 -->
-                        <ul id="active-threads-list">
+                    <div id="essays-index" class="tab-content active">
+                        <ul id="essay-timeline-index">
                             <!-- script.jsによって内容がここに挿入されます -->
                         </ul>
                     </div>
@@ -78,5 +56,16 @@
         </footer>
     </div>
     <script src="script.js"></script>
+    <script>
+        // ★★★ index.html 専用の初期化処理を呼び出す ★★★
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initializeIndexPage === "function") {
+                console.log("Calling initializeIndexPage for index.html...");
+                initializeIndexPage();
+            } else {
+                console.error("initializeIndexPage is not defined! Check script.js.");
+            }
+        });
+    </script>
 </body>
 </html>

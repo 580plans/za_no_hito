@@ -30,8 +30,10 @@ function initializeThreadDetailPage() {
 
     if (!threadId) {
         if (threadTitleElement) threadTitleElement.textContent = 'エラー';
+        if (initialPostSectionElement) initialPostSectionElement.style.display = 'block';
         if (initialPostBodyElement) initialPostBodyElement.innerHTML = '<p>表示するスレッドのIDが指定されていません。</p>';
         if (commentFormElement) commentFormElement.style.display = 'none';
+        if (commentsListElement) commentsListElement.innerHTML = '';
         console.error("Thread ID not found in URL for thread_detail.html.");
         return;
     }
@@ -55,17 +57,31 @@ function initializeThreadDetailPage() {
             threadCategoryElement.textContent = `カテゴリ: ${escapeHtml(window.categoryDisplayNamesForLoggedInPage[currentThread.category] || currentThread.category)}`;
         }
 
-        // --- 最初の投稿の表示 ---
-        // (ご共有コードには initialPostContent が使われていましたが、データ構造を合わせるため、仮のテキストを表示します)
+        // ★★★ 最初の投稿エリアの表示ロジックを修正 ★★★
         if (initialPostSectionElement) {
-            if (initialPostAuthorElement) initialPostAuthorElement.innerHTML = `<a href="profile.html">${escapeHtml(currentThread.author || loggedInUserName)}</a>`;
+            initialPostSectionElement.style.display = 'block'; // 常に表示する
+            
+            // 投稿者と日時を常に表示
+            if (initialPostAuthorElement) {
+                 const postAuthor = currentThread.author || loggedInUserName; // スレッド作成者を最初の投稿者とする
+                 initialPostAuthorElement.innerHTML = `<a href="profile.html">${escapeHtml(postAuthor)}</a>`;
+                 initialPostAuthorElement.style.display = 'block';
+            }
             if (initialPostDateElement) {
                  const postDate = new Date(currentThread.createdAt);
                  initialPostDateElement.textContent = `${postDate.toLocaleDateString('ja-JP')} ${postDate.toLocaleTimeString('ja-JP')}`;
                  initialPostDateElement.setAttribute('datetime', postDate.toISOString());
+                 initialPostDateElement.style.display = 'block';
             }
-            if (initialPostBodyElement) initialPostBodyElement.innerHTML = `<p>これは「${escapeHtml(currentThread.title)}」スレッドの最初の投稿のサンプル本文です。</p>`;
+            // 本文を表示 (もしデータに本文があればそれを、なければ仮のテキストを表示)
+            if (initialPostBodyElement) {
+                 // 将来的にはスレッド作成時に本文を保存するようになったら、そのデータを参照する
+                 // 例: currentThread.initialPostContent
+                 const initialContent = currentThread.initialPostContent || `これは「${currentThread.title}」スレッドの最初の投稿のサンプル本文です。`;
+                 initialPostBodyElement.innerHTML = `<p>${escapeHtml(initialContent).replace(/\n/g, '<br>')}</p>`;
+            }
         }
+        // ★★★ ここまで修正 ★★★
         
         // --- コメントリストの表示 ---
         if (commentsListElement) {
@@ -74,7 +90,6 @@ function initializeThreadDetailPage() {
 
         // --- コメントフォームの処理 ---
         if (commentFormElement && commentTextInput && commentCharCounter) {
-            // ★★★ 文字数カウンターのロジックを復元 ★★★
             const maxLength = parseInt(commentTextInput.getAttribute('maxlength'), 10) || 100;
             commentCharCounter.textContent = `${commentTextInput.value.length} / ${maxLength}`;
             
@@ -87,9 +102,7 @@ function initializeThreadDetailPage() {
                     commentCharCounter.style.color = '#777';
                 }
             });
-            // ★★★ ここまで ★★★
 
-            // ★★★ コメント投稿処理のロジックを復元 ★★★
             const submitThreadCommentHandler = (event) => {
                 event.preventDefault();
                 const commentText = commentTextInput.value.trim();
@@ -105,7 +118,7 @@ function initializeThreadDetailPage() {
                     window.threadSampleComments[threadId].push(newComment);
                     window.renderThreadComments(commentsListElement, threadId);
                     commentTextInput.value = '';
-                    commentCharCounter.textContent = `0 / ${maxLength}`; // カウンターもリセット
+                    commentCharCounter.textContent = `0 / ${maxLength}`;
                 } else {
                     console.warn("Thread comment submission failed. Missing data.");
                 }
@@ -115,13 +128,14 @@ function initializeThreadDetailPage() {
             }
             commentFormElement.addEventListener('submit', submitThreadCommentHandler);
             commentFormElement._submitHandler = submitThreadCommentHandler;
-            // ★★★ ここまで ★★★
         }
 
     } else { // currentThread が見つからなかった場合
         if (threadTitleElement) threadTitleElement.textContent = 'スレッドが見つかりません';
         if (initialPostSectionElement) {
             initialPostSectionElement.style.display = 'block';
+            if(initialPostAuthorElement) initialPostAuthorElement.style.display = 'none';
+            if(initialPostDateElement) initialPostDateElement.style.display = 'none';
             if (initialPostBodyElement) initialPostBodyElement.innerHTML = '<p>指定されたスレッドは存在しないか、削除された可能性があります。</p>';
         }
         if (commentFormElement) commentFormElement.style.display = 'none';
