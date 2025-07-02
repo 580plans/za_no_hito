@@ -8,9 +8,9 @@
     <style>
         /* essay_detail.html 固有のスタイル */
         .main-content-essay-detail { padding: 20px; background-color: #fff; }
-        .essay-title-area { background-color: #f0f0f0; padding: 15px 20px; margin-bottom: 15px; }
+        .essay-title-area { background-color: #f0f0f0; padding: 15px 20px; margin-bottom: 15px; border-radius: 4px; }
         .essay-title-area h2 { margin: 0; font-size: 1.8em; font-weight: bold; color: #333; text-align: left; }
-        .essay-meta-detail-wrapper { text-align: right; margin-bottom: 20px; padding: 0 20px; }
+        .essay-meta-detail-wrapper { text-align: right; margin-bottom: 20px; padding: 0 5px; }
         .essay-meta-detail { font-size: 0.9em; color: #555; display: inline-block; text-align: left; }
         .essay-meta-detail span, .essay-meta-detail time { margin-left: 15px; }
         .essay-meta-detail span:first-child { margin-left: 0; }
@@ -18,18 +18,18 @@
         .essay-meta-detail a:hover { text-decoration: underline; }
         .essay-media { margin-bottom: 20px; }
         .essay-media img, .essay-media video { max-width: 100%; max-height: 500px; height: auto; display: block; margin-left: auto; margin-right: auto; border-radius: 4px; border: 1px solid #ddd; background-color: #f0f0f0; }
-        .essay-body { line-height: 1.7; font-size: 1.1em; margin-bottom: 30px; }
+        .essay-body { line-height: 1.7; font-size: 1.1em; margin-bottom: 30px; padding: 0 5px; }
         .comments-section {}
         .comments-section h3 { font-size: 1.5em; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 1px solid #ddd; }
         .comments-section h4 { font-size: 1.2em; margin-top: 30px; margin-bottom: 10px; }
-        .comment-item { padding: 10px 0; border-bottom: 1px dotted #eee; }
+        .comment-item { padding: 10px 5px; border-bottom: 1px dotted #eee; }
         .comment-item:last-child { border-bottom: none; }
         .comment-author { font-weight: bold; margin-bottom: 3px; }
-        .comment-text { margin-bottom: 5px; }
+        .comment-text { margin-bottom: 5px; white-space: pre-wrap; word-wrap: break-word; }
         .comment-date { font-size: 0.8em; color: #777; }
         #comment-form div { margin-bottom: 10px; }
         #comment-form label { display: block; margin-bottom: 3px; font-weight: bold; }
-        #comment-form textarea { width: calc(100% - 22px); padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; resize: vertical; }
+        #comment-form textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; resize: vertical; box-sizing: border-box; }
         #comment-form button[type="submit"] { background-color: #5cb85c; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
         #comment-form button[type="submit"]:hover { background-color: #4cae4c; }
     </style>
@@ -43,37 +43,10 @@
         <main>
             <div id="left-column-container"></div>
             <div class="main-content-essay-detail">
-                <div class="essay-title-area">
-                    <h2 id="essay-title-detail">（随筆タイトル）</h2>
+                <div id="essay-detail-content">
+                    <!-- script.jsによって随筆の内容がここに挿入されます -->
+                    <p>随筆を読み込んでいます...</p>
                 </div>
-                <div class="essay-meta-detail-wrapper">
-                    <div class="essay-meta-detail">
-                        <span id="essay-author-detail">投稿者: （投稿者名）</span>
-                        <time id="essay-datetime-detail" datetime="">投稿日時: （投稿日時）</time>
-                    </div>
-                </div>
-                <article>
-                    <section class="essay-media">
-                        <div id="essay-image-detail-container" style="display: none;">
-                            <img id="essay-image-detail" src="" alt="随筆の画像">
-                        </div>
-                        <div id="essay-video-detail-container" style="display: none;">
-                            <video id="essay-video-detail" controls width="100%">お使いのブラウザは動画タグをサポートしていません。</video>
-                        </div>
-                    </section>
-                    <section class="essay-body">
-                        <p id="essay-text-detail">（随筆の本文がここに表示されます。）</p>
-                    </section>
-                </article>
-                <section class="comments-section">
-                    <h3>コメント</h3>
-                    <div id="comments-list"></div>
-                    <h4>コメントを投稿する</h4>
-                    <form id="comment-form">
-                        <div><label for="comment-text-input">コメント:</label><textarea id="comment-text-input" name="comment-text" rows="4" placeholder="コメントを入力してください..." required></textarea></div>
-                        <button type="submit">投稿する</button>
-                    </form>
-                </section>
                 <p style="margin-top: 30px; text-align: center;"><a href="logged_in.html">ホームに戻る</a></p>
             </div>
         </main>
@@ -82,13 +55,9 @@
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
     <script>
+        // ★★★ インラインスクリプトを簡素化 ★★★
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof loadHTMLPart === 'function') {
-                loadHTMLPart('_left_column_logged_in.html', 'left-column-container', null, () => {
-                    if (typeof initializeLeftColumnContent === "function") { initializeLeftColumnContent(); }
-                    if (typeof initializeEssayDetailMainContent === "function") { initializeEssayDetailMainContent(); } // ★ これが詳細表示用JS関数
-                });
-            } else { console.error("loadHTMLPart function is not defined on essay_detail.html."); }
+            console.log("essay_detail.html is loaded. App.init() in script.js will handle everything.");
         });
     </script>
 </body>

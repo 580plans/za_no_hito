@@ -1,4 +1,4 @@
-// script.js (Refactored & Fixed for Following List - Full Code)
+// script.js (Refactored & Fixed for Empty Comment Message - Full Code)
 
 // --- 1. グローバルヘルパー関数 ---
 function escapeHtml(unsafe) { if (typeof unsafe !== 'string') { return unsafe; } return unsafe.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/"/g, '"').replace(/'/g, "'"); }
@@ -9,14 +9,7 @@ function getQueryParam(param) { const urlParams = new URLSearchParams(window.loc
 const App = {
     // --- 2.1. データプロパティ ---
     currentUser: {}, essays: [], popularEssays: [], mediaItems: [], allThreads: [], notifications: [], allComments: {}, threadComments: {},
-    
-    // ★★★ 刮目中（フォロー中）のユーザーリストのサンプルデータを追加 ★★★
-    followingUsers: [
-        { name: "ユーザーA", profileUrl: "profile.html?user=userA" },
-        { name: "ユーザーB", profileUrl: "profile.html?user=userB" },
-        { name: "ユーザーC", profileUrl: "profile.html?user=userC" },
-    ],
-
+    followingUsers: [ { name: "ユーザーA", profileUrl: "profile.html?user=userA" }, { name: "ユーザーB", profileUrl: "profile.html?user=userB" }, { name: "ユーザーC", profileUrl: "profile.html?user=userC" }, ],
     categoryDisplayNames: { zatsudan: '雑談', news: 'ニュース', work: '会社・仕事', anime: 'アニメ', sports: 'スポーツ', tv: 'テレビ', game: 'ゲーム', unknown: 'その他' },
     profileFields: { username: { display: 'display-username', edit: 'edit_username' }, age: { display: 'display-age', edit: 'edit_age' }, gender: { display: 'display-gender', edit: 'edit_gender' }, blood_type: { display: 'display-blood_type', edit: 'edit_blood_type' }, star_sign: { display: 'display-star_sign', edit: 'edit_star_sign' }, residence: { display: 'display-residence', edit: 'edit_residence' }, height: { display: 'display-height', edit: 'edit_height' }, favorite_celebrity: { display: 'display-favorite_celebrity', edit: 'edit_favorite_celebrity' }, favorite_type: { display: 'display-favorite_type', edit: 'edit_favorite_type' }, favorite_food: { display: 'display-favorite_food', edit: 'edit_favorite_food' }, public_hobby: { display: 'display-public_hobby', edit: 'edit_public_hobby' }, private_hobby: { display: 'display-private_hobby', edit: 'edit_private_hobby' }, skill: { display: 'display-skill', edit: 'edit_skill' }, favorite_manga: { display: 'display-favorite_manga', edit: 'edit_favorite_manga' }, favorite_media: { display: 'display-favorite_media', edit: 'edit_favorite_media' }, motto: { display: 'display-motto', edit: 'edit_motto' }, ultimate_skill: { display: 'display-ultimate_skill', edit: 'edit_ultimate_skill' }, disliked_person: { display: 'display-disliked_person', edit: 'edit_disliked_person' }, future_dream: { display: 'display-future_dream', edit: 'edit_future_dream' } },
     genderMap: { "": "[未設定]", "male": "男性", "female": "女性", "other": "その他" },
@@ -62,7 +55,7 @@ const App = {
 
     initIndexPage: function() { console.log("Initializing Index Page..."); this.renderIndexEssayTimeline(); const loginForm = document.getElementById('login-form-aside'); if(loginForm) { loginForm.addEventListener('submit', (e) => { e.preventDefault(); alert('ログイン成功！（仮）'); window.location.href = 'logged_in.html'; }); } },
     async initLoggedInPage() { console.log("Initializing Logged-in Page..."); this.renderLeftColumn(); this.renderEssayTimeline(); this.renderPopularEssays(); this.renderRecentMedia(); this.renderLoggedInActiveThreads(); this.initializeTabs(); },
-    async initEssayDetailPage() { console.log("Initializing Essay Detail Page..."); this.renderLeftColumn(); this.renderEssayDetail(); this.handleEssayCommentForm(); },
+    async initEssayDetailPage() { console.log("Initializing Essay Detail Page..."); this.renderLeftColumn(); const essayId = getQueryParam('id'); if (essayId) { this.renderEssayDetail(parseInt(essayId, 10)); this.handleEssayCommentForm(parseInt(essayId, 10)); } else { const contentArea = document.getElementById('essay-detail-content'); if(contentArea) contentArea.innerHTML = '<p>エラー: 随筆IDが指定されていません。</p>'; } },
     async initCreateEssayPage() { console.log("Initializing Create Essay Page..."); this.renderLeftColumn(); this.handleCreateEssayForm(); },
     async initPastEssaysPage() { console.log("Initializing Past Essays Page..."); this.renderLeftColumn(); this.renderPastEssaysList(); },
     async initProfilePage() { console.log("Initializing Profile Page..."); this.renderLeftColumn(); this.renderRecentProfileEssays(); this.handleProfileForm(); },
@@ -72,33 +65,7 @@ const App = {
     async initCategoryPage(categoryKey) { console.log(`Initializing Category Page: ${categoryKey}`); this.renderLeftColumn(categoryKey); this.renderCategoryHeader(categoryKey); this.renderCategoryThreads(categoryKey); this.handleCreateThreadForm(categoryKey); },
     
     // --- 2.6. レンダリングメソッド群 ---
-    // ★★★ renderLeftColumn に「刮目中の人」の描画ロジックを追加 ★★★
-    renderLeftColumn: function(activeCategory = null) {
-        // ユーザー情報の描画
-        const userImageEl = document.getElementById('left-column-user-image');
-        const usernameTextEl = document.getElementById('left-column-username-text');
-        if (userImageEl) {
-            userImageEl.src = this.currentUser.profileImageUrl || 'default_user_thumb.png';
-            userImageEl.alt = `${this.currentUser.name}の画像`;
-        }
-        if (usernameTextEl) {
-            usernameTextEl.textContent = this.currentUser.name;
-        }
-
-        // 刮目中（フォロー中）のユーザーリストの描画
-        const followingList = document.getElementById('following-list-left-column');
-        if (followingList) {
-            let html = '';
-            if (this.followingUsers && this.followingUsers.length > 0) {
-                this.followingUsers.forEach(user => {
-                    html += `<li><a href="${user.profileUrl}">${escapeHtml(user.name)}</a></li>`;
-                });
-            } else {
-                html = '<li style="padding: 4px 15px; font-size: 0.9em; color: #777;">まだ誰もいません</li>';
-            }
-            followingList.innerHTML = html;
-        }
-    },
+    renderLeftColumn: function(activeCategory = null) { const userImageEl = document.getElementById('left-column-user-image'); const usernameTextEl = document.getElementById('left-column-username-text'); if (userImageEl) { userImageEl.src = this.currentUser.profileImageUrl || 'default_user_thumb.png'; userImageEl.alt = `${this.currentUser.name}の画像`; } if (usernameTextEl) { usernameTextEl.textContent = this.currentUser.name; } const followingList = document.getElementById('following-list-left-column'); if (followingList) { let html = ''; if (this.followingUsers && this.followingUsers.length > 0) { this.followingUsers.forEach(user => { html += `<li><a href="${user.profileUrl}">${escapeHtml(user.name)}</a></li>`; }); } else { html = '<li style="padding: 4px 15px; font-size: 0.9em; color: #777;">まだ誰もいません</li>'; } followingList.innerHTML = html; } },
     renderIndexEssayTimeline: function() { const timeline = document.getElementById('essay-timeline-index'); if (!timeline) return; timeline.innerHTML = '<li>ログイン前の随筆リストはここに表示されます。</li>'; },
     renderEssayTimeline: function() { const timeline = document.getElementById('essay-timeline-logged-in'); if (!timeline) return; const sortedEssays = [...this.essays].sort((a, b) => new Date(b.date) - new Date(a.date)); let html = ''; if (sortedEssays.length > 0) { sortedEssays.forEach(essay => { html += `<li class="essay-item-logged-in"><div class="essay-title-container"><h4 class="essay-title-logged-in"><a href="essay_detail.html?id=${essay.id}">${escapeHtml(essay.title)}</a></h4><span class="essay-author-logged-in">by <a href="profile.html?user=${escapeHtml(essay.author)}">${escapeHtml(essay.author)}</a></span></div><p class="essay-snippet-logged-in">${escapeHtml(essay.snippet)}</p><div class="essay-meta-logged-in"><span>投稿日: ${essay.date}</span></div></li>`; }); } else { html = '<li>まだ随筆がありません。</li>'; } timeline.innerHTML = html; },
     renderPopularEssays: function() { const list = document.getElementById('popular-essays-list'); if (!list) return; let html = ''; if (this.popularEssays.length > 0) { this.popularEssays.forEach(essay => { html += `<li class="essay-item-logged-in"><div class="essay-title-container"><h4 class="essay-title-logged-in"><a href="essay_detail.html?id=${essay.id}">${escapeHtml(essay.title)}</a></h4><span class="essay-author-logged-in">by <a href="profile.html?user=${escapeHtml(essay.author)}">${escapeHtml(essay.author)}</a></span></div><p class="essay-snippet-logged-in">${escapeHtml(essay.snippet)}</p><div class="essay-meta-logged-in"><span>投稿日: ${essay.date}</span></div></li>`; }); } else { html = '<li>人気の随筆はありません。</li>'; } list.innerHTML = html; },
@@ -106,8 +73,53 @@ const App = {
     renderLoggedInActiveThreads: function() { const list = document.getElementById('active-threads-list'); if (!list) return; const activeThreads = [...this.allThreads].sort((a, b) => b.commentCount - a.commentCount).slice(0, 5); let html = ''; if(activeThreads.length > 0) { activeThreads.forEach((thread) => { html += `<li class="thread-list-item"><div class="thread-info-container"><a href="thread_detail.html?id=${thread.id}" class="thread-title-link"><span class="thread-category-badge">${escapeHtml(this.categoryDisplayNames[thread.category] || 'その他')}</span>${escapeHtml(thread.title)}</a><div class="thread-stats"><span>コメント: ${thread.commentCount}</span><span>作成日: ${new Date(thread.createdAt).toLocaleDateString()}</span></div></div></li>`; }); } else { html = '<li>現在にぎやかなスレッドはありません。</li>'; } list.innerHTML = html; },
     renderRecentProfileEssays: function() { const list = document.getElementById('recent-profile-essays-list'); if (!list) return; const userEssays = this.essays.filter(essay => essay.author === this.currentUser.name); const sortedEssays = userEssays.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5); let html = ''; if (sortedEssays.length > 0) { sortedEssays.forEach(essay => { html += `<li class="essay-item-logged-in"><div class="essay-title-container"><h4 class="essay-title-logged-in"><a href="essay_detail.html?id=${essay.id}">${escapeHtml(essay.title)}</a></h4><span class="essay-author-logged-in">by <a href="profile.html?user=${escapeHtml(essay.author)}">${escapeHtml(essay.author)}</a></span></div><p class="essay-snippet-logged-in">${escapeHtml(essay.snippet)}</p><div class="essay-meta-logged-in"><span>投稿日: ${essay.date}</span></div></li>`; }); } else { html = `<li>${escapeHtml(this.currentUser.name)}さんの随筆はまだありません。</li>`; } list.innerHTML = html; },
     renderNotifications: function() { const list = document.getElementById('notification-list-area'); if (!list) return; const sortedNotifications = [...this.notifications].sort((a, b) => new Date(b.date) - new Date(a.date)); let html = ''; if (sortedNotifications.length > 0) { sortedNotifications.forEach(noti => { let iconHtml = ''; let textHtml = ''; const unreadClass = noti.read ? '' : 'notification-unread'; switch (noti.type) { case 'comment': iconHtml = '💬'; textHtml = `<a href="${noti.user.profileUrl}">${escapeHtml(noti.user.name)}</a>さんがあなたの随筆「<a href="${noti.essay.url}">${escapeHtml(noti.essay.title)}</a>」に一言申しました。`; break; case 'follow': iconHtml = '👀'; textHtml = `<a href="${noti.user.profileUrl}">${escapeHtml(noti.user.name)}</a>さんがあなたを刮目し始めました。`; break; case 'system': iconHtml = '⚙️'; textHtml = escapeHtml(noti.message); break; default: iconHtml = '🔔'; textHtml = '新しい通知があります。'; } html += `<li class="notification-item ${unreadClass}"><div class="notification-icon">${iconHtml}</div><div class="notification-content"><p class="notification-text">${textHtml}</p><span class="notification-date">${new Date(noti.date).toLocaleString('ja-JP')}</span></div></li>`; }); } else { html = '<li style="text-align: center; padding: 20px;">新しい通知はありません。</li>'; } list.innerHTML = html; },
-    renderEssayDetail: function() { console.log("renderEssayDetail is not implemented yet."); },
     renderPastEssaysList: function() { const listArea = document.getElementById('past-essays-list-area'); if (!listArea) return; const userEssays = this.essays.filter(essay => essay.author === this.currentUser.name); const sortedEssays = userEssays.sort((a, b) => new Date(b.date) - new Date(a.date)); let html = ''; if (sortedEssays.length > 0) { sortedEssays.forEach(essay => { html += `<li class="past-essay-list-item"><a href="essay_detail.html?id=${essay.id}"><span class="past-essay-list-title">${escapeHtml(essay.title)}</span><span class="past-essay-list-meta">投稿日: ${essay.date}</span><p class="past-essay-list-snippet">${escapeHtml(essay.snippet)}</p></a></li>`; }); } else { html = `<li style="text-align: center; padding: 20px;">${escapeHtml(this.currentUser.name)}さんの随筆はまだありません。</li>`; } listArea.innerHTML = html; },
+    
+    // ★★★ renderEssayDetail を修正 ★★★
+    renderEssayDetail: function(essayId) {
+        const contentArea = document.getElementById('essay-detail-content');
+        if (!contentArea) return;
+
+        const essay = this.essays.find(e => e.id === essayId);
+        if (!essay) { contentArea.innerHTML = '<p>指定された随筆が見つかりませんでした。</p>'; return; }
+
+        let mediaHtml = '';
+        if (essay.image) { mediaHtml = `<img src="${essay.image}" alt="随筆の画像">`; } 
+        else if (essay.videoUrl) { mediaHtml = `<video src="${essay.videoUrl}" controls width="100%">お使いのブラウザは動画タグをサポートしていません。</video>`; }
+
+        let commentsHtml = '';
+        const comments = this.allComments[essayId] || [];
+        if (comments.length > 0) {
+            comments.forEach(comment => {
+                commentsHtml += `<div class="comment-item"><p class="comment-author">${escapeHtml(comment.author)}</p><p class="comment-text">${escapeHtml(comment.text)}</p><p class="comment-date">${new Date(comment.date).toLocaleString('ja-JP')}</p></div>`;
+            });
+        } 
+        // ★★★ 「まだコメントはありません」の表示ロジックを削除 ★★★
+        
+        const detailHtml = `
+            <div class="essay-title-area"><h2>${escapeHtml(essay.title)}</h2></div>
+            <div class="essay-meta-detail-wrapper"><div class="essay-meta-detail"><span>投稿者: <a href="profile.html?user=${escapeHtml(essay.author)}">${escapeHtml(essay.author)}</a></span><time datetime="${new Date(essay.date).toISOString()}">投稿日時: ${essay.date}</time></div></div>
+            <article><section class="essay-media">${mediaHtml}</section><section class="essay-body">${essay.body}</section></article>
+            <section class="comments-section">
+                <h3>コメント</h3>
+                <div id="comments-list">${commentsHtml}</div>
+                <form id="comment-form" style="margin-top: 20px;">
+                    <div>
+                        <label for="comment-text-input">コメント:</label>
+                        <textarea id="comment-text-input" name="comment-text" rows="3" 
+                                  placeholder="あなたの声は100文字までです" 
+                                  required maxlength="100"></textarea>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+                        <span id="comment-char-counter" class="char-counter" style="font-size: 0.9em;">0/100</span>
+                        <button type="submit">投稿する</button>
+                    </div>
+                </form>
+            </section>
+        `;
+        contentArea.innerHTML = detailHtml;
+    },
+
     renderFeaturedThreads: function() { console.log("renderFeaturedThreads is not implemented yet."); },
     renderHotThreads: function() { console.log("renderHotThreads is not implemented yet."); },
     renderThreadDetail: function() { console.log("renderThreadDetail is not implemented yet."); },
@@ -116,7 +128,7 @@ const App = {
     
     // --- 2.7. イベントハンドラ・その他 ---
     initializeTabs: function() { const tabContainer = document.querySelector('.tab-container-logged-in, .tab-container'); if (!tabContainer) return; const tabButtons = tabContainer.querySelectorAll('.tab-button-logged-in, .tab-button'); const tabContents = tabContainer.querySelectorAll('.tab-content-logged-in, .tab-content'); tabButtons.forEach(button => { button.addEventListener('click', () => { tabButtons.forEach(btn => btn.classList.remove('active')); tabContents.forEach(content => content.classList.remove('active')); button.classList.add('active'); const activeContent = tabContainer.querySelector(`#${button.dataset.tab}`); if (activeContent) activeContent.classList.add('active'); }); }); },
-    handleEssayCommentForm: function() { console.log("handleEssayCommentForm is not implemented yet."); },
+    handleEssayCommentForm: function(essayId) { const form = document.getElementById('comment-form'); if (!form) { setTimeout(() => this.handleEssayCommentForm(essayId), 100); return; } const commentTextInput = document.getElementById('comment-text-input'); const counter = document.getElementById('comment-char-counter'); const MAX_COMMENT_LENGTH = 100; const updateCommentCounter = () => { if (!commentTextInput || !counter) return; const currentLength = commentTextInput.value.length; counter.textContent = `${currentLength}/${MAX_COMMENT_LENGTH}`; counter.classList.toggle('error', currentLength > MAX_COMMENT_LENGTH); }; commentTextInput.addEventListener('input', updateCommentCounter); updateCommentCounter(); form.addEventListener('submit', (e) => { e.preventDefault(); const commentText = commentTextInput.value.trim(); if (commentText.length > MAX_COMMENT_LENGTH) { alert(`コメントの文字数が上限（${MAX_COMMENT_LENGTH}文字）を超えています。`); return; } if (commentText) { const newComment = { author: this.currentUser.name, text: commentText, date: new Date().toISOString() }; if (!this.allComments[essayId]) { this.allComments[essayId] = []; } this.allComments[essayId].push(newComment); localStorage.setItem('allComments', JSON.stringify(this.allComments)); this.renderEssayDetail(essayId); this.handleEssayCommentForm(essayId); } }); },
     handleCreateEssayForm: function() { const form = document.getElementById('essay-form'); if (!form) return; const titleInput = document.getElementById('essay-title'); const contentInput = document.getElementById('essay-content'); const titleCounter = document.getElementById('title-char-counter'); const contentCounter = document.getElementById('content-char-counter'); const mediaInput = document.getElementById('essay-media'); const previewText = document.getElementById('preview-text'); const imagePreview = document.getElementById('image-preview'); const videoPreview = document.getElementById('video-preview'); const MAX_TITLE_LENGTH = 30; const MAX_CONTENT_LENGTH = 1000; const updateCounter = (input, counter, maxLength) => { if (!input || !counter) return; const currentLength = input.value.length; counter.textContent = `${currentLength}/${maxLength}`; counter.classList.toggle('error', currentLength > maxLength); }; titleInput.addEventListener('input', () => updateCounter(titleInput, titleCounter, MAX_TITLE_LENGTH)); contentInput.addEventListener('input', () => updateCounter(contentInput, contentCounter, MAX_CONTENT_LENGTH)); updateCounter(titleInput, titleCounter, MAX_TITLE_LENGTH); updateCounter(contentInput, contentCounter, MAX_CONTENT_LENGTH); mediaInput.addEventListener('change', (e) => { const file = e.target.files[0]; previewText.style.display = 'block'; imagePreview.style.display = 'none'; videoPreview.style.display = 'none'; if (!file) return; const reader = new FileReader(); reader.onload = (event) => { previewText.style.display = 'none'; if (file.type.startsWith('image/')) { imagePreview.src = event.target.result; imagePreview.style.display = 'block'; } else if (file.type.startsWith('video/')) { videoPreview.src = event.target.result; videoPreview.style.display = 'block'; } }; reader.readAsDataURL(file); }); form.addEventListener('submit', (e) => { e.preventDefault(); const title = titleInput.value; const content = contentInput.value; if (title.length > MAX_TITLE_LENGTH) { alert(`タイトルの文字数が上限（${MAX_TITLE_LENGTH}文字）を超えています。`); return; } if (content.length > MAX_CONTENT_LENGTH) { alert(`本文の文字数が上限（${MAX_CONTENT_LENGTH}文字）を超えています。`); return; } const mediaFile = mediaInput.files[0]; const today = new Date(); const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`; const snippet = content.replace(/\n/g, ' ').substring(0, 100) + (content.length > 100 ? '...' : ''); const newEssay = { id: Date.now(), title: title, author: this.currentUser.name, snippet: snippet, date: dateString, body: content.replace(/\n/g, '<br>'), image: null, videoUrl: null }; const saveAndRedirect = (mediaDataUrl = null) => { if (mediaDataUrl && mediaFile) { if (mediaFile.type.startsWith('image/')) { newEssay.image = mediaDataUrl; } else if (mediaFile.type.startsWith('video/')) { newEssay.videoUrl = mediaDataUrl; } } this.saveNewEssay(newEssay); alert('随筆を投稿しました！'); window.location.href = 'logged_in.html'; }; if (mediaFile) { const reader = new FileReader(); reader.onloadend = () => { saveAndRedirect(reader.result); }; reader.readAsDataURL(mediaFile); } else { saveAndRedirect(); } }); },
     handleProfileForm: function() { const profileDisplay = document.getElementById('profile-display'); const profileEditForm = document.getElementById('profile-edit-form'); if (!profileDisplay || !profileEditForm) return; const editButton = document.getElementById('edit-profile-button'); const cancelButton = document.getElementById('cancel-edit-button'); const form = document.getElementById('profile-edit-form'); const imagePreview = document.getElementById('image-preview'); const imageInput = document.getElementById('edit_profile_image'); const displayImage = document.getElementById('display-profile-image'); let currentProfileData = JSON.parse(localStorage.getItem('userProfile') || '{}'); const updateDisplay = () => { for (const key in this.profileFields) { const displayEl = document.getElementById(this.profileFields[key].display); if (displayEl) { let value = currentProfileData[key] || '[未設定]'; if (key === 'gender') value = this.genderMap[currentProfileData[key]] || '[未設定]'; if (key === 'blood_type') value = this.bloodTypeMap[currentProfileData[key]] || '[未設定]'; displayEl.textContent = value; } } displayImage.src = currentProfileData.profileImage || 'default_user_thumb.png'; this.renderLeftColumn(); }; const populateForm = () => { for (const key in this.profileFields) { const editEl = document.getElementById(this.profileFields[key].edit); if (editEl) { editEl.value = currentProfileData[key] || ''; } } imagePreview.src = currentProfileData.profileImage || 'default_user_thumb.png'; imageInput.value = ''; }; updateDisplay(); editButton.addEventListener('click', () => { currentProfileData = JSON.parse(localStorage.getItem('userProfile') || '{}'); populateForm(); profileDisplay.style.display = 'none'; profileEditForm.style.display = 'block'; }); cancelButton.addEventListener('click', () => { profileEditForm.style.display = 'none'; profileDisplay.style.display = 'block'; }); imageInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (event) => { imagePreview.src = event.target.result; }; reader.readAsDataURL(file); } }); form.addEventListener('submit', (e) => { e.preventDefault(); const newProfileData = {}; for (const key in this.profileFields) { newProfileData[key] = document.getElementById(this.profileFields[key].edit).value; } const saveProfile = (imageData) => { if (imageData) { newProfileData.profileImage = imageData; } else { newProfileData.profileImage = currentProfileData.profileImage; } localStorage.setItem('userProfile', JSON.stringify(newProfileData)); this.currentUser.name = newProfileData.username || '座の人ユーザー'; this.currentUser.profileImageUrl = newProfileData.profileImage || 'default_user_thumb.png'; currentProfileData = newProfileData; updateDisplay(); profileEditForm.style.display = 'none'; profileDisplay.style.display = 'block'; alert('プロフィールを保存しました！'); }; const file = imageInput.files[0]; if (file) { const reader = new FileReader(); reader.onloadend = () => saveProfile(reader.result); reader.readAsDataURL(file); } else { saveProfile(null); } }); },
     handleThreadCommentForm: function() { console.log("handleThreadCommentForm is not implemented yet."); },
