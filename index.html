@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>座の人 - トップ</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* index.html のインラインスタイルは style.css に集約済みなので空 */
-    </style>
 </head>
 <body>
     <div class="container">
@@ -38,16 +35,23 @@
                 <p>アカウントをお持ちでないですか？</p>
                 <p><a href="register.html">新規登録はこちら</a></p>
             </aside>
+
+            <!-- ★★★ メインコンテンツを logged_in.html のタブ構造に合わせる ★★★ -->
             <div class="main-content">
                 <section class="tab-container">
                     <div class="tab-buttons">
                         <button class="tab-button active" data-tab="essays-index">最近の随筆</button>
+                        <!-- ★★★ 他のタブは disabled 属性を付与 ★★★ -->
+                        <button class="tab-button" data-tab="popular-essays" disabled>近頃多く読まれた随筆</button>
+                        <button class="tab-button" data-tab="recent-essay-images" disabled>近頃の画像</button>
+                        <button class="tab-button" data-tab="active-threads" disabled>近頃にぎやかなスレ</button>
                     </div>
                     <div id="essays-index" class="tab-content active">
                         <ul id="essay-timeline-index">
                             <!-- script.jsによって内容がここに挿入されます -->
                         </ul>
                     </div>
+                    <!-- 他のタブのコンテンツエリアは不要（クリックできないため） -->
                 </section>
             </div>
         </main>
@@ -57,14 +61,8 @@
     </div>
     <script src="script.js"></script>
     <script>
-        // ★★★ index.html 専用の初期化処理を呼び出す ★★★
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof initializeIndexPage === "function") {
-                console.log("Calling initializeIndexPage for index.html...");
-                initializeIndexPage();
-            } else {
-                console.error("initializeIndexPage is not defined! Check script.js.");
-            }
+            console.log("index.html is loaded. App.init() in script.js will handle everything.");
         });
     </script>
 </body>

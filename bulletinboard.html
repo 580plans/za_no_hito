@@ -17,43 +17,32 @@
                 </ul>
             </nav>
         </header>
-
         <main>
             <div id="left-column-container">
-                <!-- script.jsによって左カラムのHTMLがここに挿入されます -->
+                <!-- script.jsによって _left_column_bulletinboard.html が読み込まれる -->
             </div>
-
             <div id="bulletinboard-content">
                 <section id="featured-threads-section">
                     <h3>みんなが注目してるスレ</h3>
-                    <ul id="featured-threads-list">
-                        <!-- script.jsによって内容がここに挿入されます -->
-                    </ul>
+                    <ul id="featured-threads-list"></ul>
                 </section>
-
                 <section id="hot-threads-section">
                     <h3>盛り上がってるスレ</h3>
-                    <ul id="hot-threads-list">
-                        <!-- script.jsによって内容がここに挿入されます -->
-                    </ul>
+                    <ul id="hot-threads-list"></ul>
                 </section>
             </div>
         </main>
-
         <p class="back-to-top-link"><a href="logged_in.html">ホームに戻る</a></p>
-
         <footer>
             <p>© 2025 座の人</p>
         </footer>
     </div>
-
-    <!-- ★★★ load_parts.jsの読み込みを削除 ★★★ -->
-    <script src="script.js"></script>
+    <script src="load_parts.js"></script>
+    <!-- ★★★ script.jsの読み込みより前に部品を読み込む ★★★ -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // script.jsの新しい初期化フローが全てを処理します
-            console.log("bulletinboard.html is loaded. App's main function in script.js will handle everything.");
-        });
+        const path = window.location.pathname.split("/").pop() || 'index.html';
+        loadPageParts(path);
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
