@@ -7,148 +7,39 @@
     <link rel="stylesheet" href="style.css">
     <style>
         /* thread_detail.html 固有のスタイル */
+        /* mainタグにスタイルが適用されるため、ここは空でOK */
         .main-content-thread-detail {
+            /* style.cssの共通スタイルに加えて、このページ固有のスタイルを追加 */
             padding: 20px;
             background-color: #fff;
         }
         .thread-header {
             background-color: #f0f0f0;
+            /* 親のpaddingを考慮し、ネガティブマージンで相殺して幅を合わせる */
+            margin: -20px -20px 20px -20px;
             padding: 15px 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
             border-bottom: 1px solid #ddd;
         }
-        .thread-header h2 {
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-size: 1.8em;
-            color: #333;
-            text-align: left;
-        }
-        .thread-meta-detail {
-            font-size: 0.85em;
-            color: #555;
-            text-align: left;
-        }
-        .thread-meta-detail span {
-            margin-right: 15px;
-        }
-        .thread-meta-detail span:last-child {
-            margin-right: 0;
-        }
-
-        .thread-initial-post {
-            margin-bottom: 30px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border: 1px solid #eee;
-            border-radius: 4px;
-        }
-        .thread-initial-post .post-author {
-            font-weight: bold;
-            color: #0056b3;
-            margin-bottom: 5px;
-        }
-        .thread-initial-post .post-date {
-            font-size: 0.8em;
-            color: #777;
-            margin-bottom: 10px;
-        }
-        .thread-initial-post .post-body {
-            line-height: 1.7;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        .comments-section {
-            margin-top: 30px;
-        }
-        .comment-item {
-            padding: 10px 0;
-            border-bottom: 1px dotted #eee;
-            margin-left: 0;
-        }
-        .comment-item:last-child {
-            border-bottom: none;
-        }
-        p.comment-meta {
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            color: #555;
-            display: flex;
-            align-items: baseline;
-        }
-        span.comment-number {
-            font-weight: bold;
-            margin-right: 8px;
-            color: #333;
-            min-width: 20px;
-            flex-shrink: 0;
-        }
-        span.comment-author {
-            font-weight: bold;
-            color: #0056b3;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-        time.comment-date {
-            font-size: 0.9em;
-            color: #777;
-            white-space: nowrap;
-        }
-        p.comment-text {
-            margin-top: 0;
-            margin-bottom: 5px;
-            padding-left: calc(20px + 8px);
-            line-height: 1.6;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-
-        #comment-form {
-            margin-top: 20px;
-        }
-        #comment-form .form-group-textarea {
-            position: relative;
-            margin-bottom: 10px;
-        }
-        #comment-form label {
-            display: block;
-            margin-bottom: 3px;
-            font-weight: bold;
-        }
-        #comment-form textarea {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-        .comment-form-actions {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-top: 10px;
-        }
-        #comment-char-counter {
-            margin-left: 15px;
-            font-size: 0.9em;
-            color: #777;
-        }
-        #comment-form button[type="submit"] {
-            background-color: #5cb85c;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        #comment-form button[type="submit"]:hover {
-            background-color: #4cae4c;
-        }
+        .thread-header h2 { margin-top: 0; margin-bottom: 8px; font-size: 1.8em; color: #333; text-align: left; }
+        .thread-meta-detail { font-size: 0.85em; color: #555; text-align: left; }
+        .thread-meta-detail span { margin-right: 15px; }
+        .thread-meta-detail span:last-child { margin-right: 0; }
+        .comments-section { margin-top: 30px; }
+        .comment-item { padding: 10px 0; border-bottom: 1px dotted #eee; margin-left: 0; }
+        .comment-item:last-child { border-bottom: none; }
+        p.comment-meta { margin-bottom: 5px; font-size: 0.9em; color: #555; display: flex; align-items: baseline; }
+        span.comment-number { font-weight: bold; margin-right: 8px; color: #333; min-width: 20px; flex-shrink: 0; }
+        span.comment-author { font-weight: bold; color: #0056b3; margin-right: 10px; flex-shrink: 0; }
+        time.comment-date { font-size: 0.9em; color: #777; white-space: nowrap; }
+        p.comment-text { margin-top: 0; margin-bottom: 5px; padding-left: calc(20px + 8px); line-height: 1.6; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap; }
+        #comment-form { margin-top: 20px; }
+        #comment-form .form-group-textarea { position: relative; margin-bottom: 10px; }
+        #comment-form label { display: block; margin-bottom: 3px; font-weight: bold; }
+        #comment-form textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; resize: vertical; box-sizing: border-box; }
+        .comment-form-actions { display: flex; justify-content: flex-start; align-items: center; margin-top: 10px; }
+        #comment-char-counter { margin-left: 15px; font-size: 0.9em; color: #777; }
+        #comment-form button[type="submit"] { background-color: #5cb85c; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
+        #comment-form button[type="submit"]:hover { background-color: #4cae4c; }
     </style>
 </head>
 <body>
@@ -162,66 +53,31 @@
                 </ul>
             </nav>
         </header>
-        <main>
-            <div id="left-column-placeholder-thread">
-                <!-- _left_column_bulletinboard.html が読み込まれる -->
+
+        <!-- ★★★ mainタグにIDを付与 ★★★ -->
+        <main id="bulletinboard-main-container">
+            <div id="left-column-container">
+                <!-- script.jsによって _left_column_bulletinboard.html が読み込まれる -->
             </div>
+            <!-- ★★★ div.main-content-thread-detail のクラス名はそのままでOK ★★★ -->
             <div class="main-content-thread-detail">
-                <header class="thread-header">
-                    <h2 id="thread-title-detail">（スレッドタイトル）</h2>
-                    <div class="thread-meta-detail">
-                        <span id="thread-author-detail">作成者: （ユーザー名）</span>
-                        <time id="thread-created-at-detail" datetime="">作成日時: （日時）</time>
-                        <span id="thread-category-detail">カテゴリ: （カテゴリ名）</span>
-                    </div>
-                </header>
-
-                <section class="thread-initial-post">
-                    <p class="post-author" id="initial-post-author">（最初の投稿者）</p>
-                    <p class="post-date"><time id="initial-post-date" datetime="">（投稿日時）</time></p>
-                    <div class="post-body" id="initial-post-body">
-                        <!-- JSで内容が挿入される -->
-                    </div>
-                </section>
-
-                <section class="comments-section">
-                    <div id="thread-comments-list">
-                        <!-- スレッドへのコメントがここに挿入されます -->
-                    </div>
-                    <form id="comment-form">
-                        <div class="form-group-textarea">
-                            <label for="comment-text-input">あなたの声:</label>
-                            <textarea id="comment-text-input" name="comment-text" rows="4" 
-                                      placeholder="１回の声は100文字までです、、、" 
-                                      maxlength="100" required></textarea>
-                        </div>
-                        <div class="comment-form-actions">
-                            <button type="submit">投稿する</button>
-                            <span id="comment-char-counter">0 / 100</span>
-                        </div>
-                    </form>
-                </section>
+                <div id="thread-detail-wrapper">
+                    <!-- script.jsによってスレッドの内容がここに挿入されます -->
+                    <p>スレッドを読み込んでいます...</p>
+                </div>
                 <p style="margin-top: 30px; text-align: center;"><a href="bulletinboard.html">掲示板トップに戻る</a></p>
-            </div><!-- /.main-content-thread-detail -->
+            </div>
         </main>
+        
         <footer>
             <p>© 2025 座の人</p>
         </footer>
     </div>
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
-    <script src="thread.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof loadHTMLPart === 'function') {
-                loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder-thread', null, () => {
-                    if (typeof initializeThreadDetailPage === "function") {
-                        initializeThreadDetailPage();
-                    }
-                });
-            } else {
-                console.error("loadHTMLPart function is not defined on thread_detail.html.");
-            }
+            console.log("thread_detail.html is loaded. App.init() in script.js will handle everything.");
         });
     </script>
 </body>

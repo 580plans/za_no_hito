@@ -12,46 +12,48 @@
             <h1>座の人</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">トップ</a></li>
-                    <li><a href="logged_in.html">ホーム(ログイン後)</a></li>
+                    <li><a href="logged_in.html">ホーム</a></li>
                     <li><a href="bulletinboard.html">掲示板</a></li>
                 </ul>
             </nav>
         </header>
 
-        <main id="bulletinboard-main-container">
-            <div id="left-column-placeholder"></div>
+        <main>
+            <div id="left-column-container">
+                <!-- script.jsによって左カラムのHTMLがここに挿入されます -->
+            </div>
 
             <div id="bulletinboard-content">
                 <section id="featured-threads-section">
                     <h3>みんなが注目してるスレ</h3>
                     <ul id="featured-threads-list">
-                        <!-- bulletinboard.jsによって内容がここに挿入されます -->
+                        <!-- script.jsによって内容がここに挿入されます -->
                     </ul>
                 </section>
 
                 <section id="hot-threads-section">
                     <h3>盛り上がってるスレ</h3>
                     <ul id="hot-threads-list">
-                        <!-- bulletinboard.jsによって内容がここに挿入されます -->
+                        <!-- script.jsによって内容がここに挿入されます -->
                     </ul>
                 </section>
             </div>
         </main>
 
-        <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p>
+        <p class="back-to-top-link"><a href="logged_in.html">ホームに戻る</a></p>
 
         <footer>
             <p>© 2025 座の人</p>
         </footer>
     </div>
-    <script src="load_parts.js"></script>
+
+    <!-- ★★★ load_parts.jsの読み込みを削除 ★★★ -->
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder', 'wakiaiai');
+            // script.jsの新しい初期化フローが全てを処理します
+            console.log("bulletinboard.html is loaded. App's main function in script.js will handle everything.");
         });
     </script>
-    <script src="script.js"></script>
-    <script src="bulletinboard.js"></script>
 </body>
 </html>

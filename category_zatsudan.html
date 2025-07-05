@@ -5,29 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>雑談 - 掲示板 - 座の人</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        /* このページのスタイルは style.css で管理します */
-        /* カテゴリページ共通のスタイルは style.css に定義することを推奨 */
-        /* style.css の .post-form スタイルが適用される想定 */
-        .post-form .input-with-counter { /* ★カウンターを含む入力欄のラッパー */
-            display: flex;
-            align-items: center; /* ボタンと高さを合わせるため */
-            margin-bottom: 10px; /* ボタンとの間隔 */
-        }
-        .post-form input[type="text"]#new-thread-title {
-            flex-grow: 1; /* 利用可能な幅を取る */
-            margin-right: 10px; /* カウンターやボタンとの間隔 */
-        }
-        .post-form .char-counter {
-            font-size: 0.9em;
-            color: #777;
-            white-space: nowrap; /* 折り返さない */
-            margin-right: 10px; /* ボタンとの間隔 */
-        }
-        .post-form button#create-new-thread-button {
-            flex-shrink: 0; /* ボタンが縮まないように */
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -35,57 +12,45 @@
             <h1>座の人</h1>
             <nav>
                 <ul>
-                    <li><a href="index.html">トップ</a></li>
-                    <li><a href="logged_in.html">ホーム(ログイン後)</a></li>
+                    <li><a href="logged_in.html">ホーム</a></li>
                     <li><a href="bulletinboard.html">掲示板</a></li>
                 </ul>
             </nav>
         </header>
+
         <main id="bulletinboard-main-container">
-            <div id="left-column-placeholder"></div>
+            <div id="left-column-container">
+                <!-- script.jsによって _left_column_bulletinboard.html が読み込まれる -->
+            </div>
+
             <div id="category-content">
                 <h2 id="category-name-display">雑談スレッド一覧</h2>
                 <ul id="category-threads-list">
-                    <!-- category.jsによって内容がここに挿入されます -->
+                    <!-- script.jsによって内容がここに挿入されます -->
                 </ul>
                 <div class="post-form">
                     <h3>新しいスレッドを「雑談」に作成</h3>
-                    
                     <div class="input-with-counter">
-                        <input type="text" id="new-thread-title" placeholder="スレッド名 (30文字まで)" maxlength="30">
+                        <!-- ★★★ ここのplaceholderを修正 ★★★ -->
+                        <input type="text" id="new-thread-title" placeholder="スレッドタイトルは30文字以内でキメ" maxlength="30">
                         <span class="char-counter" id="new-thread-char-counter">0 / 30</span>
                         <button id="create-new-thread-button">作成</button>
                     </div>
                 </div>
             </div>
         </main>
-        <p class="back-to-top-link"><a href="index.html">サイトトップに戻る</a></p>
+
+        <p class="back-to-top-link"><a href="bulletinboard.html">掲示板トップに戻る</a></p>
+
         <footer>
             <p>© 2025 座の人</p>
         </footer>
     </div>
     <script src="load_parts.js"></script>
     <script src="script.js"></script>
-    <script src="category.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const currentCategoryKey = 'zatsudan';
-            const currentCategoryDisplayName = '雑談';
-            // console.log(`DOMContentLoaded for ${currentCategoryKey}.html inline script.`);
-            if (typeof loadHTMLPart === 'function') {
-                // console.log(`Calling loadHTMLPart for _left_column_bulletinboard.html on ${currentCategoryKey}.html...`);
-                loadHTMLPart('_left_column_bulletinboard.html', 'left-column-placeholder', currentCategoryKey, () => {
-                    // console.log(`CALLBACK: Left column loaded into ${currentCategoryKey}.html.`);
-                    if (typeof initializeCategoryPage === "function") {
-                        // console.log(`CALLBACK: Calling initializeCategoryPage for ${currentCategoryKey}...`);
-                        initializeCategoryPage(currentCategoryKey, currentCategoryDisplayName);
-                    } else {
-                        console.error("CALLBACK: initializeCategoryPage is not defined!");
-                    }
-                });
-            } else {
-                console.error(`loadHTMLPart function is not defined on ${currentCategoryKey}.html.`);
-            }
+            console.log("category_zatsudan.html is loaded. App.init() in script.js will handle everything.");
         });
     </script>
 </body>
